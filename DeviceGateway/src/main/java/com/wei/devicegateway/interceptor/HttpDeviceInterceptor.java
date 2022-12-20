@@ -22,7 +22,7 @@ public class HttpDeviceInterceptor implements HandlerInterceptor {
         //获取token
         String token = request.getHeader("token");
 
-        if (StringUtils.hasText(token)) {
+        if (!StringUtils.hasText(token)) {
             throw new CustomException("Error", "The token is empty!");
         }
 
