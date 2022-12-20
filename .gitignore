@@ -27,3 +27,7 @@ hs_err_pid*
 /.idea/modules.xml
 /.idea/vcs.xml
 /.idea/WLRIoTPlatform.iml
+/.idea/libraries/
+/.idea/compiler.xml
+/.idea/encodings.xml
+/.idea/jarRepositories.xml

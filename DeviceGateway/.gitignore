@@ -35,3 +35,5 @@ build/
 /.mvn/wrapper/maven-wrapper.properties
 /mvnw
 /mvnw.cmd
+/src/test/java/com/wei/devicegateway/CoAPTest.java
+/src/test/java/com/wei/devicegateway/MqttTest.java
