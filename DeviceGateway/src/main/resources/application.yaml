@@ -1,4 +1,12 @@
 server:
   port: 6666
 
+spring:
+  rabbitmq:
+    host: 192.168.3.66
+    port: 5672
+    username: wei
+    password: weilai2
+    virtual-host: "/"
+
 
