@@ -3,11 +3,21 @@ package com.wei.devicegateway.server;
 import javax.annotation.PostConstruct;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MqttDeviceServer {
-    private static void mqttServer() {
+
+    private RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    private void setRabbitTemplate(RabbitTemplate rabbitTemplate) {
+        this.rabbitTemplate = rabbitTemplate;
+    }
+
+    private void mqttServer() {
         String broker = "tcp://192.168.3.66:1886";
         String topic = "mqtt/weilai";
         String username = "weilai";
@@ -37,6 +47,13 @@ public class MqttDeviceServer {
                     //消息
                     System.out.println("message content: " + new String(message.getPayload()));
 
+
+                    String exchangeName = "device.direct";
+                    String routingKey = "mqtt";
+
+                    rabbitTemplate.convertAndSend(exchangeName,routingKey,new String(message.getPayload()) + "RoutingKeyIs:" + routingKey);
+
+
                 }
 
                 public void deliveryComplete(IMqttDeliveryToken token) {
@@ -53,7 +70,7 @@ public class MqttDeviceServer {
 
     @PostConstruct
     public void startMqttServer() {
-        new Thread(MqttDeviceServer::mqttServer).start();
+        new Thread(this::mqttServer).start();
 
         System.out.println("===========================MQTT服务器已开启===========================");
     }
