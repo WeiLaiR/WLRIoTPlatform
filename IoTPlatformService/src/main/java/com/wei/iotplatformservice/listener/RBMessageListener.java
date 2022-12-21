@@ -1,4 +1,4 @@
-package com.wei.iotplatformserver.listener;
+package com.wei.iotplatformservice.listener;
 
 import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.rabbit.annotation.Exchange;

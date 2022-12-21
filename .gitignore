@@ -31,3 +31,4 @@ hs_err_pid*
 /.idea/compiler.xml
 /.idea/encodings.xml
 /.idea/jarRepositories.xml
+/Californium3.properties
