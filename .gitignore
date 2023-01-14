@@ -32,3 +32,7 @@ hs_err_pid*
 /.idea/encodings.xml
 /.idea/jarRepositories.xml
 /Californium3.properties
+/IoTPlatformUserService/mvnw.cmd
+/IoTPlatformUserService/mvnw
+/IoTPlatformUserService/.mvn/wrapper/maven-wrapper.properties
+/IoTPlatformUserService/.mvn/wrapper/maven-wrapper.jar
