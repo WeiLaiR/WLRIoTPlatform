@@ -1,0 +1,18 @@
+# 配置服务器端口
+server:
+  port: 8890
+
+spring:
+  mail:
+    host: ---
+    username: ---
+    password: ---
+    port: 465
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+            trust: ---
