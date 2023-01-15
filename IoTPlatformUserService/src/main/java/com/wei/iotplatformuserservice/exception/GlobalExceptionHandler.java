@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CustomException.class)
     public Map<String, Object> handleCustomException(CustomException customException) {
         Map<String, Object> errorResultMap = new HashMap<>(16);
-        errorResultMap.put("state", customException.getState());
+        errorResultMap.put("status", customException.getStatus());
         errorResultMap.put("message", customException.getMessage());
         return errorResultMap;
     }
