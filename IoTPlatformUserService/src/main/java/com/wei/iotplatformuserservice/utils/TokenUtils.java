@@ -28,7 +28,7 @@ public class TokenUtils {
 //                .withExpiresAt(DateUtil.offsetHour(new Date(),72))
 //                sign签名部分通过HMAC-SHA256加密,可用于验证token是否合法
 //                这里输入的数据就相当于加盐，内容非常重要，不可泄漏
-                .sign(Algorithm.HMAC256(DigestUtils.sha3_256Hex(str.concat("JiaYan"))));
+                .sign(Algorithm.HMAC256(DigestUtils.md5(str.concat("JiaYan"))));
     }
 
     /**
