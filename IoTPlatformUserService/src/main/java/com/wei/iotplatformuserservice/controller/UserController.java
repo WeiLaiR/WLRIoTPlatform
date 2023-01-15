@@ -10,6 +10,7 @@ import java.util.Map;
 @RequestMapping("/user/user")
 public class UserController {
     private UserService userService;
+
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;

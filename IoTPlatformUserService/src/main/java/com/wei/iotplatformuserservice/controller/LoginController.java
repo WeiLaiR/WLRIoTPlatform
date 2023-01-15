@@ -15,6 +15,7 @@ import java.util.Map;
 public class LoginController {
 
     private LoginService loginService;
+
     @Autowired
     public void setLoginService(LoginService loginService) {
         this.loginService = loginService;

@@ -14,6 +14,7 @@ import java.util.Map;
 @Service
 public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements LoginService {
     private LoginMapper loginMapper;
+
     @Autowired
     public void setLoginMapper(LoginMapper loginMapper) {
         this.loginMapper = loginMapper;
@@ -47,7 +48,7 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
         if (loginMapper.deleteById(uid) > 0) {
             map.put("status", 200);
             map.put("message", "删除成功");
-        }else {
+        } else {
             map.put("status", 400);
             map.put("message", "删除失败");
         }
