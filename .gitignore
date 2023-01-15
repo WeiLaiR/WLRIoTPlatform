@@ -36,3 +36,5 @@ hs_err_pid*
 /IoTPlatformUserService/mvnw
 /IoTPlatformUserService/.mvn/wrapper/maven-wrapper.properties
 /IoTPlatformUserService/.mvn/wrapper/maven-wrapper.jar
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/dataSources.xml
