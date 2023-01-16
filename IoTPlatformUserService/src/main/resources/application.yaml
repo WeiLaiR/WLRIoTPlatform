@@ -2,6 +2,8 @@
 server:
   port: 8889
 
+machine:
+  code: 6
 
 spring:
   # 连接数据库
