@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LoginMapper extends BaseMapper<Login> {
+    Login queryLogin(String email);
 }
