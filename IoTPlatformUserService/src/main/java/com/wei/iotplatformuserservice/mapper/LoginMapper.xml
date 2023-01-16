@@ -7,4 +7,9 @@
     <select id="queryLogin" resultType="com.wei.iotplatformuserservice.pojo.Login">
         select uid,password from login where email = #{email}
     </select>
+
+    <select id="queryEmailEmpty" resultType="java.lang.String">
+        SELECT email FROM login WHERE email = #{email}
+    </select>
+
 </mapper>
