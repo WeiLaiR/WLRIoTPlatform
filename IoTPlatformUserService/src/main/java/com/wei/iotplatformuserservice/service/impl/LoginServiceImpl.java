@@ -48,13 +48,11 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
         System.out.println(privateKey);
 
         Map<String, Object> map = new HashMap<>();
-        QueryWrapper<Login> wrapper = new QueryWrapper<>();
-        wrapper.eq("email", email);
-        Login login = loginMapper.selectOne(wrapper);
-        if (login != null) {
+        Login login = loginMapper.queryLogin(email);
+        if (login.getUid() != null && login.getPassword() != null) {
             if (login.getPassword().equals(password)) {
 //                生成Token并存入redis
-                String token = TokenUtils.getToken(login.getUid(), login.getEmail());
+                String token = TokenUtils.getToken(login.getUid(), email);
                 redisUtil.set(login.getUid().toString(), token);
 
                 map.put("token", token);
