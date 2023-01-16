@@ -1,6 +1,8 @@
 server:
   port: 8888
 
+machine:
+  code: 8
 
 spring:
   rabbitmq:
@@ -12,4 +14,39 @@ spring:
     listener:
       simple:
         prefetch: 3
+  # 连接数据库
+  datasource:
+    username: root
+    password: 12345678
+    url: jdbc:mysql://localhost:3306/iot_platform_db?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #    更改数据源为德鲁伊
+    type: com.alibaba.druid.pool.DruidDataSource
 
+    #Spring Boot 默认是不注入这些属性值的，需要自己绑定
+    #druid 数据源专有配置
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+
+  # 配置Date类型转json的格式
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+#Mybatis-plus配置
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-value: true #逻辑已删除值true
+      logic-not-delete-value: false #逻辑未删除值false
