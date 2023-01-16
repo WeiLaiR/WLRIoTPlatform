@@ -11,4 +11,6 @@ public interface LoginService extends IService<Login> {
 
     Map<String, Object> deleteLoginInfo(Long uid);
 
+    Map<String, Object> register(String email, String password, String vCode);
+
 }

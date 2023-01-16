@@ -1,7 +1,7 @@
 package com.wei.iotplatformuserservice.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.wei.iotplatformuserservice.exception.CustomException;
 import com.wei.iotplatformuserservice.mapper.LoginMapper;
 import com.wei.iotplatformuserservice.pojo.Login;
 import com.wei.iotplatformuserservice.service.LoginService;
@@ -10,6 +10,7 @@ import com.wei.iotplatformuserservice.utils.RedisUtil;
 import com.wei.iotplatformuserservice.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -82,4 +83,42 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
         }
         return map;
     }
+
+    @Override
+    public Map<String, Object> register(String email, String password, String vCode) {
+
+        String s = loginMapper.queryEmailEmpty(email);
+
+        if (!StringUtils.hasText(s)) {
+            throw new CustomException("400", "邮箱已被注册");
+        }
+
+        HashMap<String, Object> map = new HashMap<>();
+
+
+//      校验验证码
+        String vCode1 = redisUtil.get(email);
+
+        if (vCode1.equals(vCode)) {
+            Login login = new Login();
+
+            login.setEmail(email);
+            login.setPassword(password);
+
+            if (loginMapper.insert(login) > 0) {
+                map.put("status", 200);
+                map.put("message", "注册成功");
+            } else {
+                map.put("status", 400);
+                map.put("message", "注册失败");
+            }
+        } else {
+            throw new CustomException("400", "验证码错误");
+        }
+
+
+        return map;
+    }
+
+
 }
