@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/user/login")
+@RequestMapping("/login")
 public class LoginController {
 
     private LoginService loginService;

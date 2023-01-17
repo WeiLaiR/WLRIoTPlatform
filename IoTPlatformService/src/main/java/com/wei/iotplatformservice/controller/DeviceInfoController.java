@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/device/info")
+@RequestMapping("/deviceInfo")
 public class DeviceInfoController {
 
     private DeviceInfoService deviceInfoService;
