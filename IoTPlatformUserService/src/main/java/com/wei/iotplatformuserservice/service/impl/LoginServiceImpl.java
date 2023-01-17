@@ -90,7 +90,7 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
         String s = loginMapper.queryEmailEmpty(email);
 
         if (!StringUtils.hasText(s)) {
-            throw new CustomException("400", "邮箱已被注册");
+            throw new CustomException(400, "邮箱已被注册");
         }
 
         HashMap<String, Object> map = new HashMap<>();
@@ -113,7 +113,7 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
                 map.put("message", "注册失败");
             }
         } else {
-            throw new CustomException("400", "验证码错误");
+            throw new CustomException(400, "验证码错误");
         }
 
 

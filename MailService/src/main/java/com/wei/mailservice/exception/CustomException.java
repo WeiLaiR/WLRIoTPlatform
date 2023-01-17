@@ -10,10 +10,10 @@ import lombok.Getter;
  */
 @Getter
 public class CustomException extends RuntimeException {
-    private String status;
+    private Object status;
     private String message;
 
-    public CustomException(String code, String message) {
+    public CustomException(Object code, String message) {
         this.status = code;
         this.message = message;
     }

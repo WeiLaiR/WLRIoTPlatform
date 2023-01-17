@@ -82,7 +82,7 @@ public class RSAUtils {
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);
             return Base64.encodeBase64URLSafeString(rsaSplitCodec(cipher, Cipher.ENCRYPT_MODE, data.getBytes(CHARSET), publicKey.getModulus().bitLength()));
         } catch (Exception e) {
-            throw new CustomException("400", "加密字符串[" + data + "]时遇到异常");
+            throw new CustomException(400, "加密字符串[" + data + "]时遇到异常");
         }
     }
 
@@ -115,7 +115,7 @@ public class RSAUtils {
             cipher.init(Cipher.ENCRYPT_MODE, privateKey);
             return Base64.encodeBase64URLSafeString(rsaSplitCodec(cipher, Cipher.ENCRYPT_MODE, data.getBytes(CHARSET), privateKey.getModulus().bitLength()));
         } catch (Exception e) {
-            throw new CustomException("400", "加密字符串[" + data + "]时遇到异常");
+            throw new CustomException(400, "加密字符串[" + data + "]时遇到异常");
         }
     }
 
@@ -131,7 +131,7 @@ public class RSAUtils {
             cipher.init(Cipher.DECRYPT_MODE, publicKey);
             return new String(rsaSplitCodec(cipher, Cipher.DECRYPT_MODE, Base64.decodeBase64(data), publicKey.getModulus().bitLength()), CHARSET);
         } catch (Exception e) {
-            throw new CustomException("400", "解密字符串[" + data + "]时遇到异常");
+            throw new CustomException(400, "解密字符串[" + data + "]时遇到异常");
         }
     }
 
@@ -160,7 +160,7 @@ public class RSAUtils {
                 offSet = i * maxBlock;
             }
         } catch (Exception e) {
-            throw new CustomException("400", "加解密阀值为[" + maxBlock + "]的数据时发生异常");
+            throw new CustomException(400, "加解密阀值为[" + maxBlock + "]的数据时发生异常");
         }
         byte[] resultData = out.toByteArray();
         IOUtils.closeQuietly(out);

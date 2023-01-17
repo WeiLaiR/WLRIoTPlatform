@@ -34,7 +34,7 @@ public class BuildMail {
             }
         } catch (Exception e) {
             System.out.println("读取模板失败");
-            throw new CustomException("400", "读取模板失败");
+            throw new CustomException(400, "读取模板失败");
         } finally {
             if (fileReader != null) {
                 try {
