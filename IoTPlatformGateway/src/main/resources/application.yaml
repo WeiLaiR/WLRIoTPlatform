@@ -1,0 +1,39 @@
+server:
+  port: 8887
+
+spring:
+  application:
+    name: IoT-gateway
+
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        cluster-name: iot  #设置集群名称
+        #        namespace: 8ab1173d-c1e7-4d64-a441-9326483eea4a  #设置命名空间
+        ephemeral: true  #更改为不是临时实例(false)
+
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+
+      routes:
+        - id: platform-service
+          uri: lb://platform-service
+          predicates:
+            - Path=/platform/**
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/user/**
+        - id: mail-service
+          uri: lb://mail-service
+          predicates:
+            - Path=/mail/**
+
+
+filter:
+  config:
+    excludeUrls: /user/login/,/user/ras/  #登录和注册不需过滤，直接放行
