@@ -42,7 +42,7 @@ public class CustomIdGenerator implements IdentifierGenerator {
 //        乘10默认机器码一位十进制，可设置0-9
         now = now * 10 + mac;
 //        乘100默认计数位两位十进制，可设置0-99
-        now = now * 101 + count.get();
+        now = now * 111 + count.get();
         //返回生成的id值即可.
         return now;
     }
