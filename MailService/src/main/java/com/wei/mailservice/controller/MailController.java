@@ -7,10 +7,7 @@ import com.wei.mailservice.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.mail.internet.MimeMessage;
 import java.util.HashMap;
@@ -43,14 +40,15 @@ public class MailController {
     }
 
     @PostMapping("/send")
-    public Map<String, Object> sendMail(@RequestBody String eMail) {
+    public Map<String, Object> sendMail(@RequestBody Map<String, String> emap) {
+
 //        System.out.println(eMail);
-        if (redisUtil.get(eMail + "0ta") != null) {
-            throw new CustomException("400", "您的请求过于频繁，请稍后再试！");
+        if (redisUtil.get(emap.get("email") + "0ta") != null) {
+            throw new CustomException(400, "您的请求过于频繁，请稍后再试！");
         }
 
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        String vCode = buildVCode.buildVCode(eMail);
+        String vCode = buildVCode.buildVCode(emap.get("email"));
         Map<String, Object> map = new HashMap<>();
 
         try {
@@ -58,16 +56,16 @@ public class MailController {
 
             messageHelper.setSubject("[验证码]——WLR IoT Platform");
             messageHelper.setText(BuildMail.buildContent(vCode), true);
-            messageHelper.setTo(eMail);
+            messageHelper.setTo(emap.get("email"));
             messageHelper.setFrom("WLR IoT Platform" + '<' + "info@baiblog.top" + '>');
 
             javaMailSender.send(mimeMessage);
 
         } catch (Exception e) {
-            throw new CustomException("400", "邮件发送失败！轻稍后重试或联系管理员。");
+            throw new CustomException(400, "邮件发送失败！请稍后重试或联系管理员。");
         }
 
-        map.put("status", "200");
+        map.put("status", 200);
         map.put("message", "邮件发送成功！");
 
         return map;
