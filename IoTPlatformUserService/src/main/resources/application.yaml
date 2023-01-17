@@ -47,6 +47,18 @@ spring:
     port: 6379
 
 
+
+  application:
+    name: user-service
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        cluster-name: iot     #设置集群名称
+        ephemeral: true       #临时实例
+
+
 #Mybatis-plus配置
 mybatis-plus:
   configuration:
