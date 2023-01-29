@@ -7,6 +7,12 @@ import java.util.Map;
 
 public interface LoginService extends IService<Login> {
 
+    /**
+     * 登录
+     * @param email 邮箱
+     * @param password 密码
+     * @return 状态值及token
+     */
     Map<String, Object> signIn(String email, String password);
 
     Map<String, Object> deleteLoginInfo(Long uid);

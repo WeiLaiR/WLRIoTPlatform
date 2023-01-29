@@ -16,6 +16,11 @@ public class UserController {
         this.userService = userService;
     }
 
+    /**
+     * 获取用户信息
+     * @param uid 用户id
+     * @return 用户信息
+     */
     @GetMapping("/userinfo/{uid}")
     public Map<String, Object> getUserInfo(@PathVariable Long uid) {
         return userService.searchUserInfo(uid);

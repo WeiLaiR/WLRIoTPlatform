@@ -21,6 +21,10 @@ public class RsaController {
     }
 
 
+    /**
+     * 获取公钥
+     * @return 公钥
+     */
     @GetMapping("/getPublicKey")
     public Map<String, Object> getPublicKey() {
         HashMap<String, Object> map = new HashMap<>();

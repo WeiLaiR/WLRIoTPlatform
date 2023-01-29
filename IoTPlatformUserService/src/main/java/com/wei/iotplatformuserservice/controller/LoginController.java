@@ -21,6 +21,11 @@ public class LoginController {
         this.loginService = loginService;
     }
 
+    /**
+     * 登录
+     * @param login 登录信息
+     * @return 状态值
+     */
     @PostMapping("/sign_in")
     public Map<String, Object> SignIn(@RequestBody Login login) {
 //        System.out.println(login);
