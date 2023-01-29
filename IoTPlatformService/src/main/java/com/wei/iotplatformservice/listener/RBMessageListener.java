@@ -11,6 +11,10 @@ import org.springframework.stereotype.Component;
 public class RBMessageListener {
 
 
+    /**
+     * 接受MQ消息
+     * @param msg http信息
+     */
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue(name = "device.http.queue"),
             exchange = @Exchange(name = "device.direct", type = ExchangeTypes.DIRECT),
@@ -20,6 +24,10 @@ public class RBMessageListener {
         System.out.println("接收到HttpQueue的消息" + msg);
     }
 
+    /**
+     * 接受MQ消息
+     * @param msg mqtt信息
+     */
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue(name = "device.mqtt.queue1"),
             exchange = @Exchange(name = "device.direct", type = ExchangeTypes.DIRECT),
@@ -29,6 +37,10 @@ public class RBMessageListener {
         System.out.println("接收到MqttQueue的消息" + msg);
     }
 
+    /**
+     * 接受MQ消息
+     * @param msg coap信息
+     */
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue(name = "device.coap.queue1"),
             exchange = @Exchange(name = "device.direct", type = ExchangeTypes.DIRECT),

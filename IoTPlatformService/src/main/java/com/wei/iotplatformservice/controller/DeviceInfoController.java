@@ -21,6 +21,11 @@ public class DeviceInfoController {
         this.deviceInfoService = deviceInfoService;
     }
 
+    /**
+     * 新增硬件信息接口
+     * @param deviceInfo 硬件信息
+     * @return 状态值
+     */
     @PostMapping("/add")
     public Map<String, Object> newDeviceInfo(@RequestBody DeviceInfo deviceInfo) {
         return deviceInfoService.newDeviceInfo(deviceInfo);

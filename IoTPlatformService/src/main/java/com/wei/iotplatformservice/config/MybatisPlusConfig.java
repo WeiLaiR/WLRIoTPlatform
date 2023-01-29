@@ -8,10 +8,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@MapperScan("com.wei.iotplatformservice.mapper")
+@MapperScan("com.wei.iotplatformservice.mapper") //扫描mapper
 public class MybatisPlusConfig {
 
-//    配置分页插件
+
+    /**
+     * 配置MybatisPlus分页插件
+     * @return
+     */
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
