@@ -7,5 +7,10 @@ import java.util.Map;
 
 public interface DeviceInfoService extends IService<DeviceInfo> {
 
+    /**
+     * 新增设备信息
+     * @param deviceInfo 设备信息
+     * @return 状态值
+     */
     Map<String, Object> newDeviceInfo(DeviceInfo deviceInfo);
 }

@@ -22,6 +22,12 @@ public class DeviceInfoServiceImpl extends ServiceImpl<DeviceInfoMapper, DeviceI
         this.deviceInfoMapper = deviceInfoMapper;
     }
 
+
+    /**
+     * 新增设备信息
+     * @param deviceInfo 设备信息
+     * @return 状态值
+     */
     @Override
     public Map<String, Object> newDeviceInfo(DeviceInfo deviceInfo) {
         HashMap<String, Object> map = new HashMap<>();

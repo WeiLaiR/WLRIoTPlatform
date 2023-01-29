@@ -11,6 +11,10 @@ public class DeviceTokenUtil {
             "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V",
             "W", "X", "Y", "Z", "-", "_"};
 
+    /**
+     * 生成设备token （简短uuid生成器）
+     * @return 设备token
+     */
     public static String BuildDeviceToken() {
         StringBuilder shortBuffer = new StringBuilder();
         String uuid = UUID.randomUUID().toString().replace("-", "");

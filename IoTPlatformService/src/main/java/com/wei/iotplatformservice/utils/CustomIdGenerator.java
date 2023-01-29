@@ -18,6 +18,11 @@ public class CustomIdGenerator implements IdentifierGenerator {
     @Value("${machine.code}")
     public static long mac;
 
+    /**
+     * 自定义id生成器
+     * @param entity 实体
+     * @return id
+     */
     @Override
     public Long nextId(Object entity) {
         long now;
@@ -46,6 +51,4 @@ public class CustomIdGenerator implements IdentifierGenerator {
         //返回生成的id值即可.
         return now;
     }
-
-
 }

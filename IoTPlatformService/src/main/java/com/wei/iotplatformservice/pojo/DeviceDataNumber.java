@@ -9,6 +9,11 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+
+/**
+ * DeviceData
+ * 硬件数据实体类（double类型）
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,7 +22,7 @@ public class DeviceDataNumber {
     @TableId(type = IdType.ASSIGN_ID)
     private Long deviceDataId;
     private Long deviceCfgId;
-    private String dataNumber;
+    private Double dataNumber;
     //    注解优先级高于yml配置文件中的设置！
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime;

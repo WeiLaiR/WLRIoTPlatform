@@ -11,6 +11,11 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+/**
+ * DeviceInfo
+ * 设备信息实体类
+ */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

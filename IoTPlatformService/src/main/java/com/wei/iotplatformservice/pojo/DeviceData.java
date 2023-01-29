@@ -9,6 +9,10 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+/**
+ * DeviceData
+ * 硬件数据实体类（String类型）
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
