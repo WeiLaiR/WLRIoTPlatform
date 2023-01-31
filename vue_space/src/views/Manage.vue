@@ -9,7 +9,7 @@
 
     <v-divider color="white" class="mt-1" dark></v-divider>
 
-    <router-view />
+    <router-view/>
 
   </v-app>
 
