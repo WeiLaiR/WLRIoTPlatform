@@ -1,6 +1,6 @@
 <template>
 
-  <div>
+  <div style="height: 100%">
     <v-main
         style="padding: 0px;"
     >
