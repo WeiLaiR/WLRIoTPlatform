@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <router-view/>
+      <router-view />
     </v-main>
   </v-app>
 </template>
@@ -16,3 +16,9 @@ export default {
   }),
 };
 </script>
+
+<style>
+.v-application--wrap {
+  min-height: 93vh !important;
+}
+</style>
