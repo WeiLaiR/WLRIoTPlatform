@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import Manage from "@/views/Manage.vue";
 import Login from "@/views/Login.vue";
 import Register from "@/views/Register.vue";
+import DeviceInfo from "@/views/DeviceInfo.vue";
 
 Vue.use(VueRouter)
 
@@ -14,6 +15,7 @@ const routes = [
     redirect: "/home",
     children: [
       { path: 'home', name: '主页', component: Home},
+      { path: 'deviceInfo', name: '主页', component: DeviceInfo},
     ]
   },
   {
