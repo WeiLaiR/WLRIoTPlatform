@@ -20,7 +20,7 @@
 
         <v-list   dense class="mt-5" >
             <v-list-item-group v-model="selectedItem" color="white" >
-                  <v-list-item v-for="(item, i) in items" :key="i" v-slot="{ active }">
+                  <v-list-item v-for="(item, i) in items" :key="i" v-slot="{ active }" :to="item.path">
                       <v-list-item-icon class="ml-6">
                           <v-icon v-text="item.icon"  :color="active ? 'black' : 'grey'" ></v-icon>
                       </v-list-item-icon>
@@ -79,12 +79,12 @@ export default {
     data: () =>({
         selectedItem: 0,
         items: [
-            {icon: 'mdi-finance', text: '首页'},
-            {icon: 'mdi-calendar-outline', text: '设备信息'},
-            {icon: 'mdi-account-outline', text: '设备配置'},
-            {icon: 'mdi-content-paste', text: '用户信息'},
-            {icon: 'mdi-home-outline', text: '用户管理'},
-            {icon: 'mdi-cogs', text: '设置'},
+            {icon: 'mdi-finance', text: '首页', path: '/home'},
+            {icon: 'mdi-calendar-outline', text: '设备信息', path: '/deviceInfo'},
+            {icon: 'mdi-account-outline', text: '设备配置', path: '/home'},
+            {icon: 'mdi-content-paste', text: '用户信息', path: '/home'},
+            {icon: 'mdi-home-outline', text: '用户管理', path: '/home'},
+            {icon: 'mdi-cogs', text: '设置', path: '/home'},
         ],
     })
 }
