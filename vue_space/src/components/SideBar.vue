@@ -81,7 +81,7 @@ export default {
         items: [
             {icon: 'mdi-finance', text: '首页', path: '/home'},
             {icon: 'mdi-calendar-outline', text: '设备信息', path: '/deviceInfo'},
-            {icon: 'mdi-account-outline', text: '设备配置', path: '/home'},
+            {icon: 'mdi-account-outline', text: '设备配置', path: '/deviceSetting'},
             {icon: 'mdi-content-paste', text: '用户信息', path: '/home'},
             {icon: 'mdi-home-outline', text: '用户管理', path: '/home'},
             {icon: 'mdi-cogs', text: '设置', path: '/home'},
