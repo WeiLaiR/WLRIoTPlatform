@@ -5,6 +5,7 @@ import Manage from "@/views/Manage.vue";
 import Login from "@/views/Login.vue";
 import Register from "@/views/Register.vue";
 import DeviceInfo from "@/views/DeviceInfo.vue";
+import DeviceSetting from "@/views/DeviceSetting.vue";
 
 Vue.use(VueRouter)
 
@@ -15,7 +16,8 @@ const routes = [
     redirect: "/home",
     children: [
       { path: 'home', name: '主页', component: Home},
-      { path: 'deviceInfo', name: '主页', component: DeviceInfo},
+      { path: 'deviceInfo', name: '设备信息', component: DeviceInfo},
+      { path: 'deviceSetting', name: '设备配置', component: DeviceSetting},
     ]
   },
   {
