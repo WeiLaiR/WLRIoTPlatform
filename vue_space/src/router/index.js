@@ -6,6 +6,7 @@ import Login from "@/views/Login.vue";
 import Register from "@/views/Register.vue";
 import DeviceInfo from "@/views/DeviceInfo.vue";
 import DeviceSetting from "@/views/DeviceSetting.vue";
+import DataStatistics from "@/views/DataStatistics.vue";
 
 Vue.use(VueRouter)
 
@@ -18,6 +19,7 @@ const routes = [
       { path: 'home', name: '主页', component: Home},
       { path: 'deviceInfo', name: '设备信息', component: DeviceInfo},
       { path: 'deviceSetting', name: '设备配置', component: DeviceSetting},
+      { path: 'dataStatistics', name: '数据统计', component: DataStatistics},
     ]
   },
   {
