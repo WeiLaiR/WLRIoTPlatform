@@ -19,15 +19,50 @@
 
         <div>
 
-          <v-text-field
-              label="输入设备id或设备名称"
-              filled
-              style="width: 50%;margin-left: 20px;margin-top: 20px"
-              color="#2ebfaf"
-              append-icon="mdi-magnify"
-              v-model="deviceSearch">
+          <v-row>
 
-          </v-text-field>
+            <v-col
+                cols="6"
+            >
+              <v-text-field
+                  label="输入设备id或设备名称"
+                  filled
+                  style="margin-left: 30px;margin-top: 22px;"
+                  color="#2ebfaf"
+                  append-icon="mdi-magnify"
+                  v-model="deviceSearch">
+
+              </v-text-field>
+
+            </v-col>
+
+            <v-col
+                cols="3"
+            >
+
+            <!--       空位置       -->
+
+            </v-col>
+
+            <v-col
+                cols="3"
+            >
+              <v-btn right
+                     absolute
+                     elevation="5"
+                     large rounded
+                     color="#2ebfaf"
+                     dark
+                     style="display:inline;margin-top: 27px;margin-right: 15px"
+              >
+                NEW DEVICE
+              </v-btn>
+
+            </v-col>
+
+          </v-row>
+
+
         </div>
 
 
@@ -40,7 +75,7 @@
               :page="pageNum"
               :server-items-length="itemNums"
               class="elevation-1"
-              style="margin-left: 20px;margin-right: 20px"
+              style="margin-left: 30px;margin-right: 30px"
           >
 
             <!--      弹出的修改框      -->
@@ -169,6 +204,9 @@ export default {
     dialog (val) {
       val || this.close()
     },
+    // deviceSearch (newVal, oldVal) {
+    //   console.log('newVal' + newVal + 'OLD' + oldVal);
+    // }
   },
 
   // 启动后触发此触发器填充假数据
