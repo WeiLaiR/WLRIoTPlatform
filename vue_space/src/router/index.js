@@ -7,6 +7,8 @@ import Register from "@/views/Register.vue";
 import DeviceInfo from "@/views/DeviceInfo.vue";
 import DeviceSetting from "@/views/DeviceSetting.vue";
 import DataStatistics from "@/views/DataStatistics.vue";
+import UserInfo from "@/views/UserInfo.vue";
+import UpdateInfo from "@/views/UpdateInfo.vue";
 
 Vue.use(VueRouter)
 
@@ -20,6 +22,8 @@ const routes = [
       { path: 'deviceInfo', name: '设备信息', component: DeviceInfo},
       { path: 'deviceSetting', name: '设备配置', component: DeviceSetting},
       { path: 'dataStatistics', name: '数据统计', component: DataStatistics},
+      { path: 'userInfo', name: '数据统计', component: UserInfo},
+      { path: 'updateInfo', name: '数据统计', component: UpdateInfo},
     ]
   },
   {
