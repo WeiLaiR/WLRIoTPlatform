@@ -93,7 +93,7 @@
               <div style="margin: 0 auto">
                 <v-btn outlined color="#2ebfaf" >New account</v-btn>
 
-                <v-btn outlined color="#2ebfaf" style="margin-left: 20px">Go Back</v-btn>
+                <v-btn outlined color="#2ebfaf" style="margin-left: 20px" @click="goBack">Go Back</v-btn>
 
               </div>
 
@@ -113,7 +113,17 @@
 
 <script>
 export default {
-  name: "Register"
+  name: "Register",
+  data() {
+    return {
+
+    }
+  },
+  methods: {
+    goBack() {
+      this.$router.push('/login')
+    }
+  }
 }
 </script>
 
