@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/email")
+@RequestMapping("/mail/email")
 public class MailController {
 
 
