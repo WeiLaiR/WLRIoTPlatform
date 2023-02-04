@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements LoginService {
@@ -50,7 +51,7 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
 
         Map<String, Object> map = new HashMap<>();
         Login login = loginMapper.queryLogin(email);
-        if (login.getUid() != null && login.getPassword() != null) {
+        if (!Objects.isNull(login) && StringUtils.hasText(login.getPassword())) {
             if (login.getPassword().equals(password)) {
 //                生成Token并存入redis
                 String token = TokenUtils.getToken(login.getUid(), email);
