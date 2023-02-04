@@ -66,13 +66,14 @@
 
                   <v-form
                       ref="loginForm"
-                      v-model="userLogin"
+                      v-model="valid"
                       style="width: 90%;"
                   >
 
                     <v-text-field
                         dark
-                        v-model="email"
+                        v-model="Login.email"
+                        type="text"
                         label="E-mail"
                     >
 
@@ -80,7 +81,8 @@
 
                     <v-text-field
                         dark
-                        v-model="password"
+                        v-model="Login.password"
+                        type="password"
                         label="PassWord"
                       >
 
@@ -93,9 +95,9 @@
                 <v-card-actions
                 >
 
-                  <v-btn outlined color="#2ebfaf" style="margin: 0 auto">Log In</v-btn>
+                  <v-btn outlined color="#2ebfaf" style="margin: 0 auto" @click="login">Log In</v-btn>
 
-                  <v-btn outlined color="#2ebfaf" style="margin: 0 auto">Sign up</v-btn>
+                  <v-btn outlined color="#2ebfaf" style="margin: 0 auto" @click="signup">Sign up</v-btn>
 
                 </v-card-actions>
 
@@ -114,8 +116,47 @@
 </template>
 
 <script>
+import request from "@/utils/request";
+
 export default {
-  name: "Login"
+  name: "Login",
+  data() {
+    return {
+      valid: false,
+      Login: {
+        email: "",
+        password: ""
+      },
+      publicKey: "",
+    }
+  },
+
+  methods: {
+
+    login() {
+      request.get("/user/ras/getPublicKey").then(res => {
+        this.publicKey = res.publicKey;
+        console.log(this.publicKey);
+      })
+
+      console.log("==============================");
+
+      request.post("/user/login/sign_in", this.Login).then(res => {
+        console.log(res);
+        if (res.status === 200) {
+          this.$router.push("/home");
+          localStorage.setItem("token", res.token);
+        }
+      })
+
+    },
+
+    signup() {
+      this.$router.push("/register");
+    }
+  }
+
+
 }
 </script>
 
