@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/ras")
+@RequestMapping("/user/ras")
 public class RsaController {
     private CreateRsaKey rsa;
 
