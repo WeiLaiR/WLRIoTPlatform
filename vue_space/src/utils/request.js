@@ -1,5 +1,6 @@
 import axios from 'axios'
 import router from "@/router";
+import Message from '@/components/message/index.js'
 
 const request = axios.create({
     baseURL: 'http://localhost:8887',
@@ -40,8 +41,13 @@ request.interceptors.response.use(
             res = res ? JSON.parse(res) : res
         }
 
-        if (res.status === 401) {
-            router.push('/login')
+        if (res.status === 200) {
+            Message.success(res.message);
+        }else if (res.status === 400) {
+            Message.error(res.message);
+        }else if (res.status === 401) {
+            router.push('/login');
+            Message.error(res.message);
         }
 
 
