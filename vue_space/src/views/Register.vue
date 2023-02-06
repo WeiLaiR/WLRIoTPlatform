@@ -27,18 +27,25 @@
             <v-card-actions>
 
               <v-form
-                  ref="loginForm"
-                  v-model="userRegister"
+                  ref="registerForm"
+                  v-model="valid"
                   style="width: 80%;margin: 0 35px"
               >
 
-                <v-text-field
-                    dark
-                    v-model="email"
-                    label="E-mail"
+                <v-form
+                    ref="eMail"
+                    v-model="valid1"
                 >
+                  <v-text-field
 
-                </v-text-field>
+                      dark
+                      v-model="email"
+                      :rules="emailRules"
+                      label="E-mail"
+                  >
+
+                  </v-text-field>
+                </v-form>
 
                 <v-row>
                   <v-col cols="9">
@@ -46,6 +53,7 @@
                     <v-text-field
                         dark
                         v-model="code"
+                        :rules="codeRules"
                         label="Verification Code"
                     >
 
@@ -68,6 +76,7 @@
                 <v-text-field
                     dark
                     v-model="password"
+                    :rules="passwordRules"
                     label="PassWord"
                 >
 
@@ -77,6 +86,7 @@
                 <v-text-field
                     dark
                     v-model="password2"
+                    :rules="passwordRules"
                     label="Enter the password again"
                 >
 
@@ -116,6 +126,30 @@ export default {
   name: "Register",
   data() {
     return {
+      valid: false,
+      valid1: false,
+      email: '',
+      code: '',
+      password: '',
+      password2: '',
+      publicKey: "",
+      emailRules: [
+        v => !!v || 'E-mail is required',
+        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+        v => (v && v.length <= 50) || 'E-mail must be less than 50 characters',
+      ],
+      passwordRules: [
+        v => !!v || 'PassWord is required',
+        v => (v && v.length <= 20) || 'PassWord must be less than 20 characters',
+        v => (v && v.length >= 3) || 'PassWord must be greater than 3 characters',
+      ],
+      codeRules: [
+        v => !!v || 'Code is required',
+        v => (v && v.length <= 20) || 'Code must be less than 20 characters',
+      ],
+      pwEncrypt: "",
+
+
 
     }
   },
