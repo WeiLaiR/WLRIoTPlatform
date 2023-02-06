@@ -6,12 +6,17 @@ import com.wei.iotplatformuserservice.mapper.LoginMapper;
 import com.wei.iotplatformuserservice.pojo.Login;
 import com.wei.iotplatformuserservice.service.LoginService;
 import com.wei.iotplatformuserservice.utils.CreateRsaKey;
+import com.wei.iotplatformuserservice.utils.RSAUtils;
 import com.wei.iotplatformuserservice.utils.RedisUtil;
 import com.wei.iotplatformuserservice.utils.TokenUtils;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -45,24 +50,35 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
 
     @Override
     public Map<String, Object> signIn(String email, String password) {
-//        获取私钥
-        String privateKey = createRsaKey.getPrivateKey();
-        System.out.println(privateKey);
+    //        获取私钥
+        String privateKeyString = createRsaKey.getPrivateKey();
+        RSAPrivateKey privateKey;
+        try {
+            privateKey = RSAUtils.getPrivateKey(privateKeyString);
+        }catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new CustomException(400, "解密发生未知错误!");
+        }
+        String pw = RSAUtils.privateDecrypt(password, privateKey);
 
         Map<String, Object> map = new HashMap<>();
         Login login = loginMapper.queryLogin(email);
         if (!Objects.isNull(login) && StringUtils.hasText(login.getPassword())) {
-            if (login.getPassword().equals(password)) {
+            if (login.getStatus() != 0) {
+                if (login.getPassword().equals(DigestUtils.sha256Hex(pw.concat(email)))) {
 //                生成Token并存入redis
-                String token = TokenUtils.getToken(login.getUid(), email);
-                redisUtil.set(login.getUid().toString(), token);
+                    String token = TokenUtils.getToken(login.getUid(), email);
+                    redisUtil.set(login.getUid().toString(), token, TIMEOUT);
 
-                map.put("token", token);
-                map.put("status", 200);
-                map.put("message", "登录成功");
-            } else {
+                    map.put("token", token);
+                    map.put("status", 200);
+                    map.put("message", "登录成功");
+                } else {
+                    map.put("status", 400);
+                    map.put("message", "密码错误");
+                }
+            }else {
                 map.put("status", 400);
-                map.put("message", "密码错误");
+                map.put("message", "用户已被禁用,请及时联系管理员。");
             }
         } else {
             map.put("status", 400);
@@ -86,11 +102,24 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
     }
 
     @Override
-    public Map<String, Object> register(String email, String password, String vCode) {
+    public Map<String, Object> register(String email, String password, String vCode){
+
+        //        获取私钥
+        String privateKeyString = createRsaKey.getPrivateKey();
+        RSAPrivateKey privateKey;
+        try {
+            privateKey = RSAUtils.getPrivateKey(privateKeyString);
+        }catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new CustomException(400, "解密发生未知错误!");
+        }
+        String pw = RSAUtils.privateDecrypt(password, privateKey);
+
+        System.out.println(pw);
+
 
         String s = loginMapper.queryEmailEmpty(email);
 
-        if (!StringUtils.hasText(s)) {
+        if (StringUtils.hasText(s)) {
             throw new CustomException(400, "邮箱已被注册");
         }
 
@@ -98,13 +127,13 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
 
 
 //      校验验证码
-        String vCode1 = redisUtil.get(email);
+        String vCode1 = redisUtil.get(email.concat("vCode"));
 
-        if (vCode1.equals(vCode)) {
+        if (StringUtils.hasText(vCode1) && vCode1.equals(vCode)) {
             Login login = new Login();
 
             login.setEmail(email);
-            login.setPassword(password);
+            login.setPassword(DigestUtils.sha256Hex(pw.concat(email)));
 
             if (loginMapper.insert(login) > 0) {
                 map.put("status", 200);
