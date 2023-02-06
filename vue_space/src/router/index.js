@@ -22,8 +22,8 @@ const routes = [
       { path: 'deviceInfo', name: '设备信息', component: DeviceInfo},
       { path: 'deviceSetting', name: '设备配置', component: DeviceSetting},
       { path: 'dataStatistics', name: '数据统计', component: DataStatistics},
-      { path: 'userInfo', name: '数据统计', component: UserInfo},
-      { path: 'updateInfo', name: '数据统计', component: UpdateInfo},
+      { path: 'userInfo', name: '用户信息', component: UserInfo},
+      { path: 'updateInfo', name: '个人信息', component: UpdateInfo},
     ]
   },
   {
