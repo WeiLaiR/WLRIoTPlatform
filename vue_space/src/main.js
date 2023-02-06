@@ -11,6 +11,8 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {faTriangleExclamation} from '@fortawesome/free-solid-svg-icons'
 import {faCircleCheck} from '@fortawesome/free-solid-svg-icons'
+import JSEncrypt from 'jsencrypt';
+import SHA256 from 'js-sha256'
 // import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
 
@@ -19,6 +21,8 @@ Vue.config.productionTip = false
 Vue.use(VueAxios,axios)
 Vue.prototype.request=request
 Vue.prototype.$message = Message
+Vue.prototype.$jsEncrypt = JSEncrypt
+Vue.prototype.$SHA256 = SHA256
 library.add(faTriangleExclamation, faCircleCheck)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
