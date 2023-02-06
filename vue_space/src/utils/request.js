@@ -4,7 +4,7 @@ import Message from '@/components/message/index.js'
 
 const request = axios.create({
     baseURL: 'http://localhost:8887',
-    timeout: 5000
+    timeout: 12000
 })
 
 // request 拦截器
@@ -28,7 +28,7 @@ request.interceptors.response.use(
     response => {
         let res = response.data;
 
-        console.log('res======================================' + res)
+        console.log(res)
 
 
 
