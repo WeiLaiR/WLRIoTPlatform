@@ -73,6 +73,7 @@
                     <v-text-field
                         dark
                         v-model="Login.email"
+                        :rules="emailRules"
                         type="text"
                         label="E-mail"
                     >
@@ -82,6 +83,7 @@
                     <v-text-field
                         dark
                         v-model="Login.password"
+                        :rules="passwordRules"
                         type="password"
                         label="PassWord"
                       >
@@ -128,6 +130,16 @@ export default {
         password: ""
       },
       publicKey: "",
+      emailRules: [
+        v => !!v || 'E-mail is required',
+        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+      ],
+      passwordRules: [
+        v => !!v || 'PassWord is required',
+        v => (v && v.length <= 20) || 'PassWord must be less than 20 characters',
+        v => (v && v.length >= 3) || 'PassWord must be greater than 3 characters',
+      ],
+      pwEncrypt: "",
     }
   },
 
