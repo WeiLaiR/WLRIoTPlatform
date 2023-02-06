@@ -63,7 +63,7 @@
 
                   <v-col cols="3" style="padding: 0;margin: 0">
 
-                    <v-btn color="#2ebfaf" style="margin-top: 28px">send</v-btn>
+                    <v-btn color="#2ebfaf" style="margin-top: 28px" @click="sendEmail">send</v-btn>
 
                   </v-col>
                 </v-row>
@@ -101,7 +101,7 @@
             >
 
               <div style="margin: 0 auto">
-                <v-btn outlined color="#2ebfaf" >New account</v-btn>
+                <v-btn outlined color="#2ebfaf" @click="userRegister">New account</v-btn>
 
                 <v-btn outlined color="#2ebfaf" style="margin-left: 20px" @click="goBack">Go Back</v-btn>
 
@@ -122,6 +122,9 @@
 </template>
 
 <script>
+import request from "@/utils/request";
+import JSEncrypt from "jsencrypt";
+
 export default {
   name: "Register",
   data() {
@@ -156,7 +159,70 @@ export default {
   methods: {
     goBack() {
       this.$router.push('/login')
-    }
+    },
+    async userRegister() {
+
+      if (this.$refs.eMail.validate() && this.$refs.registerForm.validate()) {
+
+        if (this.password !== this.password2) {
+          this.$message.error("两次密码输入不一致！");
+        }
+
+        await request.get("/user/ras/getPublicKey").then(res => {
+          this.publicKey = res.publicKey;
+          console.log(this.publicKey);
+        })
+
+        // 进行简单的加盐
+        let temp = ""
+        for (let i = 0; i < this.password.length; i++) {
+          temp += (i + 7) * (this.password.charCodeAt(this.password.length - i - 1) + temp.length) % 103
+          temp += String.fromCharCode((((i + 3) * this.password.charCodeAt(i) + temp.length) % this.password.length) % 24 + 97)
+          temp += ((this.password.charCodeAt(i) + 16) * temp.length % 107)
+          if (i * temp.length % 2 === 0) {
+            temp += String.fromCharCode(((this.password.charCodeAt(this.password.length - i - 1) + temp.length) * (i * temp.length % 300 + 6)) % 24 + 65)
+          }
+          temp += String.fromCharCode( ((this.password.charCodeAt(i) + i) * temp.length) % 24 + 65)
+        }
+
+        console.log('加盐' + temp);
+
+        let sha256 = this.$SHA256(temp);
+
+        console.log('sha256加密' + sha256);
+
+        let encrypt = new JSEncrypt();
+        encrypt.setPublicKey(this.publicKey);
+        this.pwEncrypt = encrypt.encrypt(sha256);
+
+        console.log('RSA加密' + this.pwEncrypt);
+
+        request.post('/user/login/register', {
+          email: this.email,
+          code: this.code,
+          password: this.pwEncrypt
+        }).then(res => {
+          if (res.status === 200) {
+            this.$router.push('/login')
+          }
+        })
+
+
+
+      }
+
+    },
+    sendEmail() {
+      if (this.$refs.eMail.validate()) {
+        request.post('/mail/email/send', {
+          email: this.email
+        }).then(res => {
+          console.log(res)
+        })
+      }
+
+    },
+
   }
 }
 </script>
@@ -166,7 +232,7 @@ export default {
 .wrapper {
   height: 100vh;
   background-image: url("../assets/bg2.jpg");
-  background-size: 100%;
+  background-size: cover;
   overflow: hidden;
 }
 
