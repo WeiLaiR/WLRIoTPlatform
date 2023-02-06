@@ -31,4 +31,9 @@ public class LoginController {
 //        System.out.println(login);
         return loginService.signIn(login.getEmail(), login.getPassword());
     }
+
+    @PostMapping("/register")
+    public Map<String, Object> register(@RequestBody Map<String, String> lmap) {
+        return loginService.register(lmap.get("email"), lmap.get("password"), lmap.get("code"));
+    }
 }
