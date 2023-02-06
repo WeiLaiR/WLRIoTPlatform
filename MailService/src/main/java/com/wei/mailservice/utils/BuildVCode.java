@@ -29,8 +29,8 @@ public class BuildVCode {
     public String buildVCode(String eMail) {
         String randomCode = Integer.toString((int) ((Math.random() * 9 + 1) * 100000));
 
-        redisUtil.set(eMail, randomCode, TIMEOUT);
-        redisUtil.set(eMail + "0ta", "0", TRYAGAIN);
+        redisUtil.set(eMail.concat("vCode"), randomCode, TIMEOUT);
+        redisUtil.set(eMail.concat("0ta"), "0", TRYAGAIN);
 
         return randomCode;
     }
