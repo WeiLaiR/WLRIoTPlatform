@@ -5,7 +5,7 @@
 <mapper namespace="com.wei.iotplatformuserservice.mapper.LoginMapper">
 
     <select id="queryLogin" resultType="com.wei.iotplatformuserservice.pojo.Login">
-        select uid,password from login where email = #{email}
+        select uid,password,status from login where email = #{email}
     </select>
 
     <select id="queryEmailEmpty" resultType="java.lang.String">
