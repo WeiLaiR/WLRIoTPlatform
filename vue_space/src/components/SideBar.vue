@@ -29,7 +29,7 @@
                       </v-list-item-content>
                   </v-list-item>
 
-                 <v-list-item class="mt-16" v-slot="{ active }">
+                 <v-list-item class="mt-16" v-slot="{ active }" @click="LogOut">
                   <v-list-item-icon class="ml-6">
                       <v-icon :color="active ? 'black' : 'grey'" >mdi-exit-to-app</v-icon>
                   </v-list-item-icon>
@@ -75,6 +75,8 @@
 </template>
 
 <script>
+import request from "@/utils/request";
+
 export default {
     data: () =>({
         selectedItem: 0,
@@ -85,9 +87,20 @@ export default {
             {icon: 'mdi-account-outline', text: '数据统计', path: '/dataStatistics'},
             {icon: 'mdi-content-paste', text: '用户信息', path: '/userInfo'},
             {icon: 'mdi-home-outline', text: '个人信息', path: '/updateInfo'},
-            {icon: 'mdi-cogs', text: '设置', path: '/home'},
+            {icon: 'mdi-cogs', text: '设置', path: '/setting'},
         ],
-    })
+    }),
+  methods: {
+    LogOut() {
+      request.post("user/login/log_out").then( res => {
+        if (res.status === 200) {
+          this.$message.success(res.message);
+        }
+        localStorage.removeItem('token');
+        this.$router.push('/login');
+      })
+    }
+  }
 }
 </script>
 
