@@ -25,7 +25,7 @@
                 cols="6"
             >
               <v-text-field
-                  label="输入用户id或邮箱"
+                  label="输入用户id、邮箱或手机号码"
                   filled
                   style="margin-left: 30px;margin-top: 22px;"
                   color="#2ebfaf"
@@ -70,7 +70,7 @@
 
           <v-data-table
               :headers="headers"
-              :items="desserts"
+              :items="userdata"
               :items-per-page="rowNums"
               :page="pageNum"
               :server-items-length="itemNums"
@@ -154,6 +154,8 @@
 </template>
 
 <script>
+import request from "@/utils/request";
+
 export default {
   name: "UserInfo",
   data() {
@@ -170,29 +172,29 @@ export default {
           text: '用户ID',
           align: 'start',
           sortable: false,
-          value: 'name',
+          value: 'uid',
         },
-        { text: '用户名', value: 'calories' , sortable: false},
-        { text: '邮箱', value: 'fat' , sortable: false},
-        { text: '账户创建时间', value: 'carbs' , sortable: false},
-        { text: '电话', value: 'protein' , sortable: false},
+        { text: '用户名', value: 'uname' , sortable: false},
+        { text: '邮箱', value: 'email' , sortable: false},
+        { text: '账户创建时间', value: 'createTime' , sortable: false},
+        { text: '手机号码', value: 'phoneNumber' , sortable: false},
         { text: '操作', value: 'actions', sortable: false },
       ],
-      desserts: [],
+      userdata: [],
       editedIndex: -1,
       editedItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
+        uid: 0,
+        uname: '',
+        email: '',
+        createTime: '',
+        phoneNumber: '',
       },
       defaultItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
+        uid: 0,
+        uname: '',
+        email: '',
+        createTime: '',
+        phoneNumber: '',
       },
 
     }
@@ -209,96 +211,24 @@ export default {
     // }
   },
 
-  // 启动后触发此触发器填充假数据
   created () {
-    this.initialize()
+    request.get("user/users/listP/" + this.pageNum + "/" + this.rowNums + "/" + (this.deviceSearch === "" ? "null" : this.deviceSearch)).then(res => {
+      console.log(res)
+      this.userdata = res.data;
+      this.itemNums = res.total;
+    });
   },
 
   methods: {
-    initialize () {
-      this.desserts = [
-        {
-          name: 'Frozen Yogurt',
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-        },
-        {
-          name: 'Ice cream sandwich',
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-        },
-        {
-          name: 'Eclair',
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-        },
-        {
-          name: 'Cupcake',
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-        },
-        {
-          name: 'Gingerbread',
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-        },
-        {
-          name: 'Jelly bean',
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-        },
-        {
-          name: 'Lollipop',
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-        },
-        {
-          name: 'Honeycomb',
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5,
-        },
-        {
-          name: 'Donut',
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9,
-        },
-        {
-          name: 'KitKat',
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
-        },
-      ]
-    },
-
     editItem (item) {
-      this.editedIndex = this.desserts.indexOf(item)
+      this.editedIndex = this.userdata.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialog = true
     },
 
     deleteItem (item) {
-      const index = this.desserts.indexOf(item)
-      confirm('Are you sure you want to delete this item?') && this.desserts.splice(index, 1)
+      const index = this.userdata.indexOf(item)
+      confirm('Are you sure you want to delete this item?') && this.userdata.splice(index, 1)
     },
 
     close () {
@@ -311,12 +241,14 @@ export default {
 
     save () {
       if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem)
+        Object.assign(this.userdata[this.editedIndex], this.editedItem)
       } else {
-        this.desserts.push(this.editedItem)
+        this.userdata.push(this.editedItem)
       }
       this.close()
     },
+
+
 
   },
 }
