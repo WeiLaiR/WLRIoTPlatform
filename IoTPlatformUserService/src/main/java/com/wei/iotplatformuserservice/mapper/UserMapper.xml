@@ -4,4 +4,18 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wei.iotplatformuserservice.mapper.UserMapper">
 
+    <select id="qUserListPQbc" resultType="com.wei.iotplatformuserservice.pojo.User">
+        SELECT SQL_CALC_FOUND_ROWS * FROM user WHERE uid like #{val} or email like #{val} or phone_number like #{val} LIMIT #{start}, #{limit};
+    </select>
+
+    <select id="qUserListPage" resultType="com.wei.iotplatformuserservice.pojo.User">
+        SELECT * FROM user WHERE uid >= (SELECT uid FROM user WHERE uid LIMIT #{start}, 1) LIMIT #{limit};
+    </select>
+    <select id="qUserListCount" resultType="java.lang.Integer">
+        SELECT COUNT(uid) FROM user;
+    </select>
+
+    <select id="qUserListCountQbc" resultType="java.lang.Integer">
+        SELECT FOUND_ROWS() AS TOTAL;
+    </select>
 </mapper>
