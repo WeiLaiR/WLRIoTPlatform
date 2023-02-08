@@ -71,10 +71,10 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
 
                     map.put("token", token);
                     map.put("status", 200);
-                    map.put("message", "登录成功");
+                    map.put("message", "登录成功!");
                 } else {
                     map.put("status", 400);
-                    map.put("message", "密码错误");
+                    map.put("message", "密码错误!");
                 }
             }else {
                 map.put("status", 400);
@@ -82,9 +82,28 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
             }
         } else {
             map.put("status", 400);
-            map.put("message", "用户不存在");
+            map.put("message", "用户不存在!");
         }
 
+        return map;
+    }
+
+    @Override
+    public Map<String, Object> logOut() {
+        Long id = TokenUtils.getId();
+        if (id == null) {
+            throw new CustomException(400, "token已过期!");
+        }
+        String str = id.toString();
+        Map<String, Object> map = new HashMap<>();
+        redisUtil.del(str);
+        if (redisUtil.get(str) == null) {
+            map.put("status", 200);
+            map.put("message", "注销登录成功!");
+        } else {
+            map.put("status", 400);
+            map.put("message", "注销登录失败，请再次尝试!");
+        }
         return map;
     }
 
@@ -120,7 +139,7 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
         String s = loginMapper.queryEmailEmpty(email);
 
         if (StringUtils.hasText(s)) {
-            throw new CustomException(400, "邮箱已被注册");
+            throw new CustomException(400, "邮箱已被注册!");
         }
 
         HashMap<String, Object> map = new HashMap<>();
@@ -137,13 +156,13 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
 
             if (loginMapper.insert(login) > 0) {
                 map.put("status", 200);
-                map.put("message", "注册成功");
+                map.put("message", "注册成功!");
             } else {
                 map.put("status", 400);
-                map.put("message", "注册失败");
+                map.put("message", "注册失败!");
             }
         } else {
-            throw new CustomException(400, "验证码错误");
+            throw new CustomException(400, "验证码错误!");
         }
 
 
