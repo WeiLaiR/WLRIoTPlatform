@@ -25,7 +25,7 @@
               label="用户名称"
               filled
               color="#2ebfaf"
-              v-model="userName">
+              v-model="uname">
 
           </v-text-field>
 
@@ -51,6 +51,7 @@
               label="邮箱"
               filled
               color="#2ebfaf"
+              readonly
               v-model="email">
 
           </v-text-field>
@@ -59,7 +60,7 @@
               label="电话"
               filled
               color="#2ebfaf"
-              v-model="phone">
+              v-model="phoneNumber">
 
           </v-text-field>
 
@@ -67,7 +68,7 @@
               label="简介"
               filled
               color="#2ebfaf"
-              v-model="introduction">
+              v-model="briefIntroduction">
 
           </v-text-field>
 
@@ -99,6 +100,7 @@
                   large rounded
                   color="#2ebfaf"
                   dark
+                  @click="save"
               >
                  S A V E
               </v-btn>
@@ -114,6 +116,7 @@
                   large rounded
                   color="#2ebfaf"
                   dark
+                  @click="restore"
               >
                 restore
               </v-btn>
@@ -133,20 +136,70 @@
 </template>
 
 <script>
+import request from "@/utils/request";
+
 export default {
   name: "UpdateInfo",
   data() {
     return {
+      uname: "",
+      sex: null,
+      age: null,
+      email: "",
+      phoneNumber: "",
+      briefIntroduction: "",
+      remarks: "",
 
       sexItem: [
-        {text: '男', value: 1},
-        {text: '女', value: 0},
+        {text: '男', value: true},
+        {text: '女', value: false},
       ]
-
-
     }
-
   },
+
+  created() {
+    request.get("user/users/userinfo").then( res => {
+      if (res.status === 200) {
+        this.uname = res.data.uname;
+        this.sex = res.data.sex;
+        this.age = res.data.age;
+        this.email = res.data.email;
+        this.phoneNumber = res.data.phoneNumber;
+        this.briefIntroduction = res.data.briefIntroduction;
+        this.remarks = res.data.remarks;
+      }
+    })
+  },
+
+  methods: {
+    restore() {
+      request.get("user/users/userinfo").then( res => {
+        if (res.status === 200) {
+          this.uname = res.data.uname;
+          this.sex = res.data.sex;
+          this.age = res.data.age;
+          this.email = res.data.email;
+          this.phoneNumber = res.data.phoneNumber;
+          this.briefIntroduction = res.data.briefIntroduction;
+          this.remarks = res.data.remarks;
+        }
+      })
+    },
+    save() {
+      request.put("user/users/update",{
+        uname : this.uname,
+        sex : this.sex,
+        age : this.age,
+        phoneNumber : this.phoneNumber,
+        briefIntroduction : this.briefIntroduction,
+        remarks : this.remarks
+      }).then(res => {
+        if (res.status === 200) {
+          this.$message.success(res.message);
+        }
+      })
+    }
+  }
 }
 </script>
 
