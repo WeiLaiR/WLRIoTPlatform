@@ -14,4 +14,8 @@ public interface UserService extends IService<User> {
     Map<String, Object> searchUserInfo(Long uid);
 
     Map<String, Object> deleteUserInfo(Long uid);
+
+    Map<String, Object> updateUserInfo(User user);
+
+    Map<String, Object> queryUserListP(Integer start, Integer limit, String val);
 }
