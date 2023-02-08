@@ -9,6 +9,7 @@ import DeviceSetting from "@/views/DeviceSetting.vue";
 import DataStatistics from "@/views/DataStatistics.vue";
 import UserInfo from "@/views/UserInfo.vue";
 import UpdateInfo from "@/views/UpdateInfo.vue";
+import Setting from "@/views/Setting.vue";
 
 Vue.use(VueRouter)
 
@@ -24,6 +25,7 @@ const routes = [
       { path: 'dataStatistics', name: '数据统计', component: DataStatistics},
       { path: 'userInfo', name: '用户信息', component: UserInfo},
       { path: 'updateInfo', name: '个人信息', component: UpdateInfo},
+      { path: 'setting', name: '设置', component: Setting},
     ]
   },
   {
