@@ -155,7 +155,7 @@ export default {
       if (this.$refs.loginForm.validate()) {
         await request.get("/user/ras/getPublicKey").then(res => {
           this.publicKey = res.publicKey;
-          console.log(this.publicKey);
+          // console.log(this.publicKey);
         })
 
         console.log("==============================");
@@ -173,21 +173,22 @@ export default {
           temp += String.fromCharCode(((this.Login.password.charCodeAt(i) + i) * temp.length) % 24 + 65)
         }
 
-        console.log('加盐' + temp);
+        // console.log('加盐' + temp);
 
         let sha256 = this.$SHA256(temp);
 
-        console.log('sha256加密' + sha256);
+        // console.log('sha256加密' + sha256);
 
         let encrypt = new JSEncrypt();
         encrypt.setPublicKey(this.publicKey);
         this.pwEncrypt = encrypt.encrypt(sha256);
 
-        console.log('RSA加密' + this.pwEncrypt);
+        // console.log('RSA加密' + this.pwEncrypt);
 
         request.post("/user/login/sign_in", {email: this.Login.email, password: this.pwEncrypt}).then(res => {
           console.log(res);
           if (res.status === 200) {
+            this.$message.success(res.message);
             this.$router.push("/home");
             localStorage.setItem("token", res.token);
           }

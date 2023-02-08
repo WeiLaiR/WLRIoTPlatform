@@ -170,7 +170,7 @@ export default {
 
         await request.get("/user/ras/getPublicKey").then(res => {
           this.publicKey = res.publicKey;
-          console.log(this.publicKey);
+          // console.log(this.publicKey);
         })
 
         // 进行简单的加盐
@@ -185,17 +185,17 @@ export default {
           temp += String.fromCharCode( ((this.password.charCodeAt(i) + i) * temp.length) % 24 + 65)
         }
 
-        console.log('加盐' + temp);
+        // console.log('加盐' + temp);
 
         let sha256 = this.$SHA256(temp);
 
-        console.log('sha256加密' + sha256);
+        // console.log('sha256加密' + sha256);
 
         let encrypt = new JSEncrypt();
         encrypt.setPublicKey(this.publicKey);
         this.pwEncrypt = encrypt.encrypt(sha256);
 
-        console.log('RSA加密' + this.pwEncrypt);
+        // console.log('RSA加密' + this.pwEncrypt);
 
         request.post('/user/login/register', {
           email: this.email,
@@ -203,6 +203,7 @@ export default {
           password: this.pwEncrypt
         }).then(res => {
           if (res.status === 200) {
+            this.$message.success(res.message);
             this.$router.push('/login')
           }
         })
