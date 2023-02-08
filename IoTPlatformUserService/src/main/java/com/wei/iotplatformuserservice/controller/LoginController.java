@@ -36,4 +36,9 @@ public class LoginController {
     public Map<String, Object> register(@RequestBody Map<String, String> lmap) {
         return loginService.register(lmap.get("email"), lmap.get("password"), lmap.get("code"));
     }
+
+    @PostMapping("/log_out")
+    public Map<String, Object> logOut() {
+        return loginService.logOut();
+    }
 }
