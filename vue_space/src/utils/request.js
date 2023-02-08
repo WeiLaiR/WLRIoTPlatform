@@ -28,7 +28,7 @@ request.interceptors.response.use(
     response => {
         let res = response.data;
 
-        console.log(res)
+        // console.log(res)
 
 
 
@@ -42,7 +42,7 @@ request.interceptors.response.use(
         }
 
         if (res.status === 200) {
-            Message.success(res.message);
+            console.log(res.message)
         }else if (res.status === 400) {
             Message.error(res.message);
         }else if (res.status === 401) {
