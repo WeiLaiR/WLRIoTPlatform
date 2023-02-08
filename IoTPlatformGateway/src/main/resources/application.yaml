@@ -5,6 +5,16 @@ spring:
   application:
     name: IoT-gateway
 
+  redis:
+    host: 192.168.3.66
+    port: 6379
+    password: '123456'
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1ms
+        max-idle: 8
+        min-idle: 0
 
   cloud:
     nacos:
