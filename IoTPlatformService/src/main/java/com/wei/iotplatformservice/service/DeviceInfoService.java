@@ -13,4 +13,6 @@ public interface DeviceInfoService extends IService<DeviceInfo> {
      * @return 状态值
      */
     Map<String, Object> newDeviceInfo(DeviceInfo deviceInfo);
+
+    Map<String, Object> qDeviceInfoListP(String val, Integer start, Integer limit);
 }
