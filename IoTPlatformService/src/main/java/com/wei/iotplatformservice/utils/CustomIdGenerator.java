@@ -33,13 +33,14 @@ public class CustomIdGenerator implements IdentifierGenerator {
         } else {
             now = new Date().getTime();
 //            这里仅锁住对象即可，没有必要锁住整个类
-            synchronized (this) {
-                if (now == time) {
-                    do {
+            if (now == time) {
+                synchronized (this) {
+                    while (now == time)
                         now = new Date().getTime();
-                    } while (now == time);
                     time = now;
                 }
+            }else {
+                time = now;
             }
             count.set(0);
         }
@@ -47,7 +48,7 @@ public class CustomIdGenerator implements IdentifierGenerator {
 //        乘10默认机器码一位十进制，可设置0-9
         now = now * 10 + mac;
 //        乘100默认计数位两位十进制，可设置0-99
-        now = now * 111 + count.get();
+        now = now * 100 + count.get();
         //返回生成的id值即可.
         return now;
     }

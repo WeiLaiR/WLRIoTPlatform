@@ -33,13 +33,14 @@ public class CustomIdGenerator implements IdentifierGenerator {
         } else {
             now = new Date().getTime();
 //            这里仅锁住对象即可，没有必要锁住整个类
-            synchronized (this) {
-                if (now == time) {
-                    do {
+            if (now == time) {
+                synchronized (this) {
+                    while (now == time)
                         now = new Date().getTime();
-                    } while (now == time);
                     time = now;
                 }
+            }else {
+                time = now;
             }
             count.set(0);
         }
