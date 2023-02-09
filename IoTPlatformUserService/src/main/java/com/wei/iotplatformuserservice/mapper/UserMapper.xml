@@ -5,11 +5,11 @@
 <mapper namespace="com.wei.iotplatformuserservice.mapper.UserMapper">
 
     <select id="qUserListPQbc" resultType="com.wei.iotplatformuserservice.pojo.User">
-        SELECT SQL_CALC_FOUND_ROWS * FROM user WHERE uid like #{val} or email like #{val} or phone_number like #{val} LIMIT #{start}, #{limit};
+        SELECT SQL_CALC_FOUND_ROWS uid, uname, email, create_time, phone_number FROM user WHERE uid like #{val} or email like #{val} or phone_number like #{val} LIMIT #{start}, #{limit};
     </select>
 
     <select id="qUserListPage" resultType="com.wei.iotplatformuserservice.pojo.User">
-        SELECT * FROM user WHERE uid >= (SELECT uid FROM user WHERE uid LIMIT #{start}, 1) LIMIT #{limit};
+        SELECT uid, uname, email, create_time, phone_number FROM user WHERE uid >= (SELECT uid FROM user WHERE uid LIMIT #{start}, 1) LIMIT #{limit};
     </select>
     <select id="qUserListCount" resultType="java.lang.Integer">
         SELECT COUNT(uid) FROM user;
