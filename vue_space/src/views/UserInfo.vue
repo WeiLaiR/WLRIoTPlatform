@@ -30,6 +30,7 @@
                   style="margin-left: 30px;margin-top: 22px;"
                   color="#2ebfaf"
                   append-icon="mdi-magnify"
+                  @blur="load"
                   v-model="deviceSearch">
 
               </v-text-field>
@@ -71,8 +72,8 @@
           <v-data-table
               :headers="headers"
               :items="userdata"
-              :items-per-page="rowNums"
-              :page="pageNum"
+              :items-per-page.sync="rowNums"
+              :page.sync="pageNum"
               :server-items-length="itemNums"
               class="elevation-1"
               style="margin-left: 30px;margin-right: 30px"
@@ -206,6 +207,12 @@ export default {
     dialog (val) {
       val || this.close()
     },
+    pageNum () {
+      this.load();
+    },
+    rowNums () {
+      this.load();
+    },
     // deviceSearch (newVal, oldVal) {
     //   console.log('newVal' + newVal + 'OLD' + oldVal);
     // }
@@ -247,6 +254,17 @@ export default {
       }
       this.close()
     },
+
+    load() {
+      request.get("user/users/listP/" + this.pageNum + "/" + this.rowNums + "/" + (this.deviceSearch === "" ? "null" : this.deviceSearch)).then(res => {
+        console.log(res)
+        this.userdata = res.data;
+        this.itemNums = res.total;
+      });
+    },
+    formTitle() {
+
+    }
 
 
 
