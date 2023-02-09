@@ -30,6 +30,7 @@
                   style="margin-left: 30px;margin-top: 22px;"
                   color="#2ebfaf"
                   append-icon="mdi-magnify"
+                  @blur="load"
                   v-model="deviceSearch">
 
               </v-text-field>
@@ -70,9 +71,9 @@
 
           <v-data-table
               :headers="headers"
-              :items="desserts"
-              :items-per-page="rowNums"
-              :page="pageNum"
+              :items="infoData"
+              :items-per-page.sync="rowNums"
+              :page.sync="pageNum"
               :server-items-length="itemNums"
               class="elevation-1"
               style="margin-left: 30px;margin-right: 30px"
@@ -154,6 +155,8 @@
 </template>
 
 <script>
+import request from "@/utils/request";
+
 export default {
   name: "DeviceInfo",
   data() {
@@ -170,29 +173,29 @@ export default {
           text: '设备ID',
           align: 'start',
           sortable: false,
-          value: 'name',
+          value: 'deviceId',
         },
-        { text: '设备名称', value: 'calories' },
-        { text: '创建时间', value: 'fat' },
-        { text: '描述信息', value: 'carbs' },
-        { text: '状态', value: 'protein' },
+        { text: '设备名称', value: 'deviceName' },
+        { text: '创建时间', value: 'createTime' },
+        { text: '描述信息', value: 'description' },
+        { text: '状态', value: 'status' },
         { text: '操作', value: 'actions', sortable: false },
       ],
-      desserts: [],
+      infoData: [],
       editedIndex: -1,
       editedItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
+        deviceId: '',
+        deviceName: 0,
+        createTime: 0,
+        description: 0,
+        status: 0,
       },
       defaultItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
+        deviceId: '',
+        deviceName: 0,
+        createTime: 0,
+        description: 0,
+        status: 0,
       },
 
     }
@@ -204,6 +207,12 @@ export default {
     dialog (val) {
       val || this.close()
     },
+    pageNum () {
+      this.load();
+    },
+    rowNums () {
+      this.load();
+    },
     // deviceSearch (newVal, oldVal) {
     //   console.log('newVal' + newVal + 'OLD' + oldVal);
     // }
@@ -211,94 +220,25 @@ export default {
 
   // 启动后触发此触发器填充假数据
   created () {
-    this.initialize()
+    request.get("platform/deviceInfo/listP/" + this.pageNum + "/" + this.rowNums + "/" + (this.deviceSearch === "" ? "null" : this.deviceSearch)).then(res => {
+      console.log(res)
+      this.infoData = res.data;
+      this.itemNums = res.total;
+    });
   },
 
   methods: {
-    initialize () {
-      this.desserts = [
-        {
-          name: 'Frozen Yogurt',
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-        },
-        {
-          name: 'Ice cream sandwich',
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-        },
-        {
-          name: 'Eclair',
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-        },
-        {
-          name: 'Cupcake',
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-        },
-        {
-          name: 'Gingerbread',
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-        },
-        {
-          name: 'Jelly bean',
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-        },
-        {
-          name: 'Lollipop',
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-        },
-        {
-          name: 'Honeycomb',
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5,
-        },
-        {
-          name: 'Donut',
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9,
-        },
-        {
-          name: 'KitKat',
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
-        },
-      ]
-    },
+
 
     editItem (item) {
-      this.editedIndex = this.desserts.indexOf(item)
+      this.editedIndex = this.infoData.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialog = true
     },
 
     deleteItem (item) {
-      const index = this.desserts.indexOf(item)
-      confirm('Are you sure you want to delete this item?') && this.desserts.splice(index, 1)
+      const index = this.infoData.indexOf(item)
+      confirm('Are you sure you want to delete this item?') && this.infoData.splice(index, 1)
     },
 
     close () {
@@ -311,12 +251,23 @@ export default {
 
     save () {
       if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem)
+        Object.assign(this.infoData[this.editedIndex], this.editedItem)
       } else {
-        this.desserts.push(this.editedItem)
+        this.infoData.push(this.editedItem)
       }
       this.close()
     },
+
+    load() {
+      request.get("platform/deviceInfo/listP/" + this.pageNum + "/" + this.rowNums + "/" + (this.deviceSearch === "" ? "null" : this.deviceSearch)).then(res => {
+        console.log(res)
+        this.infoData = res.data;
+        this.itemNums = res.total;
+      });
+    },
+    formTitle() {
+
+    }
 
   },
 }
