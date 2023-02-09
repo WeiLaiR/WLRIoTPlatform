@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -46,6 +47,26 @@ public class DeviceInfoServiceImpl extends ServiceImpl<DeviceInfoMapper, DeviceI
             map.put("status", 400);
             map.put("message", "设备新增失败");
         }
+
+        return map;
+    }
+
+    @Override
+    public Map<String, Object> qDeviceInfoListP(String val, Integer start, Integer limit) {
+        Map<String, Object> map = new HashMap<>();
+        if (val.equals("null")) {
+            val = "%";
+        }else {
+            val = val.concat("%");
+        }
+
+        List<DeviceInfo> infos = deviceInfoMapper.qInfoListPQbc(val, start, limit, TokenUtils.getId());
+        Integer count = deviceInfoMapper.qInfoListCountQbc();
+
+        map.put("status", 200);
+        map.put("message", "查询成功");
+        map.put("data", infos);
+        map.put("total", count);
 
         return map;
     }
