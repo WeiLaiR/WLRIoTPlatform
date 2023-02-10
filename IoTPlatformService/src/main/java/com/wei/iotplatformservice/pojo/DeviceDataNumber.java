@@ -22,7 +22,7 @@ public class DeviceDataNumber {
     @TableId(type = IdType.ASSIGN_ID)
     private Long deviceDataId;
     private Long deviceCfgId;
-    private Double dataNumber;
+    private Double data;
     //    注解优先级高于yml配置文件中的设置！
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
