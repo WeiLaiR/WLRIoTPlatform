@@ -39,4 +39,9 @@ public class DeviceInfoController {
     }
 
 
+    @GetMapping("/briefList")
+    public Map<String, Object> getBriefInfoList() {
+        return deviceInfoService.queryBriefInfoList();
+    }
+
 }
