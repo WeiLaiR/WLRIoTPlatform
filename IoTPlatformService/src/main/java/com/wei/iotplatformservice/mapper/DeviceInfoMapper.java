@@ -12,4 +12,6 @@ public interface DeviceInfoMapper extends BaseMapper<DeviceInfo> {
     List<DeviceInfo> qInfoListPQbc(String val, Integer start, Integer limit, Long uid);
 
     Integer qInfoListCountQbc();
+
+    List<DeviceInfo> queryBriefInfoList(Long uid);
 }

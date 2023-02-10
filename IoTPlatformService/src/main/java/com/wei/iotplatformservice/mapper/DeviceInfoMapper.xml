@@ -11,5 +11,8 @@
     <select id="qInfoListCountQbc" resultType="java.lang.Integer">
         SELECT FOUND_ROWS() AS TOTAL;
     </select>
+    <select id="queryBriefInfoList" resultType="com.wei.iotplatformservice.pojo.DeviceInfo">
+        SELECT device_id, device_name FROM device_info  WHERE uid = #{uid} LIMIT 100;
+    </select>
 
 </mapper>
