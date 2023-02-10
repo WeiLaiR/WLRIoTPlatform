@@ -73,9 +73,9 @@
 
           <v-data-table
               :headers="headers"
-              :items="desserts"
-              :items-per-page="rowNums"
-              :page="pageNum"
+              :items="dataCfg"
+              :items-per-page.sync="rowNums"
+              :page.sync="pageNum"
               :server-items-length="itemNums"
               class="elevation-1"
               style="margin-left: 30px;margin-right: 30px"
@@ -157,17 +157,14 @@
 </template>
 
 <script>
+import request from "@/utils/request";
+
 export default {
   name: "DeviceSetting",
   data() {
     return {
-      deviceCh: {},
+      deviceCh: null,
       items: [
-        { text: '123', value: '1233' },
-        { text: '123a', value: '1233a' },
-        { text: '123b', value: '1233b' },
-        { text: '123c', value: '1233c' },
-        { text: '123d', value: '1233d' },
       ],
 
 
@@ -182,27 +179,27 @@ export default {
           text: '配置ID',
           align: 'start',
           sortable: false,
-          value: 'name',
+          value: 'deviceCfgId',
         },
-        { text: '数据名称', value: 'calories' },
-        { text: '数据类型', value: 'fat' },
-        { text: '创建时间', value: 'carbs' },
-        { text: '操作', value: 'actions', sortable: false },
+        { text: '数据名称', sortable: false, value: 'typeName' },
+        { text: '类型是否为数字', sortable: false, value: 'isNumber' },
+        { text: '创建时间', sortable: false, value: 'createTime' },
+        { text: '操作',  value: 'actions', sortable: false },
       ],
-      desserts: [],
+      dataCfg: [],
       editedIndex: -1,
       editedItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
+        deviceCfgId: '',
+        typeName: 0,
+        isNumber: 0,
+        createTime: 0,
         protein: 0,
       },
       defaultItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
+        deviceCfgId: '',
+        typeName: 0,
+        isNumber: 0,
+        createTime: 0,
         protein: 0,
       },
 
@@ -216,93 +213,49 @@ export default {
     dialog (val) {
       val || this.close()
     },
-    deviceCh(newVal, oldVal) {
-      console.log('newVal' + newVal);
-      console.log('oldVal' + oldVal);
-    }
+    deviceCh() {
+      this.load();
+    },
+    pageNum () {
+      this.load();
+    },
+    rowNums () {
+      this.load();
+    },
   },
 
 
   // 启动后触发此触发器填充假数据
-  created () {
-    this.initialize()
+  async created () {
+
+    await request.get("/platform/deviceInfo/briefList").then(res => {
+      console.log(res)
+      this.items = res.data;
+      this.deviceCh = this.items.at(0).value
+    });
+
+
+    if (this.deviceCh != null && this.deviceCh !== '') {
+      request.get("/platform/deviceCfg/listP/" + this.pageNum + "/" + this.rowNums + "/" + this.deviceCh).then(res => {
+        console.log(res)
+        this.dataCfg = res.data;
+        this.itemNums = res.total;
+      });
+    }
+
   },
 
   methods: {
-    initialize() {
-      this.desserts = [
-        {
-          name: 'Frozen Yogurt',
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-        },
-        {
-          name: 'Ice cream sandwich',
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-        },
-        {
-          name: 'Eclair',
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-        },
-        {
-          name: 'Cupcake',
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-        },
-        {
-          name: 'Gingerbread',
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-        },
-        {
-          name: 'Jelly bean',
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-        },
-        {
-          name: 'Lollipop',
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-        },
-        {
-          name: 'Honeycomb',
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-        },
-        {
-          name: 'Donut',
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-        },
-        {
-          name: 'KitKat',
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-        },
-      ]
-    },
 
     editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item)
+      this.editedIndex = this.dataCfg.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialog = true
     },
 
     deleteItem(item) {
-      const index = this.desserts.indexOf(item)
-      confirm('Are you sure you want to delete this item?') && this.desserts.splice(index, 1)
+      const index = this.dataCfg.indexOf(item)
+      confirm('Are you sure you want to delete this item?') && this.dataCfg.splice(index, 1)
     },
 
     close() {
@@ -315,12 +268,26 @@ export default {
 
     save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem)
+        Object.assign(this.dataCfg[this.editedIndex], this.editedItem)
       } else {
-        this.desserts.push(this.editedItem)
+        this.dataCfg.push(this.editedItem)
       }
       this.close()
     },
+
+
+    load() {
+      if (this.deviceCh != null && this.deviceCh !== '') {
+        request.get("/platform/deviceCfg/listP/" + this.pageNum + "/" + this.rowNums + "/" + this.deviceCh).then(res => {
+          console.log(res)
+          this.dataCfg = res.data;
+          this.itemNums = res.total;
+        });
+      }
+    },
+    formTitle() {
+
+    }
   }
 }
 </script>
