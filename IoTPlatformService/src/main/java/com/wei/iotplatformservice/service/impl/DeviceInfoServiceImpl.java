@@ -9,6 +9,7 @@ import com.wei.iotplatformservice.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,6 +68,27 @@ public class DeviceInfoServiceImpl extends ServiceImpl<DeviceInfoMapper, DeviceI
         map.put("message", "查询成功");
         map.put("data", infos);
         map.put("total", count);
+
+        return map;
+    }
+
+    @Override
+    public Map<String, Object> queryBriefInfoList() {
+        Map<String, Object> map = new HashMap<>();
+
+        List<DeviceInfo> infos = deviceInfoMapper.queryBriefInfoList(TokenUtils.getId());
+        ArrayList<Map<String, Object>> maps = new ArrayList<>();
+
+        for (DeviceInfo info : infos) {
+            HashMap<String, Object> map1 = new HashMap<>();
+            map1.put("text", info.getDeviceName() + " - " + info.getDeviceId());
+            map1.put("value", info.getDeviceId());
+            maps.add(map1);
+        }
+
+        map.put("status", 200);
+        map.put("message", "查询成功");
+        map.put("data", maps);
 
         return map;
     }

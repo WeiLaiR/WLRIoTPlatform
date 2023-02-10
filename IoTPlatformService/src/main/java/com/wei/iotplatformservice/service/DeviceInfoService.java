@@ -15,4 +15,6 @@ public interface DeviceInfoService extends IService<DeviceInfo> {
     Map<String, Object> newDeviceInfo(DeviceInfo deviceInfo);
 
     Map<String, Object> qDeviceInfoListP(String val, Integer start, Integer limit);
+
+    Map<String, Object> queryBriefInfoList();
 }
