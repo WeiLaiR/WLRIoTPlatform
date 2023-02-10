@@ -43,7 +43,7 @@
             <v-select
                 v-model="cfgCh"
                 color="#2ebfaf"
-                :items="items"
+                :items="cfgS"
                 item-text="text"
                 item-value="value"
                 filled
@@ -54,8 +54,8 @@
           </v-col>
 
           <v-col
-              cols="2"
-              style="padding-left: 0;margin-top: 22px;padding-right: 20px"
+              cols="1"
+              style="padding-left: 0;margin-top: 22px;padding-right: 2px"
           >
             <v-menu
                 v-model="menu1"
@@ -83,8 +83,47 @@
           </v-col>
 
           <v-col
-              cols="2"
+              cols="1"
               style="padding-left: 0;margin-top: 22px;padding-right: 15px"
+          >
+            <v-menu
+                ref="menu3"
+                v-model="menu3"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                :return-value.sync="time1"
+                transition="scale-transition"
+                color="#2ebfaf"
+                offset-y
+                max-width="290px"
+                min-width="290px"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                    v-model="time1"
+                    label=" TIME"
+                    readonly
+                    color="#2ebfaf"
+                    v-bind="attrs"
+                    v-on="on"
+                ></v-text-field>
+              </template>
+              <v-time-picker
+                  v-if="menu3"
+                  v-model="time1"
+                  color="#2ebfaf"
+                  full-width
+                  @click:minute="$refs.menu3.save(time1)"
+              ></v-time-picker>
+            </v-menu>
+
+          </v-col>
+
+
+
+          <v-col
+              cols="1"
+              style="padding-left: 0;margin-top: 22px;padding-right: 2px;"
           >
             <v-menu
                 v-model="menu2"
@@ -111,8 +150,45 @@
 
           </v-col>
 
-          <v-col cols="1" style="margin-top: 16px;">
-            <v-switch v-model="switch1" color="#2ebfaf"></v-switch>
+          <v-col
+              cols="1"
+              style="padding-left: 0;margin-top: 22px;padding-right: 15px"
+          >
+            <v-menu
+                ref="menu4"
+                v-model="menu4"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                :return-value.sync="time2"
+                transition="scale-transition"
+                offset-y
+                color="#2ebfaf"
+                max-width="290px"
+                min-width="290px"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                    v-model="time2"
+                    label=" TIME"
+                    readonly
+                    color="#2ebfaf"
+                    v-bind="attrs"
+                    v-on="on"
+                ></v-text-field>
+              </template>
+              <v-time-picker
+                  v-if="menu4"
+                  v-model="time2"
+                  color="#2ebfaf"
+                  full-width
+                  @click:minute="$refs.menu4.save(time2)"
+              ></v-time-picker>
+            </v-menu>
+
+          </v-col>
+
+          <v-col cols="1" style="margin-top: 6px;">
+            <v-switch v-model="switch1" :disabled="!isNumber" messages="数据简要图" color="#2ebfaf"></v-switch>
           </v-col>
 
         </v-row>
@@ -139,17 +215,18 @@
               :auto-line-width="autoLineWidth"
               height="120"
               :labels="value"
+              label-size="3"
               auto-draw
           ></v-sparkline>
 
 
           <v-data-table
               v-show="!switch1"
-              :items-per-page="rowNums"
-              :page="pageNum"
+              :items-per-page.sync="rowNums"
+              :page.sync="pageNum"
               :server-items-length="itemNums"
               :headers="headers"
-              :items="desserts"
+              :items="dataValue"
               class="elevation-1"
               style="margin-left: 30px;margin-right: 30px"
           ></v-data-table>
@@ -171,6 +248,8 @@
 
 <script>
 
+import request from "@/utils/request";
+
 const gradients = [
   ['#222'],
   ['#42b3f4'],
@@ -188,28 +267,32 @@ export default {
       rowNums: 10,
       pageNum: 1,
       itemNums: 10,
-
+      isNumber: null,
       menu1: false,
       menu2: false,
       switch1: false,
       dateStart:new Date().toISOString().substr(0, 10),
       dateEnd:new Date().toISOString().substr(0, 10),
-      deviceCh: "",
-      cfgCh: "",
+      deviceCh: null,
+      cfgCh: null,
       items: [
-        { text: '123', value: '1233' },
-        { text: '123a', value: '1233a' },
-        { text: '123b', value: '1233b' },
-        { text: '123c', value: '1233c' },
-        { text: '123d', value: '1233d' },
+
       ],
+      cfgS: [
+
+      ],
+
+      time1: '00:00',
+      time2: '23:59',
+      menu3: false,
+      menu4: false,
 
       width: 3,
       radius: 10,
       padding: 16,
       lineCap: 'round',
       gradient: gradients[5],
-      value: [0, 2, 5, 9, 5, 10, 3, 5, 3, 0, 1, 8, 2, 9, 0],
+      value: [0, 2, 5, 9, 5, 10, 3, 5, 3, 0, 1, 8, 2, 9, 0, 11, 8, 5, 9, 5],
       gradientDirection: 'top',
       gradients,
       fill: false,
@@ -217,75 +300,110 @@ export default {
       autoLineWidth: false,
 
 
-
-
-
-
-
       headers: [
         {
           text: '数据ID',
           align: 'start',
           sortable: false,
-          value: 'name',
+          value: 'deviceDataId',
         },
-        { text: '数据接收时间', value: 'calories' },
-        { text: '数据值', value: 'fat' },
+        { text: '数据接收时间', value: 'createTime' },
+        { text: '数据值', value: 'data' },
       ],
-      desserts: [
-        {
-          name: 'Frozen Yogurt',
-          calories: 159,
-          fat: 6.0,
-        },
-        {
-          name: 'Ice cream sandwich',
-          calories: 237,
-          fat: 9.0,
-        },
-        {
-          name: 'Eclair',
-          calories: 262,
-          fat: 16.0,
-        },
-        {
-          name: 'Cupcake',
-          calories: 305,
-          fat: 3.7,
-        },
-        {
-          name: 'Gingerbread',
-          calories: 356,
-          fat: 16.0,
-        },
-        {
-          name: 'Jelly bean',
-          calories: 375,
-          fat: 0.0,
-        },
-        {
-          name: 'Lollipop',
-          calories: 392,
-          fat: 0.2,
-        },
-        {
-          name: 'Honeycomb',
-          calories: 408,
-          fat: 3.2,
-        },
-        {
-          name: 'Donut',
-          calories: 452,
-          fat: 25.0,
-        },
-        {
-          name: 'KitKat',
-          calories: 518,
-          fat: 26.0,
-        },
+      dataValue: [
       ],
     }
   },
+
+  async created() {
+    await request.get("/platform/deviceInfo/briefList").then(res => {
+      console.log(res)
+      this.items = res.data;
+      this.deviceCh = this.items.at(0).value
+    });
+
+    if (this.deviceCh != null && this.deviceCh !== '') {
+      await request.get("/platform/deviceCfg/briefList/" +  this.deviceCh).then(res => {
+        console.log(res)
+        this.cfgS = res.data;
+        this.cfgCh = this.cfgS.at(0).value
+      });
+    }
+
+    if (this.cfgCh != null && this.cfgCh !== '') {
+      await request.get("/platform/deviceData/listP/" + this.pageNum + "/" + this.rowNums + "/" + this.cfgCh + "/"
+          + this.dateStart + ' ' + this.time1 + ':00' + "/" + this.dateEnd + ' ' + this.time2 + ':59').then(res => {
+        console.log(res)
+        this.dataValue = res.data;
+        this.itemNums = res.total;
+        this.isNumber = res.isNumber;
+      });
+    }
+  },
+
+  watch: {
+    deviceCh() {
+      this.loadCfg();
+    },
+    cfgCh() {
+      this.load();
+    },
+    dateStart() {
+      this.load();
+    },
+    dateEnd() {
+      this.load();
+    },
+    pageNum() {
+      this.load();
+    },
+    rowNums() {
+      this.load();
+    },
+    time1() {
+      this.load();
+    },
+    time2() {
+      this.load();
+    },
+    switch1() {
+      if (this.switch1 === true) {
+        if (this.isNumber === true) {
+          request.get("/platform/deviceData/value/"  + this.cfgCh + "/"
+              + this.dateStart + ' ' + this.time1 + ':00' + "/" + this.dateEnd + ' ' + this.time2 + ':59').then(res => {
+            console.log(res)
+            this.value = res.data;
+          });
+        }else
+          this.switch1 = false;
+      }
+    }
+
+  },
+
+  methods: {
+    load() {
+      if (this.deviceCh != null && this.deviceCh !== '') {
+        request.get("/platform/deviceData/listP/" + this.pageNum + "/" + this.rowNums + "/" + this.cfgCh + "/"
+            + this.dateStart + ' ' + this.time1 + ':00' + "/" + this.dateEnd + ' ' + this.time2 + ':59').then(res => {
+          console.log(res)
+          this.dataValue = res.data;
+          this.itemNums = res.total;
+          this.isNumber = res.isNumber;
+        });
+      }
+    },
+    loadCfg() {
+      request.get("/platform/deviceCfg/briefList/" +  this.deviceCh).then(res => {
+        console.log(res)
+        this.cfgS = res.data;
+        this.cfgCh = this.cfgS.at(0).value
+      });
+    },
+    formTitle() {
+
+    }
+  }
 
 }
 </script>
