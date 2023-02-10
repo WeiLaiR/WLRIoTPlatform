@@ -4,4 +4,15 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wei.iotplatformservice.mapper.DeviceDataNumberMapper">
 
+    <select id="queryDeviceDataNumberListP" resultType="com.wei.iotplatformservice.pojo.DeviceDataNumber">
+        SELECT SQL_CALC_FOUND_ROWS device_data_id, data, create_time FROM device_data_number WHERE device_cfg_id = #{cid} AND create_time >= #{startTime} AND #{endTime} >= create_time LIMIT #{start}, #{limit};
+    </select>
+
+    <select id="queryDeviceDataNumberCount" resultType="java.lang.Integer">
+        SELECT FOUND_ROWS() AS TOTAL;
+    </select>
+    <select id="queryDeviceDataNumberValue" resultType="java.lang.Double">
+        SELECT data FROM device_data_number WHERE device_cfg_id = #{cid} AND create_time >= #{startTime} AND #{endTime} >= create_time;
+    </select>
+
 </mapper>
