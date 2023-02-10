@@ -4,4 +4,19 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wei.iotplatformservice.mapper.DeviceCfgMapper">
 
+    <select id="queryDeviceCfgListP" resultType="com.wei.iotplatformservice.pojo.DeviceCfg">
+        SELECT SQL_CALC_FOUND_ROWS device_cfg_id, type_name, is_number, create_time FROM device_cfg  WHERE device_id = #{did} LIMIT #{start}, #{limit};
+    </select>
+
+    <select id="queryDeviceCfgCountP" resultType="java.lang.Integer">
+        SELECT FOUND_ROWS() AS TOTAL;
+    </select>
+    <select id="queryBriefCfgList" resultType="com.wei.iotplatformservice.pojo.DeviceCfg">
+        SELECT  device_cfg_id, type_name FROM device_cfg  WHERE device_id = #{did} LIMIT 100;
+    </select>
+    <select id="queryDeviceIsNumber" resultType="java.lang.Boolean">
+        SELECT is_number FROM device_cfg WHERE device_cfg_id = #{cid};
+    </select>
+
+
 </mapper>
