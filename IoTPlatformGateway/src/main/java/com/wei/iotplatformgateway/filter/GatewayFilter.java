@@ -73,7 +73,7 @@ public class GatewayFilter implements GlobalFilter {
         if (!StringUtils.hasText(token)) {
             System.out.println("========================token是否为空==========================");
             try {
-                return generateJSON(exchange,400,"信息异常，请重新登录！");
+                return generateJSON(exchange,401,"信息异常，请重新登录！");
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
@@ -86,7 +86,7 @@ public class GatewayFilter implements GlobalFilter {
         }catch (JWTDecodeException jwtDecodeException){
             System.out.println("========================解析token==========================");
             try {
-                return generateJSON(exchange,400,"信息异常，请重新登录！");
+                return generateJSON(exchange,401,"信息异常，请重新登录！");
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
@@ -97,7 +97,7 @@ public class GatewayFilter implements GlobalFilter {
         if (!StringUtils.hasText(storedToken)) {
             System.out.println("========================在redis查询==========================");
             try {
-                return generateJSON(exchange,400,"信息异常，请重新登录！");
+                return generateJSON(exchange,401,"信息异常，请重新登录！");
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
@@ -107,7 +107,7 @@ public class GatewayFilter implements GlobalFilter {
         if (!storedToken.equals(token)) {
             System.out.println("========================对比token==========================");
             try {
-                return generateJSON(exchange,400,"信息异常，请重新登录！");
+                return generateJSON(exchange,401,"信息异常，请重新登录！");
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
