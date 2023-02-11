@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.wei.iotplatformuserservice.pojo.Login;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface LoginMapper extends BaseMapper<Login> {
 
@@ -20,4 +22,8 @@ public interface LoginMapper extends BaseMapper<Login> {
      * @return 邮箱
      */
     String queryEmailEmpty(String email);
+
+    List<Login> queryStatusZeroList();
+
+    Integer queryStatus(Long uid);
 }
