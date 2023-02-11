@@ -53,10 +53,11 @@
                      elevation="5"
                      large rounded
                      color="#2ebfaf"
+                     @click="openStatus"
                      dark
                      style="display:inline;margin-top: 27px;margin-right: 15px"
               >
-                CREATE mUUID
+                without permission user
               </v-btn>
 
             </v-col>
@@ -144,6 +145,27 @@
 
         </div>
 
+        <div>
+
+          <v-dialog v-model="dialogStatus" width="800px">
+            <v-card>
+              <v-card-title>
+                <span class="headline">申请注册用户列表:</span>
+              </v-card-title>
+
+
+
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="green darken-1" text @click="dialogStatus = false">Disagree</v-btn>
+                <v-btn color="green darken-1" text @click="dialogStatus = false">Agree</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+
+        </div>
+
 
 
       </v-card>
@@ -166,6 +188,7 @@ export default {
       pageNum: 1,
       itemNums: 10,
 
+      dialogStatus: false,
 
       dialog: false,
       headers: [
@@ -253,6 +276,9 @@ export default {
         this.userdata.push(this.editedItem)
       }
       this.close()
+    },
+    openStatus () {
+      this.dialogStatus = true;
     },
 
     load() {
