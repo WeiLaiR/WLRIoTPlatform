@@ -12,4 +12,13 @@
         SELECT email FROM login WHERE email = #{email}
     </select>
 
+    <select id="queryStatusZeroList" resultType="com.wei.iotplatformuserservice.pojo.Login">
+        SELECT uid FROM login WHERE status = 0
+    </select>
+
+    <select id="queryStatus" resultType="java.lang.Integer">
+        SELECT status FROM login WHERE uid = #{uid}
+    </select>
+
+
 </mapper>
