@@ -154,12 +154,35 @@
               </v-card-title>
 
 
+              <template >
+                <v-simple-table height="330px" fixed-header style="margin: 20px 0 20px 20px;">
+                  <template v-slot:default>
+                    <thead>
+                    <tr>
+                      <th class="text-left">ID</th>
+                      <th class="text-center">Email</th>
+                      <th class="text-right">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="item in statusZero" :key="item.name">
+                      <td class="text-left">{{ item.uid }}</td>
+                      <td class="text-center">{{ item.email }}</td>
+                      <td class="text-right">
+                        <v-btn color="primary" text @click="pass(item)">
+                          PASS
+                        </v-btn>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </template>
+                </v-simple-table>
+              </template>
 
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="green darken-1" text @click="dialogStatus = false">Disagree</v-btn>
-                <v-btn color="green darken-1" text @click="dialogStatus = false">Agree</v-btn>
+                <v-btn color="green darken-1" text @click="dialogStatus = false">CLOSE</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -220,6 +243,9 @@ export default {
         createTime: '',
         phoneNumber: '',
       },
+      statusZero: [
+
+      ],
 
     }
   },
@@ -278,7 +304,12 @@ export default {
       this.close()
     },
     openStatus () {
+      request.get("/user/login/get_status_zero_list").then( res => {
+        this.statusZero = res.data;
+      })
+
       this.dialogStatus = true;
+
     },
 
     load() {
@@ -290,6 +321,9 @@ export default {
     },
     formTitle() {
 
+    },
+    pass(item) {
+      console.log(item)
     }
 
 
