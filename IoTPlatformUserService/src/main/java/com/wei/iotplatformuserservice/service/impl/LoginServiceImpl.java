@@ -18,6 +18,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -165,6 +166,24 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
             throw new CustomException(400, "验证码错误!");
         }
 
+
+        return map;
+    }
+
+    @Override
+    public Map<String, Object> queryStatusZeroList() {
+        HashMap<String, Object> map = new HashMap<>();
+        List<Login> logins;
+
+        try {
+            logins = loginMapper.queryStatusZeroList();
+        }catch (Exception e) {
+            throw new CustomException(400, "查询失败!");
+        }
+
+        map.put("status", 200);
+        map.put("message", "查询成功!");
+        map.put("data", logins);
 
         return map;
     }
