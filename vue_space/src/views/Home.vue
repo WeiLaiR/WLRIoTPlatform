@@ -101,6 +101,13 @@ export default {
     ],
   }),
 
+  created() {
+    let token = localStorage.getItem("token") ? localStorage.getItem("token") : null;
+    if (token === null) {
+      this.$router.push("/login");
+    }
+  },
+
   components: {
     History,
     Appointment,
