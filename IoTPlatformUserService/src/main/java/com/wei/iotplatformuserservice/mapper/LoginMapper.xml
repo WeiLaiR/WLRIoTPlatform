@@ -13,7 +13,7 @@
     </select>
 
     <select id="queryStatusZeroList" resultType="com.wei.iotplatformuserservice.pojo.Login">
-        SELECT uid FROM login WHERE status = 0
+        SELECT uid, email FROM login WHERE status = 0
     </select>
 
     <select id="queryStatus" resultType="java.lang.Integer">
