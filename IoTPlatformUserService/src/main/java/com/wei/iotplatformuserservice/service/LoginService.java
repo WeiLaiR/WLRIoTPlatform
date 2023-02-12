@@ -21,4 +21,6 @@ public interface LoginService extends IService<Login> {
 
     Map<String, Object> register(String email, String password, String vCode);
 
+    Map<String, Object> queryStatusZeroList();
+
 }
