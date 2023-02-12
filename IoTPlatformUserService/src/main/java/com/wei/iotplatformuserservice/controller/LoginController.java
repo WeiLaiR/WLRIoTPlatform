@@ -3,10 +3,7 @@ package com.wei.iotplatformuserservice.controller;
 import com.wei.iotplatformuserservice.pojo.Login;
 import com.wei.iotplatformuserservice.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -40,5 +37,10 @@ public class LoginController {
     @PostMapping("/log_out")
     public Map<String, Object> logOut() {
         return loginService.logOut();
+    }
+
+    @GetMapping("/get_status_zero_list")
+    public Map<String, Object> getStatusZeroList() {
+        return loginService.queryStatusZeroList();
     }
 }
