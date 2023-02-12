@@ -2,6 +2,7 @@ package com.wei.iotplatformuserservice;
 
 import com.wei.iotplatformuserservice.mapper.LoginMapper;
 import com.wei.iotplatformuserservice.mapper.UserMapper;
+import com.wei.iotplatformuserservice.pojo.Login;
 import com.wei.iotplatformuserservice.pojo.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,4 +58,13 @@ class IoTPlatformUserServiceApplicationTests {
         System.out.println(userMapper.qUserListPage( 0, 10));
     }
 
+    @Test
+    void Test5() {
+        for (int i = 0; i < 100; i++) {
+            Login login = new Login();
+            login.setEmail(i + "@ccc.com");
+            login.setPassword("123456");
+            loginMapper.insert(login);
+        }
+    }
 }
