@@ -79,13 +79,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         Map<String, Object> map = new HashMap<>();
         List<User> users;
         int count;
-        if (val.equals("null")) {
-            users = userMapper.qUserListPage(start, limit);
-            count = userMapper.qUserListCount();
-        }else {
-            val = val.concat("%");
-            users = userMapper.qUserListPQbc(val, start, limit);
-            count = userMapper.qUserListCountQbc();
+
+        try{
+            if (val.equals("null")) {
+                users = userMapper.qUserListPage(start, limit);
+                count = userMapper.qUserListCount();
+            }else {
+                val = val.concat("%");
+                users = userMapper.qUserListPQbc(val, start, limit);
+                count = userMapper.qUserListCountQbc();
+            }
+        } catch (Exception e) {
+            throw new CustomException(400, "出现了未知错误，无法获取用户信息！");
         }
 
         map.put("status", 200);
