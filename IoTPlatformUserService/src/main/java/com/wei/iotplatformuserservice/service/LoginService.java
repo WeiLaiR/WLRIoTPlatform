@@ -23,4 +23,10 @@ public interface LoginService extends IService<Login> {
 
     Map<String, Object> queryStatusZeroList();
 
+    Map<String, Object> updateStatus(Long uid);
+
+    Map<String, Object> queryStatus(Long uid);
+
+    Map<String, Object> verification(String password);
+
 }
