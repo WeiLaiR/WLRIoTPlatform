@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       visible: false,
-      duration: 2000,
+      duration: 3600,
       message: '',
       timer: null,
       closed: false,
