@@ -64,12 +64,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (user.getUid() == null) {
             user.setUid(TokenUtils.getId());
         }
-        if (userMapper.updateById(user) > 0) {
-            map.put("status", 200);
-            map.put("message", "个人信息保存成功！");
-        } else {
-            map.put("status", 400);
-            map.put("message", "数据更新失败，请稍后再试！");
+        try {
+            if (userMapper.updateById(user) > 0) {
+                map.put("status", 200);
+                map.put("message", "信息保存成功！");
+            } else {
+                map.put("status", 400);
+                map.put("message", "数据更新失败，请稍后再试！");
+            }
+        } catch (Exception e) {
+            throw new CustomException(400, "出现未知异常，请稍后再试！");
         }
         return map;
     }
@@ -98,6 +102,28 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         map.put("data", users);
         map.put("total", count);
 
+        return map;
+    }
+
+    @Override
+    public Map<String, Object> insertUser(Long uid, String Email) {
+        HashMap<String, Object> map = new HashMap<>();
+        User user = new User();
+        String name = Email;
+        if (Email.length() > 20) {
+            name = Email.substring(0, 15);
+        }
+        user.setUid(uid);
+        user.setEmail(Email);
+        user.setUname(name);
+        user.setPhoneNumber(uid.toString());
+        if (userMapper.insert(user) > 0) {
+            map.put("status", 200);
+            map.put("message", "用户注册通过！");
+        } else {
+            map.put("status", 400);
+            map.put("message", "出现了未知异常！");
+        }
         return map;
     }
 }
