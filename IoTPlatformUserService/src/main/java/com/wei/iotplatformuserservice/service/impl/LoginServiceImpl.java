@@ -188,5 +188,98 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
         return map;
     }
 
+    @Override
+    public Map<String, Object> updateStatus(Long uid) {
+        Map<String, Object> map = new HashMap<>();
+
+        Integer status;
+
+        try {
+            status = loginMapper.queryStatus(uid);
+        } catch (Exception e) {
+            throw new CustomException(400, "出现未知异常!(UserStatus)");
+        }
+
+        Login login = new Login();
+        login.setUid(uid);
+        if (status == 0) {
+            login.setStatus(1);
+            map.put("message", "该账号状态已恢复正常!");
+        } else {
+            login.setStatus(0);
+            map.put("message", "该账号已被封禁 禁止登录!");
+        }
+        try {
+            if (loginMapper.updateById(login) > 0) {
+                map.put("status", 200);
+            } else {
+                map.put("status", 400);
+                map.put("message", "修改失败!");
+            }
+        } catch (Exception e) {
+            throw new CustomException(400, "出现未知错误!");
+        }
+        return map;
+    }
+
+    @Override
+    public Map<String, Object> queryStatus(Long uid) {
+        Integer status;
+        try {
+            status = loginMapper.queryStatus(uid);
+        } catch (Exception e) {
+            throw new CustomException(400, "出现未知异常!(UserStatus)");
+        }
+        Map<String, Object> map = new HashMap<>();
+        if (status != null) {
+            map.put("status", 200);
+            map.put("message", "查询成功!");
+            map.put("data", status);
+        }else {
+            map.put("status", 400);
+            map.put("message", "查询失败!");
+        }
+        return map;
+    }
+
+    @Override
+    public Map<String, Object> verification(String password) {
+        String privateKeyString = createRsaKey.getPrivateKey();
+        RSAPrivateKey privateKey;
+        try {
+            privateKey = RSAUtils.getPrivateKey(privateKeyString);
+        }catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new CustomException(400, "解密发生未知错误!");
+        }
+        String pw = RSAUtils.privateDecrypt(password, privateKey);
+
+        Map<String, Object> map = new HashMap<>();
+        Long id = TokenUtils.getId();
+        if (id == null) {
+            throw new CustomException(401, "请先登录!");
+        }
+        Login login = loginMapper.selectById(id);
+        if (!Objects.isNull(login) && StringUtils.hasText(login.getPassword())) {
+            if (login.getStatus() != 0) {
+                if (login.getPassword().equals(DigestUtils.sha256Hex(pw.concat(login.getEmail())))) {
+
+                    map.put("status", 200);
+                    map.put("message", "验证成功!");
+                } else {
+                    map.put("status", 401);
+                    map.put("message", "密码错误!");
+                }
+            }else {
+                map.put("status", 401);
+                map.put("message", "用户已被禁用,请及时联系管理员。");
+            }
+        } else {
+            map.put("status", 401);
+            map.put("message", "用户不存在!");
+        }
+
+        return map;
+    }
+
 
 }
