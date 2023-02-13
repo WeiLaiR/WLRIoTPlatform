@@ -82,29 +82,29 @@
 
             <!--      弹出的修改框      -->
             <template v-slot:top>
-              <v-dialog v-model="dialog" max-width="500px">
+              <v-dialog v-model="dialog" max-width="800px">
                 <v-card>
                   <v-card-title>
-                    <span class="headline">{{ formTitle }}</span>
+                    <span class="headline">修改用户信息：</span>
                   </v-card-title>
 
-                  <v-card-text>
+                  <v-card-text style="padding: 50px">
                     <v-container>
                       <v-row>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.name" label="Device ID"></v-text-field>
+                          <v-text-field v-model="editedItem.uid" readonly label="Device ID"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.calories" label="Device Name"></v-text-field>
+                          <v-text-field v-model="editedItem.uname" label="Device Name"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.fat" label="Create Time"></v-text-field>
+                          <v-text-field v-model="editedItem.createTime" readonly label="Create Time"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.carbs" label="Description"></v-text-field>
+                          <v-text-field v-model="editedItem.email" readonly label="Email"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.protein" label="Status"></v-text-field>
+                          <v-text-field v-model="editedItem.phoneNumber" label="Phone Number"></v-text-field>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -134,9 +134,9 @@
               <v-icon
                   small
                   color="#ff3f6f"
-                  @click="deleteItem(item)"
+                  @click="passStatus(item)"
               >
-                mdi-delete
+                mdi-lock-check
               </v-icon>
             </template>
 
@@ -182,7 +182,83 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="green darken-1" text @click="dialogStatus = false">CLOSE</v-btn>
+                <v-btn color="#2ebfaf" @click="dialogStatus = false">CLOSE</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+
+        </div>
+
+        <div>
+
+          <v-dialog v-model="dialogPassStatus" width="600px">
+            <v-card>
+              <v-card-title>
+                <span class="headline">用户登陆权限变更:</span>
+              </v-card-title>
+
+              <div style="padding: 15px 30px">
+                {{ passStatusText }}
+                <div  style="font-size: 13px;color: red; padding: 10px">
+                  您的行为很危险，请勿随意操作！
+                </div>
+              </div>
+
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="green darken-1" style="min-width: 80px" @click="dialogPassStatus = false">CLOSE</v-btn>
+                <v-btn color="#ff3f6f" style="min-width: 80px" @click="userReject">YES</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+
+        </div>
+
+
+        <div>
+
+          <v-dialog v-model="dialogPassWord" width="600px">
+            <v-card>
+              <v-card-title style="margin: 10px">
+                <span class="headline">请您输入密码进行用户验证:</span>
+              </v-card-title>
+
+
+              <v-row style="width: 580px">
+                <v-col cols="1">
+
+                </v-col>
+
+                <v-col cols="10">
+
+                  <v-form
+                      ref="loginForm"
+                      v-model="valid"
+                  >
+                    <v-text-field
+                        light
+                        color="#2ebfaf"
+
+                        v-model="passWord"
+                        :rules="passwordRules"
+                        type="password"
+                        label="PassWord"
+                    >
+                    </v-text-field>
+                  </v-form>
+
+                </v-col>
+
+              </v-row>
+
+
+
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="green darken-1" style="min-width: 80px" @click="dialogPassWord = false">CLOSE</v-btn>
+                <v-btn color="#ff3f6f" style="min-width: 80px" @click="verification">YES</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -201,6 +277,7 @@
 
 <script>
 import request from "@/utils/request";
+import JSEncrypt from "jsencrypt";
 
 export default {
   name: "UserInfo",
@@ -212,6 +289,11 @@ export default {
       itemNums: 10,
 
       dialogStatus: false,
+      dialogPassStatus: false,
+      dialogPassWord: false,
+      userStatus: 0,
+      itemUid: 0,
+      passCount: 0,
 
       dialog: false,
       headers: [
@@ -246,6 +328,13 @@ export default {
       statusZero: [
 
       ],
+      valid: false,
+      passWord: '',
+      passwordRules: [
+        v => !!v || 'PassWord is required',
+        v => (v && v.length <= 20) || 'PassWord must be less than 20 characters',
+        v => (v && v.length >= 3) || 'PassWord must be greater than 3 characters',
+      ],
 
     }
   },
@@ -275,16 +364,28 @@ export default {
     });
   },
 
+  computed: {
+    passStatusText () {
+      return this.userStatus === 0 ? "当前用户已被封禁且禁止登录，您确定要恢复此用户账号状态吗？" : "当前用户功能一切正常，您确定要封禁此账户吗？";
+    }
+  },
+
   methods: {
     editItem (item) {
+      console.log(item)
       this.editedIndex = this.userdata.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialog = true
     },
 
-    deleteItem (item) {
-      const index = this.userdata.indexOf(item)
-      confirm('Are you sure you want to delete this item?') && this.userdata.splice(index, 1)
+    passStatus (item) {
+      this.itemUid = item.uid;
+      request.get("user/login/get_status/" + item.uid).then(res => {
+        if (res.status === 200) {
+          this.userStatus = res.data;
+        }
+      })
+      this.dialogPassStatus = true;
     },
 
     close () {
@@ -298,10 +399,20 @@ export default {
     save () {
       if (this.editedIndex > -1) {
         Object.assign(this.userdata[this.editedIndex], this.editedItem)
+        request.put("user/users/update",{
+          uid: this.userdata[this.editedIndex].uid,
+          uname: this.editedItem.uname,
+          phoneNumber: this.editedItem.phoneNumber,
+        }).then( res => {
+          if (res.status === 200) {
+            this.$message.success(res.message)
+            this.close()
+          }
+        })
       } else {
         this.userdata.push(this.editedItem)
+        this.close()
       }
-      this.close()
     },
     openStatus () {
       request.get("/user/login/get_status_zero_list").then( res => {
@@ -319,11 +430,79 @@ export default {
         this.itemNums = res.total;
       });
     },
-    formTitle() {
-
-    },
     pass(item) {
-      console.log(item)
+      request.post("/user/login/user_pass", {
+        uid: item.uid,
+        email: item.email
+      }).then(res => {
+        console.log(res);
+        if (res.status === 200) {
+          this.$message.success(res.message)
+        }
+        this.openStatus();
+      })
+    },
+    userReject() {
+      if (this.passCount === 3) {
+        this.$message.error("您已经连续三次尝试封禁或解封用户，为了您的账户安全，请稍后再试！");
+        this.dialogPassWord = true;
+        this.dialogPassStatus = false;
+        return;
+      }
+      this.passCount ++;
+      request.post("/user/login/user_reject", this.itemUid ).then(res => {
+        if (res.status === 200) {
+          this.$message.success(res.message);
+          this.dialogPassStatus = false;
+        }
+      })
+    },
+
+    async verification() {
+      if (this.$refs.loginForm.validate()) {
+        await request.get("/user/ras/getPublicKey").then(res => {
+          this.publicKey = res.publicKey;
+          // console.log(this.publicKey);
+        })
+
+        console.log("==============================");
+
+
+        // 进行简单的加盐
+        let temp = ""
+        for (let i = 0; i < this.passWord.length; i++) {
+          temp += (i + 7) * (this.passWord.charCodeAt(this.passWord.length - i - 1) + temp.length) % 103
+          temp += String.fromCharCode((((i + 3) * this.passWord.charCodeAt(i) + temp.length) % this.passWord.length) % 24 + 97)
+          temp += ((this.passWord.charCodeAt(i) + 16) * temp.length % 107)
+          if (i * temp.length % 2 === 0) {
+            temp += String.fromCharCode(((this.passWord.charCodeAt(this.passWord.length - i - 1) + temp.length) * (i * temp.length % 300 + 6)) % 24 + 65)
+          }
+          temp += String.fromCharCode(((this.passWord.charCodeAt(i) + i) * temp.length) % 24 + 65)
+        }
+
+        // console.log('加盐' + temp);
+
+        let sha256 = this.$SHA256(temp);
+
+        // console.log('sha256加密' + sha256);
+
+        let encrypt = new JSEncrypt();
+        encrypt.setPublicKey(this.publicKey);
+        this.pwEncrypt = encrypt.encrypt(sha256);
+
+        // console.log('RSA加密' + this.pwEncrypt);
+
+        request.post("/user/login/verification", this.pwEncrypt).then(res => {
+          console.log(res);
+          if (res.status === 200) {
+            this.$message.success(res.message);
+            this.passCount += 10;
+            this.dialogPassWord = false;
+          }else {
+            this.$refs.loginForm.validata = false;
+          }
+        })
+      }
     }
 
 
