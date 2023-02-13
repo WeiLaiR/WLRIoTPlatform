@@ -2,6 +2,7 @@ package com.wei.iotplatformuserservice.controller;
 
 import com.wei.iotplatformuserservice.pojo.Login;
 import com.wei.iotplatformuserservice.service.LoginService;
+import com.wei.iotplatformuserservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,13 @@ public class LoginController {
     @Autowired
     public void setLoginService(LoginService loginService) {
         this.loginService = loginService;
+    }
+
+    private UserService userService;
+
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 
     /**
@@ -42,5 +50,26 @@ public class LoginController {
     @GetMapping("/get_status_zero_list")
     public Map<String, Object> getStatusZeroList() {
         return loginService.queryStatusZeroList();
+    }
+
+    @PostMapping("/user_pass")
+    public Map<String, Object> userPass(@RequestBody Map<String, Object> map) {
+        loginService.updateStatus( (Long) map.get("uid"));
+        return userService.insertUser((Long) map.get("uid"), (String) map.get("email"));
+    }
+
+    @PostMapping("/user_reject")
+    public Map<String, Object> userReject(@RequestBody Long uid) {
+        return loginService.updateStatus(uid);
+    }
+
+    @GetMapping("/get_status/{uid}")
+    public Map<String, Object> getStatus(@PathVariable Long uid) {
+        return loginService.queryStatus(uid);
+    }
+
+    @PostMapping("/verification")
+    public Map<String, Object> verification(@RequestBody String password) {
+        return loginService.verification(password);
     }
 }
