@@ -46,6 +46,7 @@ request.interceptors.response.use(
         }else if (res.status === 400) {
             Message.error(res.message);
         }else if (res.status === 401) {
+            localStorage.removeItem('token');
             router.push('/login');
             Message.error(res.message);
         }
