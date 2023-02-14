@@ -1,12 +1,10 @@
 package com.wei.iotplatformservice.controller;
 
 import com.wei.iotplatformservice.exception.CustomException;
+import com.wei.iotplatformservice.pojo.DeviceCfg;
 import com.wei.iotplatformservice.service.DeviceCfgService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -14,6 +12,7 @@ import java.util.Map;
 @RequestMapping("/platform/deviceCfg")
 public class DeviceCfgController {
     private DeviceCfgService deviceCfgService;
+
     @Autowired
     public void setDeviceCfgService(DeviceCfgService deviceCfgService) {
         this.deviceCfgService = deviceCfgService;
@@ -31,6 +30,16 @@ public class DeviceCfgController {
     @GetMapping("/briefList/{did}")
     public Map<String, Object> getBriefCfgList(@PathVariable Long did) {
         return deviceCfgService.queryBriefCfgList(did);
+    }
+
+    @PutMapping("/newDeviceCfg")
+    public Map<String, Object> newDeviceCfg(@RequestBody DeviceCfg deviceCfg) {
+        return deviceCfgService.newDeviceCfg(deviceCfg);
+    }
+
+    @PostMapping("/updateDeviceCfg")
+    public Map<String, Object> updateDeviceCfg(@RequestBody DeviceCfg deviceCfg) {
+        return deviceCfgService.updateDeviceCfg(deviceCfg);
     }
 
 
