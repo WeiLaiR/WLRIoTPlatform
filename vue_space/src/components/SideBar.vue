@@ -100,7 +100,14 @@ export default {
         this.$router.push('/login');
       })
     }
-  }
+  },
+
+  created() {
+    let token = localStorage.getItem("token") ? localStorage.getItem("token") : null;
+    if (token === null) {
+      this.$router.push("/login");
+    }
+  },
 }
 </script>
 
