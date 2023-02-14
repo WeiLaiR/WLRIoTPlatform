@@ -12,4 +12,10 @@ public interface DeviceCfgService extends IService<DeviceCfg> {
     Map<String, Object> queryBriefCfgList(Long did);
 
     Boolean queryDeviceIsNumber(Long cid);
+
+    Map<String, Object> newDeviceCfg(DeviceCfg deviceCfg);
+
+    Map<String, Object> updateDeviceCfg(DeviceCfg deviceCfg);
+
+
 }
