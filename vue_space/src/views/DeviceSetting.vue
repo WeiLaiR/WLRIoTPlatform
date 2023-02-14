@@ -54,6 +54,7 @@
                      elevation="5"
                      large rounded
                      color="#2ebfaf"
+                     @click="newCfg"
                      dark
                      style="display:inline;margin-top: 27px;margin-right: 15px"
               >
@@ -86,26 +87,23 @@
               <v-dialog v-model="dialog" max-width="500px">
                 <v-card>
                   <v-card-title>
-                    <span class="headline">{{ formTitle }}</span>
+                    <span class="headline">修改设备配置信息：</span>
                   </v-card-title>
 
                   <v-card-text>
                     <v-container>
                       <v-row>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.name" label="Device ID"></v-text-field>
+                        <v-col cols="12" sm="6" md="6">
+                          <v-text-field v-model="editedItem.deviceCfgId" disabled label="Device Cfg ID"></v-text-field>
                         </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.calories" label="Device Name"></v-text-field>
+                        <v-col cols="12" sm="6" md="6">
+                          <v-text-field v-model="editedItem.typeName" label="Type Name"></v-text-field>
                         </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.fat" label="Create Time"></v-text-field>
+                        <v-col cols="12" sm="6" md="6">
+                          <v-select :items="IS" v-model="editedItem.isNumber" disabled label="Is Number?"></v-select>
                         </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.carbs" label="Description"></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.protein" label="Status"></v-text-field>
+                        <v-col cols="12" sm="6" md="6">
+                          <v-text-field v-model="editedItem.createTime" disabled label="Create Time"></v-text-field>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -147,6 +145,70 @@
         </div>
 
 
+        <div>
+
+          <v-dialog v-model="dialogNewDeviceCfg" width="600px">
+            <v-card>
+              <v-card-title >
+                <span class="headline" style="margin: 12px">添加新的设备配置：</span>
+              </v-card-title>
+
+
+              <v-row style="width: 580px">
+                <v-col cols="1">
+
+                </v-col>
+
+                <v-col cols="10">
+
+                  <v-text-field
+                      light
+                      color="#2ebfaf"
+
+                      v-model="typeName"
+                      label="Type Name"
+                  >
+                  </v-text-field>
+
+                </v-col>
+                <v-col cols="1">
+
+                </v-col>
+
+                <v-col cols="1">
+
+                </v-col>
+
+                <v-col cols="10">
+
+                  <v-select
+                      light
+                      color="#2ebfaf"
+                      :items="IS"
+
+                      v-model="isNumber"
+                      label="Is Number?"
+                  >
+                  </v-select>
+
+                </v-col>
+
+              </v-row>
+
+
+
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="green darken-1" style="min-width: 80px;margin: 20px" @click="dialogNewDeviceCfg = false">CLOSE</v-btn>
+                <v-btn color="#ff3f6f" style="min-width: 80px;margin: 20px" @click="createCfg">NEXT</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+
+        </div>
+
+
 
       </v-card>
 
@@ -166,6 +228,21 @@ export default {
       deviceCh: null,
       items: [
       ],
+
+      IS: [
+        {
+          text: 'True',
+          value: true
+        },
+        {
+          text: 'False',
+          value: false
+        }
+      ],
+
+      typeName: '',
+      isNumber: null,
+      dialogNewDeviceCfg: false,
 
 
       rowNums: 10,
@@ -268,11 +345,25 @@ export default {
 
     save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.dataCfg[this.editedIndex], this.editedItem)
+        if (this.editedItem.typeName === '' || this.editedItem.typeName === null) {
+          this.$message.error("请输入数据名称");
+        }else {
+          Object.assign(this.dataCfg[this.editedIndex], this.editedItem)
+          request.post("/platform/deviceCfg/updateDeviceCfg", {
+            deviceCfgId: this.dataCfg[this.editedIndex].deviceCfgId,
+            typeName: this.editedItem.typeName,
+          }).then(res => {
+            if (res.status === 200) {
+              this.$message.success(res.message);
+              this.close()
+            }
+          });
+        }
       } else {
         this.dataCfg.push(this.editedItem)
+        this.close()
       }
-      this.close()
+
     },
 
 
@@ -285,8 +376,37 @@ export default {
         });
       }
     },
-    formTitle() {
 
+    newCfg() {
+      this.typeName = '';
+      this.isNumber = null;
+      this.dialogNewDeviceCfg = true;
+    },
+
+    createCfg() {
+      if (this.typeName === '') {
+        this.$message.error("请输入数据名称");
+        return;
+      } else if (this.isNumber === null) {
+        this.$message.error("请选择类型是否为数字");
+        return;
+      } else if (this.deviceCh === null) {
+        this.$message.error("请选择设备");
+        return;
+      } else {
+        request.put("/platform/deviceCfg/newDeviceCfg", {
+          deviceId: this.deviceCh,
+          typeName: this.typeName,
+          isNumber: this.isNumber,
+        }).then(res => {
+          if (res.status === 200) {
+            this.$message.success(res.message);
+            this.dialogNewDeviceCfg = false;
+            this.load();
+          }
+        });
+      }
+      console.log('CREATE CFG')
     }
   }
 }
