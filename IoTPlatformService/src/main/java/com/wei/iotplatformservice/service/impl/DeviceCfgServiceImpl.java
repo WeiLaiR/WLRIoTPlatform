@@ -1,6 +1,7 @@
 package com.wei.iotplatformservice.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.wei.iotplatformservice.exception.CustomException;
 import com.wei.iotplatformservice.mapper.DeviceCfgMapper;
 import com.wei.iotplatformservice.pojo.DeviceCfg;
 import com.wei.iotplatformservice.service.DeviceCfgService;
@@ -61,6 +62,44 @@ public class DeviceCfgServiceImpl extends ServiceImpl<DeviceCfgMapper, DeviceCfg
     @Override
     public Boolean queryDeviceIsNumber(Long cid) {
         return deviceCfgMapper.queryDeviceIsNumber(cid);
+    }
+
+    @Override
+    public Map<String, Object> newDeviceCfg(DeviceCfg deviceCfg) {
+        Map<String, Object> map = new HashMap<>();
+
+        try {
+            if (deviceCfgMapper.insert(deviceCfg) > 0) {
+                map.put("status", 200);
+                map.put("message", "新增成功");
+            } else {
+                map.put("status", 400);
+                map.put("message", "新增失败");
+            }
+        }catch (Exception e) {
+            throw new CustomException(400, "出现了未知异常！(DeviceCfgNEW)");
+        }
+
+        return map;
+    }
+
+    @Override
+    public Map<String, Object> updateDeviceCfg(DeviceCfg deviceCfg) {
+        Map<String, Object> map = new HashMap<>();
+
+        try {
+            if (deviceCfgMapper.updateById(deviceCfg) > 0) {
+                map.put("status", 200);
+                map.put("message", "修改成功");
+            } else {
+                map.put("status", 400);
+                map.put("message", "修改失败");
+            }
+        }catch (Exception e) {
+            throw new CustomException(400, "出现了未知异常！(DeviceCfgUPDATE)");
+        }
+
+        return map;
     }
 
 
