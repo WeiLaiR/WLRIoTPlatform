@@ -1,6 +1,7 @@
 package com.wei.iotplatformservice.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.wei.iotplatformservice.exception.CustomException;
 import com.wei.iotplatformservice.mapper.DeviceInfoMapper;
 import com.wei.iotplatformservice.pojo.DeviceInfo;
 import com.wei.iotplatformservice.service.DeviceInfoService;
@@ -42,11 +43,11 @@ public class DeviceInfoServiceImpl extends ServiceImpl<DeviceInfoMapper, DeviceI
 
         if (deviceInfoMapper.insert(deviceInfo) > 0) {
             map.put("status", 200);
-            map.put("message", "设备新增成功");
+            map.put("message", "设备新增成功！");
             map.put("deviceToken", deviceToken);
         } else {
             map.put("status", 400);
-            map.put("message", "设备新增失败");
+            map.put("message", "设备新增失败！");
         }
 
         return map;
@@ -89,6 +90,51 @@ public class DeviceInfoServiceImpl extends ServiceImpl<DeviceInfoMapper, DeviceI
         map.put("status", 200);
         map.put("message", "查询成功");
         map.put("data", maps);
+
+        return map;
+    }
+
+    @Override
+    public Map<String, Object> updateDeviceInfo(DeviceInfo deviceInfo) {
+        HashMap<String, Object> map = new HashMap<>();
+        try {
+            if (deviceInfoMapper.updateById(deviceInfo) > 0) {
+                map.put("status", 200);
+                map.put("message", "设备信息更新成功!");
+            } else {
+                map.put("status", 400);
+                map.put("message", "设备信息更新失败!");
+            }
+        }catch (Exception e) {
+            throw new CustomException(400, "出现了未知异常！(DeviceInfoUpdate)");
+        }
+        return map;
+    }
+
+    @Override
+    public Map<String, Object> deleteDeviceInfo(DeviceInfo deviceInfo) {
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> createNewToken(Long did) {
+        HashMap<String, Object> map = new HashMap<>();
+        try {
+            String deviceToken = DeviceTokenUtil.BuildDeviceToken();
+            DeviceInfo deviceInfo = new DeviceInfo();
+            deviceInfo.setDeviceId(did);
+            deviceInfo.setDeviceToken(deviceToken);
+            if (deviceInfoMapper.updateById(deviceInfo) > 0) {
+                map.put("status", 200);
+                map.put("message", "设备Token更新成功!");
+                map.put("deviceToken", deviceToken);
+            } else {
+                map.put("status", 400);
+                map.put("message", "设备Token更新失败!");
+            }
+        }catch (Exception e) {
+            throw new CustomException(400, "出现了未知异常！(DeviceInfoCreateNewToken)");
+        }
 
         return map;
     }
