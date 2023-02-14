@@ -44,4 +44,14 @@ public class DeviceInfoController {
         return deviceInfoService.queryBriefInfoList();
     }
 
+    @PostMapping("/update")
+    public Map<String, Object> updateDeviceInfo(@RequestBody DeviceInfo deviceInfo) {
+        return deviceInfoService.updateDeviceInfo(deviceInfo);
+    }
+
+    @PostMapping("/createNewToken")
+    public Map<String, Object> createNewToken(@RequestBody Long did) {
+        return deviceInfoService.createNewToken(did);
+    }
+
 }
