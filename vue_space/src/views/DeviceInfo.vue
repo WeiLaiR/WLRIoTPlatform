@@ -53,6 +53,7 @@
                      elevation="5"
                      large rounded
                      color="#2ebfaf"
+                     @click="openNew"
                      dark
                      style="display:inline;margin-top: 27px;margin-right: 15px"
               >
@@ -84,26 +85,23 @@
               <v-dialog v-model="dialog" max-width="500px">
                 <v-card>
                   <v-card-title>
-                    <span class="headline">{{ formTitle }}</span>
+                    <span class="headline">修改设备基本信息：</span>
                   </v-card-title>
 
                   <v-card-text>
                     <v-container>
                       <v-row>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.name" label="Device ID"></v-text-field>
+                        <v-col cols="12" sm="6" md="6">
+                          <v-text-field v-model="editedItem.deviceId" disabled label="Device ID"></v-text-field>
                         </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.calories" label="Device Name"></v-text-field>
+                        <v-col cols="12" sm="6" md="6">
+                          <v-text-field v-model="editedItem.deviceName" label="Device Name"></v-text-field>
                         </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.fat" label="Create Time"></v-text-field>
+                        <v-col cols="12" sm="6" md="6">
+                          <v-text-field v-model="editedItem.createTime" disabled label="Create Time"></v-text-field>
                         </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.carbs" label="Description"></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.protein" label="Status"></v-text-field>
+                        <v-col cols="12" sm="6" md="6">
+                          <v-text-field v-model="editedItem.description" label="Description"></v-text-field>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -133,6 +131,16 @@
               <v-icon
                   small
                   color="#ff3f6f"
+                  class="mr-2"
+                  @click="openCreateToken(item)"
+
+              >
+                mdi-security
+              </v-icon>
+
+              <v-icon
+                  small
+                  color="red"
                   @click="deleteItem(item)"
               >
                 mdi-delete
@@ -143,6 +151,152 @@
           </v-data-table>
 
         </div>
+
+
+
+        <div>
+
+          <v-dialog v-model="dialogNewDevice" width="600px">
+            <v-card>
+              <v-card-title >
+                <span class="headline" style="margin: 12px">添加新的设备：</span>
+              </v-card-title>
+
+
+              <v-row style="width: 580px">
+                <v-col cols="1">
+
+                </v-col>
+
+                <v-col cols="10">
+
+                  <v-form
+                      ref="loginForm"
+                      v-model="valid"
+                  >
+                    <v-text-field
+                        light
+                        color="#2ebfaf"
+
+                        v-model="deviceName"
+                        label="Device Name"
+                    >
+                    </v-text-field>
+                  </v-form>
+
+                </v-col>
+                <v-col cols="1">
+
+                </v-col>
+
+                <v-col cols="1">
+
+                </v-col>
+
+                <v-col cols="10">
+
+                  <v-form
+                      ref="loginForm1"
+                      v-model="valid"
+                  >
+                    <v-text-field
+                        light
+                        color="#2ebfaf"
+
+                        v-model="description"
+                        label="Device Description"
+                    >
+                    </v-text-field>
+                  </v-form>
+
+                </v-col>
+
+              </v-row>
+
+
+
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="green darken-1" style="min-width: 80px;margin: 20px" @click="dialogNewDevice = false">CLOSE</v-btn>
+                <v-btn color="#ff3f6f" style="min-width: 80px;margin: 20px" @click="addDeviceInfo">YES</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+
+        </div>
+
+        <div>
+
+          <v-dialog v-model="dialogToken" width="600px">
+            <v-card>
+              <v-card-title >
+                <span class="headline" style="margin: 12px">Token：</span>
+              </v-card-title>
+
+
+
+
+              <v-row style="width: 590px">
+                <v-col cols="3">
+
+                </v-col>
+
+                <v-col cols="6">
+
+                  <v-text-field
+                      light
+                      color="#2ebfaf"
+                      readonly
+                      v-model="deviceToken"
+                      label="Device Token"
+                      style="margin-top: 15px"
+                  >
+                  </v-text-field>
+
+                </v-col>
+
+              </v-row>
+
+              <div style="padding: 10px 56px;font-size: 13px;color: red">
+                每个设备Token仅可展示一次，您无法再从服务器中获取当前Token，请您妥善保管，这是您的设备连接服务器的唯一凭证，请勿泄露或丢失！
+              </div>
+
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="green darken-1" style="min-width: 80px;margin: 20px" @click="dialogToken = false">CLOSE</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+
+        </div>
+
+
+        <div>
+          <v-dialog v-model="dialogCreateToken" width="600px">
+            <v-card>
+              <v-card-title >
+                <span class="headline" style="margin: 12px">警告：</span>
+              </v-card-title>
+
+
+
+              <div style="padding: 10px 56px;font-size: 15px;color: red">
+                您正在正在进行高风险操作！该行为会使您当前设备的Token失效，并为您生成新的Token！
+              </div>
+
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="green darken-1" style="min-width: 80px;margin: 20px" @click="dialogCreateToken = false">CLOSE</v-btn>
+                <v-btn color="#ff3f6f" style="min-width: 80px;margin: 20px" @click="CreateToken">NEXT</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </div>
+
+
 
 
 
@@ -165,6 +319,16 @@ export default {
       rowNums: 10,
       pageNum: 1,
       itemNums: 10,
+      dialogNewDevice: false,
+      valid: false,
+      description: '',
+      deviceName: '',
+      dialogToken: false,
+      deviceToken: '',
+      dialogCreateToken: false,
+      CDid: 0,
+
+
 
 
       dialog: false,
@@ -213,6 +377,11 @@ export default {
     rowNums () {
       this.load();
     },
+    dialogToken (val) {
+      if (val === false) {
+        this.deviceToken = '';
+      }
+    },
     // deviceSearch (newVal, oldVal) {
     //   console.log('newVal' + newVal + 'OLD' + oldVal);
     // }
@@ -251,11 +420,30 @@ export default {
 
     save () {
       if (this.editedIndex > -1) {
-        Object.assign(this.infoData[this.editedIndex], this.editedItem)
+        if (this.editedItem.deviceName === '' || this.editedItem.deviceName === null) {
+          this.$message.error('设备名称不能为空');
+          return;
+        }else if (this.editedItem.description === '' || this.editedItem.description === null) {
+          this.$message.error('设备描述不能为空');
+          return;
+        }else {
+          Object.assign(this.infoData[this.editedIndex], this.editedItem)
+          request.post("platform/deviceInfo/update", {
+            deviceId: this.infoData[this.editedIndex].deviceId,
+            deviceName: this.editedItem.deviceName,
+            description: this.editedItem.description,
+          }).then(res => {
+            if (res.status === 200) {
+              this.$message.success(res.message)
+              this.close()
+            }
+          });
+        }
       } else {
         this.infoData.push(this.editedItem)
+        this.close()
       }
-      this.close()
+      console.log('save')
     },
 
     load() {
@@ -265,7 +453,53 @@ export default {
         this.itemNums = res.total;
       });
     },
-    formTitle() {
+
+    openNew() {
+      this.deviceName = '';
+      this.description = '';
+      this.dialogNewDevice = true;
+    },
+
+    addDeviceInfo() {
+      if (this.deviceName === '' || this.deviceName === null) {
+        this.$message.error('设备名称不能为空');
+
+      }else if (this.description === '' || this.description === null) {
+        this.$message.error('设备描述不能为空');
+
+      }else {
+        request.post("platform/deviceInfo/add", {
+          deviceName: this.deviceName,
+          description: this.description,
+        }).then(res => {
+          if (res.status === 200) {
+            this.$message.success(res.message)
+            this.dialogNewDevice = false;
+            this.deviceToken = res.deviceToken;
+            this.dialogToken = true;
+            this.load();
+          }
+        });
+      }
+    },
+
+    openCreateToken(item) {
+      this.CDid = item.deviceId;
+      this.dialogCreateToken = true;
+    },
+
+    CreateToken() {
+      if (this.CDid === 0 || this.CDid === null || this.CDid === '') {
+        this.$message.error('设备ID不能为空');
+      }
+      request.post("platform/deviceInfo/createNewToken", this.CDid).then(res => {
+        if (res.status === 200) {
+          this.$message.success(res.message)
+          this.dialogCreateToken = false;
+          this.deviceToken = res.deviceToken;
+          this.dialogToken = true;
+        }
+      });
 
     }
 
