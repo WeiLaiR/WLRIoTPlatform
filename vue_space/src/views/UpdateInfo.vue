@@ -186,18 +186,24 @@ export default {
       })
     },
     save() {
-      request.put("user/users/update",{
-        uname : this.uname,
-        sex : this.sex,
-        age : this.age,
-        phoneNumber : this.phoneNumber,
-        briefIntroduction : this.briefIntroduction,
-        remarks : this.remarks
-      }).then(res => {
-        if (res.status === 200) {
-          this.$message.success(res.message);
-        }
-      })
+      if (this.uname === null || this.uname === '' | this.sex === null | this.sex === '' | this.age === null | this.age === '' | this.phoneNumber === null | this.phoneNumber === '' | this.briefIntroduction === null | this.briefIntroduction === '' | this.remarks === null | this.remarks === '') {
+        this.$message.error("请填写完整信息");
+        return;
+      }else {
+        request.put("user/users/update",{
+          uname : this.uname,
+          sex : this.sex,
+          age : this.age,
+          phoneNumber : this.phoneNumber,
+          briefIntroduction : this.briefIntroduction,
+          remarks : this.remarks
+        }).then(res => {
+          if (res.status === 200) {
+            this.$message.success(res.message);
+          }
+        })
+      }
+      console.log('save')
     }
   }
 }
