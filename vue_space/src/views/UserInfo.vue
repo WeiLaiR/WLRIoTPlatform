@@ -92,10 +92,10 @@
                     <v-container>
                       <v-row>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.uid" readonly label="Device ID"></v-text-field>
+                          <v-text-field v-model="editedItem.uid" readonly label="User ID"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="editedItem.uname" label="Device Name"></v-text-field>
+                          <v-text-field v-model="editedItem.uname" label="User Name"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
                           <v-text-field v-model="editedItem.createTime" readonly label="Create Time"></v-text-field>
@@ -150,7 +150,7 @@
           <v-dialog v-model="dialogStatus" width="800px">
             <v-card>
               <v-card-title>
-                <span class="headline">申请注册用户列表:</span>
+                <span class="headline" style="margin: 12px">申请注册用户列表:</span>
               </v-card-title>
 
 
@@ -194,7 +194,7 @@
           <v-dialog v-model="dialogPassStatus" width="600px">
             <v-card>
               <v-card-title>
-                <span class="headline">用户登陆权限变更:</span>
+                <span class="headline" style="margin: 12px">用户登陆权限变更:</span>
               </v-card-title>
 
               <div style="padding: 15px 30px">
@@ -220,8 +220,8 @@
 
           <v-dialog v-model="dialogPassWord" width="600px">
             <v-card>
-              <v-card-title style="margin: 10px">
-                <span class="headline">请您输入密码进行用户验证:</span>
+              <v-card-title >
+                <span class="headline" style="margin: 12px">请您输入密码进行用户验证:</span>
               </v-card-title>
 
 
@@ -398,17 +398,24 @@ export default {
 
     save () {
       if (this.editedIndex > -1) {
-        Object.assign(this.userdata[this.editedIndex], this.editedItem)
-        request.put("user/users/update",{
-          uid: this.userdata[this.editedIndex].uid,
-          uname: this.editedItem.uname,
-          phoneNumber: this.editedItem.phoneNumber,
-        }).then( res => {
-          if (res.status === 200) {
-            this.$message.success(res.message)
-            this.close()
-          }
-        })
+        if (this.editedItem.uname === "" || this.editedItem.uname === null) {
+          this.$message.error("用户名不能为空")
+
+        }else if (this.editedItem.phoneNumber === "" || this.editedItem.phoneNumber === null) {
+          this.$message.error("电话号码不能为空")
+        }else {
+          Object.assign(this.userdata[this.editedIndex], this.editedItem)
+          request.put("user/users/update",{
+            uid: this.userdata[this.editedIndex].uid,
+            uname: this.editedItem.uname,
+            phoneNumber: this.editedItem.phoneNumber,
+          }).then( res => {
+            if (res.status === 200) {
+              this.$message.success(res.message)
+              this.close()
+            }
+          })
+        }
       } else {
         this.userdata.push(this.editedItem)
         this.close()
