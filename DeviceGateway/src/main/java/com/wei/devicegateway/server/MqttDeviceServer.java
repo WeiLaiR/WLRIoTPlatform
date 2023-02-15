@@ -5,6 +5,7 @@ import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -23,7 +24,7 @@ public class MqttDeviceServer {
         String username = "weilai";
         String password = "weilaiPassword";
         String clientid = "client_weilai";
-        int qos = 0;
+        int qos = 1;
 
         try {
             MqttClient client = new MqttClient(broker, clientid, new MemoryPersistence());
@@ -68,9 +69,10 @@ public class MqttDeviceServer {
         }
     }
 
+    @Async
     @PostConstruct
     public void startMqttServer() {
-        new Thread(this::mqttServer).start();
+        mqttServer();
 
         System.out.println("===========================MQTT服务器已开启===========================");
     }
