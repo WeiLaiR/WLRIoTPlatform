@@ -7,6 +7,7 @@ import org.eclipse.californium.core.coap.CoAP;
 import org.eclipse.californium.core.server.resources.CoapExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -38,9 +39,10 @@ public class CoAPDeviceServer {
         coapServer.start();
     }
 
+    @Async
     @PostConstruct
     public void startCoapServer() {
-        new Thread(this::coapServer).start();
+        coapServer();
 
         System.out.println("===========================CoAP服务器已开启===========================");
     }
