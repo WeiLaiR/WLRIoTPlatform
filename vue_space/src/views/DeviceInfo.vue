@@ -19,7 +19,7 @@
 
         <div>
 
-          <v-row>
+          <v-row style="margin-bottom: 0;padding-bottom: 0">
 
             <v-col
                 cols="6"
@@ -27,7 +27,7 @@
               <v-text-field
                   label="输入设备id或设备名称"
                   filled
-                  style="margin-left: 30px;margin-top: 22px;"
+                  style="margin-left: 30px;margin-top: 22px;position: absolute;width: 46%"
                   color="#2ebfaf"
                   append-icon="mdi-magnify"
                   @blur="load"
@@ -38,16 +38,19 @@
             </v-col>
 
             <v-col
-                cols="3"
+                cols="2"
             >
 
-            <!--       空位置       -->
+              <!--       空位置       -->
 
             </v-col>
 
             <v-col
-                cols="3"
+                cols="4"
             >
+              <div style="color: #666666FF;font-size: 18px;position: absolute;right: 185px;top: 29px"> {{this.startNumber}} - {{this.endNumber}} of {{this.itemNums}}  <v-icon size="42px" @click="minusOne" color="#00CDFFFF">mdi-arrow-left-bold-box-outline</v-icon> <v-icon size="42px" @click="addOne" color="#00CDFFFF">mdi-arrow-right-bold-box-outline</v-icon></div>
+
+
               <v-btn right
                      absolute
                      elevation="5"
@@ -68,87 +71,122 @@
         </div>
 
 
+        <div style="margin: 100px 45px 0 45px">
+
+          <v-row>
+
+            <template v-for="(info, index) in infoData">
+
+
+              <v-col cols="4" :key="index" style="padding: 0 18px;margin-bottom: 23px">
+
+                <v-card height="195px" elevation="5" rounded="xl" style="padding: 20px 0 12px 12px">
+
+                  <div style="color: black;font-weight: 600"  >
+                    <v-icon color="black">mdi-server-network</v-icon>
+                    {{info.deviceName}}
+                    <v-chip
+                        small
+                        color="#00C98BFF"
+                        outlined
+                    >
+                      <v-icon left>mdi-alpha-v-box-outline</v-icon>
+                      version:1.1
+                    </v-chip>
+                  </div>
+
+                  <v-img src="../assets/router.png"  height="98px" width="102px" style="float: right;position: absolute;right: 5px;top: 20px;margin-right: 10px"></v-img>
+
+                  <div style="margin-top: 9px;position: relative;">
+                    <v-chip
+                        label
+                        small
+                        color="success"
+                        outlined
+                        style="margin-left: 3px"
+                    >
+                      在线
+                    </v-chip>
+
+                    <v-chip
+                        label
+                        small
+                        color="#00D0F1FF"
+                        outlined
+                        style="margin-left: 6px"
+                    >
+                      MQTT
+                    </v-chip>
+
+                  </div>
+
+                  <div style="margin-top: 6px;margin-left: 4px;font-size: 13px">
+                    设备ID: {{info.deviceId}}
+                  </div>
+
+                  <div style="margin-top: 0;margin-left: 4px;font-size: 13px">
+                    描述信息: {{info.description}}
+                  </div>
+
+                  <div style="margin-top: 0;margin-left: 4px;font-size: 13px">
+                    创建时间: {{info.createTime}}
+                  </div>
+
+                  <div style="margin: 3px 70px 0 70px">
+
+                    <v-btn dark small color="#0077FFFF" @click="editItem(info)" style="margin: 1px"><v-icon left>mdi-pencil</v-icon>修改</v-btn>
+                    <v-btn dark small color="#00CC43FF" @click="openCreateToken(info)" style="margin: 3px">重置密钥</v-btn>
+                    <v-btn small color="error" @click="deleteItem(info)" style="margin: 1px"><v-icon left>mdi-delete-forever</v-icon>删除</v-btn>
+
+                  </div>
+
+                </v-card>
+
+              </v-col>
+
+            </template>
+
+
+
+          </v-row>
+
+
+        </div>
+
         <div>
 
-          <v-data-table
-              :headers="headers"
-              :items="infoData"
-              :items-per-page.sync="rowNums"
-              :page.sync="pageNum"
-              :server-items-length="itemNums"
-              class="elevation-1"
-              style="margin-left: 30px;margin-right: 30px"
-          >
+          <v-dialog v-model="dialog" max-width="500px">
+            <v-card>
+              <v-card-title>
+                <span class="headline">修改设备基本信息：</span>
+              </v-card-title>
 
-            <!--      弹出的修改框      -->
-            <template v-slot:top>
-              <v-dialog v-model="dialog" max-width="500px">
-                <v-card>
-                  <v-card-title>
-                    <span class="headline">修改设备基本信息：</span>
-                  </v-card-title>
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12" sm="6" md="6">
+                      <v-text-field v-model="editedItem.deviceId" disabled label="Device ID"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="6">
+                      <v-text-field v-model="editedItem.deviceName" label="Device Name"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="6">
+                      <v-text-field v-model="editedItem.createTime" disabled label="Create Time"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="6">
+                      <v-text-field v-model="editedItem.description" label="Description"></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
 
-                  <v-card-text>
-                    <v-container>
-                      <v-row>
-                        <v-col cols="12" sm="6" md="6">
-                          <v-text-field v-model="editedItem.deviceId" disabled label="Device ID"></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="6">
-                          <v-text-field v-model="editedItem.deviceName" label="Device Name"></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="6">
-                          <v-text-field v-model="editedItem.createTime" disabled label="Create Time"></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="6">
-                          <v-text-field v-model="editedItem.description" label="Description"></v-text-field>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-card-text>
-
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                    <v-btn color="blue darken-1" text @click="save">Save</v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-            </template>
-
-            <!--      两个按键      -->
-
-            <template v-slot:item.actions="{ item }">
-              <v-icon
-                  small
-                  color="#2ebfaf"
-                  class="mr-2"
-                  @click="editItem(item)"
-              >
-                mdi-pencil
-              </v-icon>
-
-              <v-icon
-                  small
-                  color="#ff3f6f"
-                  class="mr-2"
-                  @click="openCreateToken(item)"
-
-              >
-                mdi-security
-              </v-icon>
-
-              <v-icon
-                  small
-                  color="red"
-                  @click="deleteItem(item)"
-              >
-                mdi-delete
-              </v-icon>
-            </template>
-
-
-          </v-data-table>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+                <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
 
         </div>
 
@@ -316,9 +354,11 @@ export default {
   data() {
     return {
       deviceSearch: "",
-      rowNums: 10,
+      rowNums: 9,
       pageNum: 1,
       itemNums: 10,
+      startNumber: 0,
+      endNumber: 0,
       dialogNewDevice: false,
       valid: false,
       description: '',
@@ -371,9 +411,6 @@ export default {
     dialog (val) {
       val || this.close()
     },
-    pageNum () {
-      this.load();
-    },
     rowNums () {
       this.load();
     },
@@ -389,11 +426,7 @@ export default {
 
   // 启动后触发此触发器填充假数据
   created () {
-    request.get("platform/deviceInfo/listP/" + this.pageNum + "/" + this.rowNums + "/" + (this.deviceSearch === "" ? "null" : this.deviceSearch)).then(res => {
-      console.log(res)
-      this.infoData = res.data;
-      this.itemNums = res.total;
-    });
+    this.load();
   },
 
   methods: {
@@ -451,6 +484,8 @@ export default {
         console.log(res)
         this.infoData = res.data;
         this.itemNums = res.total;
+        this.startNumber = (this.pageNum - 1) * this.rowNums + 1;
+        this.endNumber = this.pageNum * this.rowNums;
       });
     },
 
@@ -501,7 +536,19 @@ export default {
         }
       });
 
-    }
+    },
+    minusOne() {
+      if (this.pageNum > 1) {
+        this.pageNum --;
+        this.load()
+      }
+    },
+    addOne() {
+      if (this.pageNum < Math.ceil(this.itemNums / this.rowNums)) {
+        this.pageNum ++;
+        this.load()
+      }
+    },
 
   },
 }
