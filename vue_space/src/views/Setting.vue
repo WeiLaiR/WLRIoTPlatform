@@ -1,10 +1,17 @@
 <template>
-  <v-main>
+  <div style="height: 100%">
+    <v-main style="margin: 0;padding: 0;height: 100%">
 
-  </v-main>
+
+
+
+    </v-main>
+  </div>
 </template>
 
 <script>
+
+
 export default {
   name: "Setting"
 }
