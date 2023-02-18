@@ -52,6 +52,17 @@ spring:
         cluster-name: iot     #设置集群名称
         ephemeral: true       #临时实例
 
+  redis:
+    host: 192.168.3.66
+    port: 6379
+    password: 'xxxxxx'
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1ms
+        max-idle: 8
+        min-idle: 0
+
 #Mybatis-plus配置
 mybatis-plus:
   configuration:
