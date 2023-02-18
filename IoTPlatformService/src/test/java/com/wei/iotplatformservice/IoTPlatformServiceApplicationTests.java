@@ -79,7 +79,7 @@ class IoTPlatformServiceApplicationTests {
         Random random = new Random();
         for (int i = 0; i < 300; i++) {
             DeviceDataNumber dataNumber = new DeviceDataNumber();
-            dataNumber.setDeviceCfgId(1676011054947001L);
+            dataNumber.setDeviceCfgId(1676702296524010L);
             dataNumber.setData(((int) (random.nextDouble() * 10000) / 100.0));
             deviceDataNumberMapper.insert(dataNumber);
         }
