@@ -14,4 +14,7 @@ public interface DeviceInfoMapper extends BaseMapper<DeviceInfo> {
     Integer qInfoListCountQbc();
 
     List<DeviceInfo> queryBriefInfoList(Long uid);
+
+    Long queryDeviceIdByToken(String token);
+
 }
