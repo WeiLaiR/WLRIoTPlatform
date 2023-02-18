@@ -5,14 +5,19 @@
 <mapper namespace="com.wei.iotplatformservice.mapper.DeviceInfoMapper">
 
     <select id="qInfoListPQbc" resultType="com.wei.iotplatformservice.pojo.DeviceInfo">
-        SELECT SQL_CALC_FOUND_ROWS device_id, device_name, create_time, description FROM device_info WHERE uid = #{uid} and device_id like #{val} or device_name like #{val} LIMIT #{start}, #{limit};
+        SELECT SQL_CALC_FOUND_ROWS device_id, device_name, create_time, description, version, protocol FROM device_info WHERE uid = #{uid} and device_id like #{val} or device_name like #{val} LIMIT #{start}, #{limit};
     </select>
 
     <select id="qInfoListCountQbc" resultType="java.lang.Integer">
         SELECT FOUND_ROWS() AS TOTAL;
     </select>
+
     <select id="queryBriefInfoList" resultType="com.wei.iotplatformservice.pojo.DeviceInfo">
         SELECT device_id, device_name FROM device_info  WHERE uid = #{uid} LIMIT 100;
     </select>
+    <select id="queryDeviceIdByToken" resultType="java.lang.Long">
+        SELECT device_id FROM device_info WHERE device_token = #{token};
+    </select>
+
 
 </mapper>
