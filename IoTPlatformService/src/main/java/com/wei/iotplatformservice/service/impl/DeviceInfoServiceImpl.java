@@ -6,6 +6,7 @@ import com.wei.iotplatformservice.mapper.DeviceInfoMapper;
 import com.wei.iotplatformservice.pojo.DeviceInfo;
 import com.wei.iotplatformservice.service.DeviceInfoService;
 import com.wei.iotplatformservice.utils.DeviceTokenUtil;
+import com.wei.iotplatformservice.utils.RedisUtil;
 import com.wei.iotplatformservice.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,13 @@ public class DeviceInfoServiceImpl extends ServiceImpl<DeviceInfoMapper, DeviceI
     @Autowired
     public void setDeviceInfoMapper(DeviceInfoMapper deviceInfoMapper) {
         this.deviceInfoMapper = deviceInfoMapper;
+    }
+
+    private RedisUtil redisUtil;
+
+    @Autowired
+    public void setRedisUtil(RedisUtil redisUtil) {
+        this.redisUtil = redisUtil;
     }
 
 
@@ -65,9 +73,29 @@ public class DeviceInfoServiceImpl extends ServiceImpl<DeviceInfoMapper, DeviceI
         List<DeviceInfo> infos = deviceInfoMapper.qInfoListPQbc(val, start, limit, TokenUtils.getId());
         Integer count = deviceInfoMapper.qInfoListCountQbc();
 
+        ArrayList<Map<String, Object>> maps = new ArrayList<>();
+
+        for (DeviceInfo info : infos) {
+            String s = redisUtil.get(info.getDeviceId() + "status");
+
+            HashMap<String, Object> map1 = new HashMap<>();
+            map1.put("deviceId", info.getDeviceId());
+            map1.put("deviceName", info.getDeviceName());
+            map1.put("createTime", info.getCreateTime());
+            map1.put("description", info.getDescription());
+            map1.put("version", info.getVersion());
+            map1.put("protocol", info.getProtocol());
+            if (s == null) {
+                map1.put("status", "离线");
+            }else {
+                map1.put("status", "在线");
+            }
+            maps.add(map1);
+        }
+
         map.put("status", 200);
         map.put("message", "查询成功");
-        map.put("data", infos);
+        map.put("data", maps);
         map.put("total", count);
 
         return map;
