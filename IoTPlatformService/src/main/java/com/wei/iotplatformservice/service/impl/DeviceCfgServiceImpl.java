@@ -47,7 +47,7 @@ public class DeviceCfgServiceImpl extends ServiceImpl<DeviceCfgMapper, DeviceCfg
 
         for (DeviceCfg cfg : cfgS) {
             HashMap<String, Object> map1 = new HashMap<>();
-            map1.put("text", cfg.getTypeName() + " - " + cfg.getDeviceCfgId());
+            map1.put("text", cfg.getTypeNickName() + "-" + cfg.getTypeName() + " - " + cfg.getDeviceCfgId());
             map1.put("value", cfg.getDeviceCfgId());
             maps.add(map1);
         }
