@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -39,7 +40,9 @@ public class MqttController {
         String token = (String) val.get("token");
         status.put(token, true);
 
-        customThreadPool1.execute(() -> MqttTask(token, (Map<String, Boolean>) val.get("map")));
+        List<Map<String, Object>> list = (List) val.get("list");
+
+        customThreadPool1.execute(() -> MqttTask(token, list));
 
         map.put("state", "200");
         map.put("message", "success");
@@ -59,23 +62,37 @@ public class MqttController {
         return map;
     }
 
-    private void MqttTask(String token, Map<String, Boolean> map) {
+    private void MqttTask(String token, List<Map<String, Object>> list) {
         Random random = new Random();
+        double version = ((int) (random.nextDouble() * 30)) / 10.0 + 0.6;
         while (status.getOrDefault(token, true)) {
             StringBuilder sb = new StringBuilder();
             sb.append("token=").append(token);
-            for (String key : map.keySet()) {
-                double v = ((int) (random.nextDouble() * 10000)) / 100.0;
-                String value = String.valueOf(v);
-                if (!map.get(key)) {
+            sb.append("&version=").append(version);
+            for (Map<String, Object> val : list) {
+                int statVal = 0;
+                int endVal = 100;
+                if (val.getOrDefault("startVal", null) != null) {
+                    statVal = (int) val.get("startVal");
+                }
+
+                if (val.getOrDefault("endVal", null) != null) {
+                    endVal = (int) val.get("endVal");
+                }
+
+                double v = random.nextDouble() * (endVal - statVal);
+                v = v + statVal;
+
+                String value = String.format("%.2f", v);
+                if (! (Boolean) val.get("isNumber")) {
                     value = "Message" + value;
                 }
-                sb.append("&").append(key).append("=").append(value);
+                sb.append("&").append(val.get("typeName")).append("=").append(value);
             }
             message.publish(sb.toString(), false);
 
             try {
-                Thread.sleep(3600);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
