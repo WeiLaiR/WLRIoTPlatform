@@ -27,6 +27,10 @@ public class DeviceInfo {
     private String deviceName;
     private String deviceToken;
 
+    private String protocol;
+
+    private Double version;
+
     private String description;
 
     //    注解优先级高于yml配置文件中的设置！
