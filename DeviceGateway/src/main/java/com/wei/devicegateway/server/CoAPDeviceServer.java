@@ -1,6 +1,8 @@
 package com.wei.devicegateway.server;
 
 import javax.annotation.PostConstruct;
+
+import com.wei.devicegateway.utils.MessageHandler;
 import org.eclipse.californium.core.CoapResource;
 import org.eclipse.californium.core.CoapServer;
 import org.eclipse.californium.core.coap.CoAP;
@@ -9,6 +11,8 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 @Component
 public class CoAPDeviceServer {
@@ -31,9 +35,16 @@ public class CoAPDeviceServer {
                 String exchangeName = "device.direct";
                 String routingKey = "coap";
 
-                rabbitTemplate.convertAndSend(exchangeName,routingKey,message + "RoutingKeyIs:" + routingKey);
+                Map<String, Object> map = MessageHandler.handleMessage(message);
 
-                exchange.respond(CoAP.ResponseCode.CONTENT, "OKK");
+                if (map != null) {
+                    rabbitTemplate.convertAndSend(exchangeName,routingKey,map);
+                    exchange.respond(CoAP.ResponseCode.CONTENT, "SUCCESS");
+                }else {
+                    exchange.respond(CoAP.ResponseCode.CONTENT, "ERROR");
+                }
+
+
             }
         });
         coapServer.start();
