@@ -80,18 +80,18 @@
 
               <v-col cols="4" :key="index" style="padding: 0 18px;margin-bottom: 23px">
 
-                <v-card height="195px" elevation="5" rounded="xl" style="padding: 20px 0 12px 12px">
+                <v-card height="195px" elevation="5" rounded="xl" style="padding: 20px 0 12px 12px;width: 100%">
 
                   <div style="color: black;font-weight: 600"  >
                     <v-icon color="black">mdi-server-network</v-icon>
-                    {{info.deviceName}}
+                    {{info.deviceName}}&nbsp;&nbsp;
                     <v-chip
                         small
                         color="#00C98BFF"
                         outlined
                     >
                       <v-icon left>mdi-alpha-v-box-outline</v-icon>
-                      version:1.1
+                      version:{{info.version}}
                     </v-chip>
                   </div>
 
@@ -101,21 +101,21 @@
                     <v-chip
                         label
                         small
-                        color="success"
+                        :color="info.status === '在线' ? '#00C98BFF' : info.protocol === null? '#9C9C9CFF' : '#FFB300FF'"
                         outlined
                         style="margin-left: 3px"
                     >
-                      在线
+                      {{info.status === '在线' ? info.status : info.protocol === null? '未激活' : '离线'}}
                     </v-chip>
 
                     <v-chip
                         label
                         small
-                        color="#00D0F1FF"
+                        :color="info.protocol === null ? '#9C9C9CFF' : info.protocol === 'CoAP' ? '#00D0F1FF' : info.protocol === 'MQTT' ? '#FF0081FF' : '#6E00FFFF'"
                         outlined
                         style="margin-left: 6px"
                     >
-                      MQTT
+                      {{info.protocol === null ? 'NULL' : info.protocol}}
                     </v-chip>
 
                   </div>
@@ -132,7 +132,7 @@
                     创建时间: {{info.createTime}}
                   </div>
 
-                  <div style="margin: 3px 70px 0 70px">
+                  <div style="margin: 3px 0 0 0;" align="center">
 
                     <v-btn dark small color="#0077FFFF" @click="editItem(info)" style="margin: 1px"><v-icon left>mdi-pencil</v-icon>修改</v-btn>
                     <v-btn dark small color="#00CC43FF" @click="openCreateToken(info)" style="margin: 3px">重置密钥</v-btn>
