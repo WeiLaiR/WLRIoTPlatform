@@ -100,6 +100,9 @@
                           <v-text-field v-model="editedItem.typeName" label="Type Name"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" md="6">
+                          <v-text-field v-model="editedItem.typeNickName" label="Type Nick Name"></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="6">
                           <v-select :items="IS" v-model="editedItem.isNumber" disabled label="Is Number?"></v-select>
                         </v-col>
                         <v-col cols="12" sm="6" md="6">
@@ -155,6 +158,28 @@
 
 
               <v-row style="width: 580px">
+
+                <v-col cols="1">
+
+                </v-col>
+
+                <v-col cols="10">
+
+                  <v-text-field
+                      light
+                      color="#2ebfaf"
+
+                      v-model="typeNickName"
+                      label="Type Nick Name"
+                  >
+                  </v-text-field>
+
+                </v-col>
+                <v-col cols="1">
+
+                </v-col>
+
+
                 <v-col cols="1">
 
                 </v-col>
@@ -240,6 +265,7 @@ export default {
         }
       ],
 
+      typeNickName: '',
       typeName: '',
       isNumber: null,
       dialogNewDeviceCfg: false,
@@ -258,6 +284,7 @@ export default {
           sortable: false,
           value: 'deviceCfgId',
         },
+        { text: '数据昵称', sortable: false, value: 'typeNickName' },
         { text: '数据名称', sortable: false, value: 'typeName' },
         { text: '类型是否为数字', sortable: false, value: 'isNumber' },
         { text: '创建时间', sortable: false, value: 'createTime' },
@@ -267,17 +294,17 @@ export default {
       editedIndex: -1,
       editedItem: {
         deviceCfgId: '',
-        typeName: 0,
-        isNumber: 0,
-        createTime: 0,
-        protein: 0,
+        typeNickName: '',
+        typeName: '',
+        isNumber: false,
+        createTime: '',
       },
       defaultItem: {
         deviceCfgId: '',
-        typeName: 0,
-        isNumber: 0,
-        createTime: 0,
-        protein: 0,
+        typeNickName: '',
+        typeName: '',
+        isNumber: false,
+        createTime: '',
       },
 
 
@@ -352,6 +379,7 @@ export default {
           request.post("/platform/deviceCfg/updateDeviceCfg", {
             deviceCfgId: this.dataCfg[this.editedIndex].deviceCfgId,
             typeName: this.editedItem.typeName,
+            typeNickName: this.editedItem.typeNickName
           }).then(res => {
             if (res.status === 200) {
               this.$message.success(res.message);
@@ -379,12 +407,13 @@ export default {
 
     newCfg() {
       this.typeName = '';
+      this.typeNickName = '';
       this.isNumber = null;
       this.dialogNewDeviceCfg = true;
     },
 
     createCfg() {
-      if (this.typeName === '') {
+      if (this.typeName === '' || this.typeNickName === '' || this.typeName === null || this.typeNickName === null) {
         this.$message.error("请输入数据名称");
         return;
       } else if (this.isNumber === null) {
@@ -398,6 +427,7 @@ export default {
           deviceId: this.deviceCh,
           typeName: this.typeName,
           isNumber: this.isNumber,
+          typeNickName: this.typeNickName,
         }).then(res => {
           if (res.status === 200) {
             this.$message.success(res.message);
