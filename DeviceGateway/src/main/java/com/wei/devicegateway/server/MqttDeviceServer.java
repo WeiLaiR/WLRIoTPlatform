@@ -1,12 +1,16 @@
 package com.wei.devicegateway.server;
 
 import javax.annotation.PostConstruct;
+
+import com.wei.devicegateway.utils.MessageHandler;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 @Component
 public class MqttDeviceServer {
@@ -46,13 +50,17 @@ public class MqttDeviceServer {
 //                    System.out.println("topic: " + topic);
 //                    System.out.println("Qos: " + message.getQos());
                     //消息
-                    System.out.println("message content: " + new String(message.getPayload()));
+                    System.out.println(new String(message.getPayload()));
 
 
                     String exchangeName = "device.direct";
                     String routingKey = "mqtt";
 
-                    rabbitTemplate.convertAndSend(exchangeName,routingKey,new String(message.getPayload()) + "RoutingKeyIs:" + routingKey);
+                    Map<String, Object> map = MessageHandler.handleMessage(new String(message.getPayload()));
+
+                    if (map != null) {
+                        rabbitTemplate.convertAndSend(exchangeName,routingKey,map);
+                    }
 
 
                 }
