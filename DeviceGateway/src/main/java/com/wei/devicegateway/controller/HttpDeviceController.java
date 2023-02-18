@@ -1,5 +1,6 @@
 package com.wei.devicegateway.controller;
 
+import com.wei.devicegateway.utils.MessageHandler;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +23,7 @@ public class HttpDeviceController {
     }
 
     @PostMapping("/httpTelemetry")
-    public Map<String, Object> httpTelemetry(@RequestBody Map<Object, Object> message) {
+    public Map<String, Object> httpTelemetry(@RequestBody String message) {
         Map<String, Object> map = new HashMap<>();
 
         System.out.println(message);
@@ -30,9 +31,15 @@ public class HttpDeviceController {
         String exchangeName = "device.direct";
         String routingKey = "http";
 
-        rabbitTemplate.convertAndSend(exchangeName,routingKey,message + "RoutingKeyIs:" + routingKey);
+        Map<String, Object> map1 = MessageHandler.handleMessage(message);
 
-        map.put("state", "200");
+        if (map1 != null) {
+            rabbitTemplate.convertAndSend(exchangeName,routingKey,map1);
+
+            map.put("state", "200");
+        }else {
+            map.put("status", "400");
+        }
 
         return map;
     }
