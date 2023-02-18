@@ -26,6 +26,8 @@ public class DeviceCfg {
     private String typeName;
     private Boolean isNumber;
 
+    private String typeNickName;
+
     //    注解优先级高于yml配置文件中的设置！
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
