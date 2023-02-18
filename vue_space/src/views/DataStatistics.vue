@@ -309,6 +309,7 @@ export default {
         },
         { text: '数据接收时间', value: 'createTime' },
         { text: '数据值', value: 'data' },
+        { text: '协议', value: 'protocol' },
       ],
       dataValue: [
       ],
@@ -367,6 +368,7 @@ export default {
       this.load();
     },
     switch1() {
+      this.value = [];
       if (this.switch1 === true) {
         if (this.isNumber === true) {
           request.get("/platform/deviceData/value/"  + this.cfgCh + "/"
