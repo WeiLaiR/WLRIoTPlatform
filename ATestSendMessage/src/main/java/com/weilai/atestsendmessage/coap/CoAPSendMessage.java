@@ -10,7 +10,7 @@ import java.io.IOException;
 
 @Component
 public class CoAPSendMessage {
-    private final String URL = "localhost:6667/coapTelemetry";
+    private final String URL = "coap://localhost:6667/coapTelemetry";
 
     private CoapClient client;
 
