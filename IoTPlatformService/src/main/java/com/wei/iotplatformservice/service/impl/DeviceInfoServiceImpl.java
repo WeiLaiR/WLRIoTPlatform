@@ -1,8 +1,15 @@
 package com.wei.iotplatformservice.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wei.iotplatformservice.exception.CustomException;
+import com.wei.iotplatformservice.mapper.DeviceCfgMapper;
+import com.wei.iotplatformservice.mapper.DeviceDataMapper;
+import com.wei.iotplatformservice.mapper.DeviceDataNumberMapper;
 import com.wei.iotplatformservice.mapper.DeviceInfoMapper;
+import com.wei.iotplatformservice.pojo.DeviceCfg;
+import com.wei.iotplatformservice.pojo.DeviceData;
+import com.wei.iotplatformservice.pojo.DeviceDataNumber;
 import com.wei.iotplatformservice.pojo.DeviceInfo;
 import com.wei.iotplatformservice.service.DeviceInfoService;
 import com.wei.iotplatformservice.utils.DeviceTokenUtil;
@@ -26,6 +33,23 @@ public class DeviceInfoServiceImpl extends ServiceImpl<DeviceInfoMapper, DeviceI
         this.deviceInfoMapper = deviceInfoMapper;
     }
 
+
+    private DeviceCfgMapper deviceCfgMapper;
+    @Autowired
+    public void setDeviceCfgMapper(DeviceCfgMapper deviceCfgMapper) {
+        this.deviceCfgMapper = deviceCfgMapper;
+    }
+
+    DeviceDataMapper deviceDataMapper;
+    @Autowired
+    public void setDeviceDataMapper(DeviceDataMapper deviceDataMapper) {
+        this.deviceDataMapper = deviceDataMapper;
+    }
+    DeviceDataNumberMapper deviceDataNumberMapper;
+    @Autowired
+    public void setDeviceDataNumberMapper(DeviceDataNumberMapper deviceDataNumberMapper) {
+        this.deviceDataNumberMapper = deviceDataNumberMapper;
+    }
     private RedisUtil redisUtil;
 
     @Autowired
@@ -140,8 +164,44 @@ public class DeviceInfoServiceImpl extends ServiceImpl<DeviceInfoMapper, DeviceI
     }
 
     @Override
-    public Map<String, Object> deleteDeviceInfo(DeviceInfo deviceInfo) {
-        return null;
+    public Map<String, Object> deleteDeviceInfo(Long deviceId) {
+        Map<String, Object> map = new HashMap<>();
+
+        boolean sign = false;
+
+        try {
+            List<DeviceCfg> deviceCfgS = deviceCfgMapper.queryDeviceCfgListP(0, Integer.MAX_VALUE, deviceId);
+            for (DeviceCfg deviceCfg : deviceCfgS) {
+                if (deviceCfg.getIsNumber()) {
+                    if (deviceDataNumberMapper.delete(new QueryWrapper<DeviceDataNumber>().eq("device_cfg_id", deviceCfg.getDeviceCfgId())) < 0) {
+                        sign = true;
+                    }
+                }else {
+                    if (deviceDataMapper.delete(new QueryWrapper<DeviceData>().eq("device_cfg_id", deviceCfg.getDeviceCfgId())) < 0) {
+                        sign = true;
+                    }
+                }
+
+                if (deviceCfgMapper.deleteById(deviceCfg.getDeviceCfgId()) < 0) {
+                    sign = true;
+                }
+            }
+
+            if (deviceInfoMapper.deleteById(deviceId) < 0) {
+                sign = true;
+            }
+        } catch (Exception e) {
+            throw new CustomException(400, "出现了未知异常！(DeviceInfoDelete)");
+        }
+
+        if (sign) {
+            throw new CustomException(400, "出现了未知异常！(DeviceInfoDelete)");
+        }
+
+        map.put("status", 200);
+        map.put("message", "设备删除成功!");
+
+        return map;
     }
 
     @Override
