@@ -439,8 +439,16 @@ export default {
     },
 
     deleteItem (item) {
-      const index = this.infoData.indexOf(item)
-      confirm('Are you sure you want to delete this item?') && this.infoData.splice(index, 1)
+      if (item.deviceId === '' || item.deviceId === null || item.deviceId === 0) {
+        this.$message.error('表单数据异常！');
+        return;
+      }
+      request.delete("platform/deviceInfo/delete/" + item.deviceId).then(res => {
+        if (res.status === 200) {
+          this.$message.success(res.message);
+          this.load();
+        }
+      })
     },
 
     close () {
