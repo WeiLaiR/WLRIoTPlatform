@@ -20,7 +20,7 @@ public interface DeviceInfoService extends IService<DeviceInfo> {
 
     Map<String, Object> updateDeviceInfo(DeviceInfo deviceInfo);
 
-    Map<String, Object> deleteDeviceInfo(DeviceInfo deviceInfo);
+    Map<String, Object> deleteDeviceInfo(Long deviceId);
 
     Map<String, Object> createNewToken(Long did);
 
