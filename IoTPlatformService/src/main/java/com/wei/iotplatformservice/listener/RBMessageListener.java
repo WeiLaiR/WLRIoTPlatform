@@ -1,6 +1,6 @@
 package com.wei.iotplatformservice.listener;
 
-import com.wei.iotplatformservice.utils.DeviceMessageHandler;
+import com.wei.iotplatformservice.handler.DeviceMessageHandler;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
