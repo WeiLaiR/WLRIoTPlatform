@@ -81,12 +81,12 @@ export default {
     data: () =>({
         selectedItem: 0,
         items: [
-            {icon: 'mdi-finance', text: '首页', path: '/home'},
-            {icon: 'mdi-calendar-outline', text: '设备信息', path: '/deviceInfo'},
-            {icon: 'mdi-account-outline', text: '设备配置', path: '/deviceSetting'},
-            {icon: 'mdi-account-outline', text: '数据统计', path: '/dataStatistics'},
-            {icon: 'mdi-content-paste', text: '用户信息', path: '/userInfo'},
-            {icon: 'mdi-home-outline', text: '个人信息', path: '/updateInfo'},
+            {icon: 'mdi-home-outline', text: '首页', path: '/home'},
+            {icon: 'mdi-cellphone-link', text: '设备信息', path: '/deviceInfo'},
+            {icon: 'mdi-cellphone-cog', text: '设备配置', path: '/deviceSetting'},
+            {icon: 'mdi-database-search-outline', text: '数据统计', path: '/dataStatistics'},
+            {icon: 'mdi-account-search-outline', text: '用户信息', path: '/userInfo'},
+            {icon: 'mdi-comment-account-outline', text: '个人信息', path: '/updateInfo'},
             {icon: 'mdi-cogs', text: '设置', path: '/setting'},
         ],
     }),
