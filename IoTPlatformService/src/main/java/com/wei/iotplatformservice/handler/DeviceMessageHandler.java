@@ -1,4 +1,4 @@
-package com.wei.iotplatformservice.utils;
+package com.wei.iotplatformservice.handler;
 
 import com.wei.iotplatformservice.mapper.DeviceCfgMapper;
 import com.wei.iotplatformservice.mapper.DeviceDataMapper;
@@ -8,6 +8,7 @@ import com.wei.iotplatformservice.pojo.DeviceCfg;
 import com.wei.iotplatformservice.pojo.DeviceData;
 import com.wei.iotplatformservice.pojo.DeviceDataNumber;
 import com.wei.iotplatformservice.pojo.DeviceInfo;
+import com.wei.iotplatformservice.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ import java.util.Map;
 @Component
 public class DeviceMessageHandler {
 
-    private static final Long TIMEOUT =  60 * 10L;
+    private static final Long TIMEOUT =  30 * 10L;
 
     private DeviceInfoMapper deviceInfoMapper;
     @Autowired
