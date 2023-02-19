@@ -54,4 +54,9 @@ public class DeviceInfoController {
         return deviceInfoService.createNewToken(did);
     }
 
+    @DeleteMapping("/delete/{deviceId}")
+    public Map<String, Object> deleteDeviceInfo(@PathVariable Long deviceId) {
+        return deviceInfoService.deleteDeviceInfo(deviceId);
+    }
+
 }
