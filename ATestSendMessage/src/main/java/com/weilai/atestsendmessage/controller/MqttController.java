@@ -3,10 +3,7 @@ package com.weilai.atestsendmessage.controller;
 import com.weilai.atestsendmessage.mqtt.MqttSendMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -54,7 +51,7 @@ public class MqttController {
     public Map<String, Object> stopMqtt(@RequestBody Map<String, Object> val) {
         Map<String, Object> map = new HashMap<>();
 
-        status.put((String) val.get("token"), false);
+        status.remove((String) val.get("token"));
 
         map.put("state", "200");
         map.put("message", "success");
@@ -62,13 +59,24 @@ public class MqttController {
         return map;
     }
 
+    @GetMapping("/getMap")
+    public Map<String, Object> getMap() {
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("state", "200");
+        map.put("message", "success");
+        map.put("data", status);
+
+        return map;
+    }
+
     private void MqttTask(String token, List<Map<String, Object>> list) {
         Random random = new Random();
         double version = ((int) (random.nextDouble() * 30)) / 10.0 + 0.6;
-        while (status.getOrDefault(token, true)) {
+        while (status.getOrDefault(token, false)) {
             StringBuilder sb = new StringBuilder();
             sb.append("token=").append(token);
-            sb.append("&version=").append(version);
+            sb.append("&version=").append(String.format("%.1f", version));
             for (Map<String, Object> val : list) {
                 int statVal = 0;
                 int endVal = 100;
