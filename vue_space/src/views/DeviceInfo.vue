@@ -136,7 +136,7 @@
 
                     <v-btn dark small color="#0077FFFF" @click="editItem(info)" style="margin: 1px"><v-icon left>mdi-pencil</v-icon>修改</v-btn>
                     <v-btn dark small color="#00CC43FF" @click="openCreateToken(info)" style="margin: 3px">重置密钥</v-btn>
-                    <v-btn small color="error" @click="deleteItem(info)" style="margin: 1px"><v-icon left>mdi-delete-forever</v-icon>删除</v-btn>
+                    <v-btn small color="error" @click="deleteDialog(info)" style="margin: 1px"><v-icon left>mdi-delete-forever</v-icon>删除</v-btn>
 
                   </div>
 
@@ -335,6 +335,44 @@
         </div>
 
 
+        <div>
+
+          <v-dialog v-model="dialogDeleteInfo" width="600px">
+            <v-card>
+              <v-card-title >
+                <span class="headline" style="margin: 12px">警告：</span>
+              </v-card-title>
+
+
+              <v-row style="width: 580px">
+
+                <v-col cols="1">
+
+                </v-col>
+
+                <v-col cols="10" style="color: red">
+
+                  你确定要删除当前的设备信息吗？其相关数据也会随之删除。
+
+                </v-col>
+                <v-col cols="1">
+
+                </v-col>
+
+              </v-row>
+
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="green darken-1" style="min-width: 80px;margin: 20px" @click="dialogDeleteInfo = false">CLOSE</v-btn>
+                <v-btn color="#ff3f6f" style="min-width: 80px;margin: 20px" @click="deleteItem">NEXT</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+
+        </div>
+
+
 
 
 
@@ -367,6 +405,8 @@ export default {
       deviceToken: '',
       dialogCreateToken: false,
       CDid: 0,
+      dialogDeleteInfo: false,
+      dDeviceInfoId: 0,
 
 
 
@@ -438,15 +478,16 @@ export default {
       this.dialog = true
     },
 
-    deleteItem (item) {
-      if (item.deviceId === '' || item.deviceId === null || item.deviceId === 0) {
+    deleteItem () {
+      if (this.dDeviceInfoId === '' || this.dDeviceInfoId === null || this.dDeviceInfoId === 0) {
         this.$message.error('表单数据异常！');
         return;
       }
-      request.delete("platform/deviceInfo/delete/" + item.deviceId).then(res => {
+      request.delete("platform/deviceInfo/delete/" + this.dDeviceInfoId).then(res => {
         if (res.status === 200) {
           this.$message.success(res.message);
           this.load();
+          this.dialogDeleteInfo = false;
         }
       })
     },
@@ -558,7 +599,14 @@ export default {
       }
     },
 
+    deleteDialog(item) {
+      this.dDeviceInfoId = item.deviceId;
+      this.dialogDeleteInfo = true;
+    }
+
   },
+
+
 }
 </script>
 
