@@ -19,13 +19,13 @@ const routes = [
     component: Manage,
     redirect: "/home",
     children: [
-      { path: 'home', name: '主页', component: Home},
-      { path: 'deviceInfo', name: '设备信息', component: DeviceInfo},
-      { path: 'deviceSetting', name: '设备配置', component: DeviceSetting},
-      { path: 'dataStatistics', name: '数据统计', component: DataStatistics},
-      { path: 'userInfo', name: '用户信息', component: UserInfo},
-      { path: 'updateInfo', name: '个人信息', component: UpdateInfo},
-      { path: 'setting', name: '设置', component: Setting},
+      { path: 'home', name: '主页', component: Home, meta: {title: 'WLRIoTPlatform-主页'}},
+      { path: 'deviceInfo', name: '设备信息', component: DeviceInfo, meta: {title: 'WLRIoTPlatform-设备信息'}},
+      { path: 'deviceSetting', name: '设备配置', component: DeviceSetting, meta: {title: 'WLRIoTPlatform-设备配置'}},
+      { path: 'dataStatistics', name: '数据统计', component: DataStatistics, meta: {title: 'WLRIoTPlatform-数据统计'}},
+      { path: 'userInfo', name: '用户信息', component: UserInfo, meta: {title: 'WLRIoTPlatform-用户信息'}},
+      { path: 'updateInfo', name: '个人信息', component: UpdateInfo, meta: {title: 'WLRIoTPlatform-个人信息'}},
+      { path: 'setting', name: '设置', component: Setting, meta: {title: 'WLRIoTPlatform-设置'}},
     ]
   },
   {
@@ -39,12 +39,12 @@ const routes = [
   {
     path: "/login",
     name: 'Login',
-    component: Login
+    component: Login, meta: {title: 'WLRIoTPlatform-登录'}
   },
   {
     path: "/register",
     name: "Register",
-    component: Register
+    component: Register, meta: {title: 'WLRIoTPlatform-注册'}
   }
 ]
 
@@ -53,5 +53,13 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+
+router.afterEach((to) => {
+  document.title = to.meta.title //在全局后置守卫中获取路由元信息设置title
+})
+
+
+
 
 export default router
