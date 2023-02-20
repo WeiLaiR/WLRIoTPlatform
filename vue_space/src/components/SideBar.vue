@@ -6,7 +6,7 @@
       color="#E9EEF4"
     >
        <div class="text-center mt-5">
-           <h1 class="teal--text text-lg-h5 font-weight-bold ">WLRIoTPlatform</h1>
+           <h1 class="teal--text text-lg-h5 font-weight-bold "> <v-img src="../assets/iot.svg" height="30px" width="30px" style="position: absolute; left: 12px"></v-img> &nbsp;&nbsp;&nbsp;WLRIoTPlatform</h1>
            <v-divider color="white" class="mt-4"></v-divider>
             <v-avatar class="my-5" size="60">
             <v-img src="https://cdn.vuetifyjs.com/images/lists/1.jpg" class="image"></v-img>
