@@ -136,7 +136,7 @@
               <v-icon
                   small
                   color="#ff3f6f"
-                  @click="deleteItem(item)"
+                  @click="deleteDialog(item)"
               >
                 mdi-delete
               </v-icon>
@@ -221,12 +221,48 @@
               </v-row>
 
 
-
-
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="green darken-1" style="min-width: 80px;margin: 20px" @click="dialogNewDeviceCfg = false">CLOSE</v-btn>
                 <v-btn color="#ff3f6f" style="min-width: 80px;margin: 20px" @click="createCfg">NEXT</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+
+        </div>
+
+
+        <div>
+
+          <v-dialog v-model="dialogDeleteCfg" width="600px">
+            <v-card>
+              <v-card-title >
+                <span class="headline" style="margin: 12px">警告：</span>
+              </v-card-title>
+
+
+              <v-row style="width: 580px">
+
+                <v-col cols="1">
+
+                </v-col>
+
+                <v-col cols="10" style="color: red">
+
+                  你确定要删除当前的设备配置吗？其对应的数据也会随之删除。
+
+                </v-col>
+                <v-col cols="1">
+
+                </v-col>
+
+              </v-row>
+
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="green darken-1" style="min-width: 80px;margin: 20px" @click="dialogDeleteCfg = false">CLOSE</v-btn>
+                <v-btn color="#ff3f6f" style="min-width: 80px;margin: 20px" @click="deleteItem">NEXT</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -269,6 +305,8 @@ export default {
       typeName: '',
       isNumber: null,
       dialogNewDeviceCfg: false,
+      dialogDeleteCfg: false,
+      dDeviceCfgId: 0,
 
 
       rowNums: 10,
@@ -357,9 +395,16 @@ export default {
       this.dialog = true
     },
 
-    deleteItem(item) {
-      const index = this.dataCfg.indexOf(item)
-      confirm('Are you sure you want to delete this item?') && this.dataCfg.splice(index, 1)
+    deleteItem() {
+      if (this.dDeviceCfgId !== 0 && this.dDeviceCfgId !== null) {
+        request.delete("/platform/deviceCfg/deleteDeviceCfg/" + this.dDeviceCfgId).then(res => {
+          if (res.status === 200) {
+            this.$message.success(res.message);
+            this.dialogDeleteCfg = false;
+            this.load();
+          }
+        });
+      }
     },
 
     close() {
@@ -437,7 +482,12 @@ export default {
         });
       }
       console.log('CREATE CFG')
-    }
+    },
+
+    deleteDialog(item) {
+      this.dDeviceCfgId = item.deviceCfgId;
+      this.dialogDeleteCfg = true;
+    },
   }
 }
 </script>
