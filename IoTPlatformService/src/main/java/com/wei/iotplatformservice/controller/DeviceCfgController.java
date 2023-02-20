@@ -42,5 +42,10 @@ public class DeviceCfgController {
         return deviceCfgService.updateDeviceCfg(deviceCfg);
     }
 
+    @DeleteMapping("/deleteDeviceCfg/{cid}")
+    public Map<String, Object> deleteDeviceCfg(@PathVariable Long cid) {
+        return deviceCfgService.deleteDeviceCfg(cid);
+    }
+
 
 }
