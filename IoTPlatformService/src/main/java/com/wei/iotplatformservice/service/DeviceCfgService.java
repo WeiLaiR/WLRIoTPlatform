@@ -17,5 +17,7 @@ public interface DeviceCfgService extends IService<DeviceCfg> {
 
     Map<String, Object> updateDeviceCfg(DeviceCfg deviceCfg);
 
+    Map<String, Object> deleteDeviceCfg(Long cid);
+
 
 }
