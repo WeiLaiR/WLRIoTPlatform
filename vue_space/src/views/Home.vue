@@ -2,112 +2,83 @@
 
   <div style="height: 100%">
     <v-main
-        style="padding: 0px;"
+        style="margin: 0;padding: 0;height: 100%"
     >
-      <v-container>
+      <div style="margin: 35px">
+
         <v-row>
-          <v-col cols="12" sm="12">
-            <v-toolbar flat color="rgba(0,0,0,0)" class="mt-n5">
-              <v-toolbar-title>仪表盘</v-toolbar-title>
-              <v-spacer></v-spacer>
-            </v-toolbar>
 
-            <v-row class="px-5 mt-n6 ml-5" style="padding-top: 20px">
-              <v-col cols="12" sm="3" v-for="list in lists" :key="list">
-                <v-card
-                    align="center"
-                    color="#F9FAFC"
-                    class="rounded-circle border pt-10"
-                    width="200"
-                    height="200"
-                    flat
-                >
-                  <v-icon size="60" color="#2EBFAF">
-                    {{ list.icon }}
-                  </v-icon>
+          <v-col cols="3">
 
-                  <v-card-text class="grey--text text-lg-h6">
-                    {{ list.title }}
-                  </v-card-text>
+            <v-card
+              height="260px"
+            >
+              <div style="font-size: 19px;padding: 15px">
+                <v-icon color="#55A8D8FF">
+                  mdi-star-four-points-outline
+                </v-icon>
+                物联网平台引导
+              </div>
 
-                  <v-btn
-                      absolute
-                      color="#2EBFAF"
-                      class="white--text"
-                      fab
-                      left
-                      top
-                  >
-                    <h2>{{ list.count }}</h2>
-                  </v-btn>
-                </v-card>
-              </v-col>
-            </v-row>
+              <v-card style="margin: 0 22px 10px 22px;background-image: linear-gradient(to top left, #FFFFFFFF 0%,#FFFFFFFF 50%, #D0E8FDFF 100%);" elevation="3" height="70px" >
+                <v-img src="../assets/advi.svg" height="55px" width="55px" style="margin: 5px;position: absolute;top: 5px"></v-img>
+
+                <div style="position: absolute;left: 65px;top: 10px;color: #747474FF">STEP1</div>
+
+                <div style="position: absolute;left: 65px;top: 36px;font-size: 17px">创建设备</div>
+
+                <div style="position: absolute;left: 210px;top: -5px;font-size: 66px;color: #D1E8FDFF">1</div>
+
+              </v-card>
+
+              <v-card style="margin: 10px 22px;background-image: linear-gradient(to top left, #FFFFFFFF 0%,#FFFFFFFF 50%, #D0E8FDFF 100%);" elevation="3" height="70px">
+                <v-img src="../assets/acfg.svg" height="55px" width="55px" style="margin: 5px;position: absolute;top: 5px"></v-img>
+
+                <div style="position: absolute;left: 65px;top: 10px;color: #747474FF">STEP2</div>
+
+                <div style="position: absolute;left: 65px;top: 36px;font-size: 17px">创建配置</div>
+
+                <div style="position: absolute;left: 210px;top: -5px;font-size: 66px;color: #D1E8FDFF">2</div>
+
+              </v-card>
 
 
-            <v-row class="mt-n5" style="padding-top: 50px">
-              <v-col cols="12" sm="7">
-                <History />
-              </v-col>
+            </v-card>
 
-              <v-col cols="12" sm="5">
-                <Appointment />
-              </v-col>
-
-            </v-row>
-
-            <v-row class="mt-n12" style="padding-top: 50px">
-              <v-col cols="12" sm="12">
-                <Table />
-              </v-col>
-            </v-row>
           </v-col>
+
+
+
         </v-row>
-      </v-container>
+
+      </div>
     </v-main>
   </div>
 
 </template>
 
 <script>
-import Table from "../components/Table";
-import History from "../components/History";
-import Appointment from "../components/Appointment";
+
 export default {
   name: "Home",
   data: () => ({
 
-    lists: [
-      {
-        icon: "fas fa-user-md",
-        title: "注册设备",
-        count: 21,
-      },
-      {
-        icon: "fas fa-procedures",
-        title: "活跃设备",
-        count: 41,
-      },
-      {
-        icon: "fas fa-user-nurse",
-        title: "Active Nurses",
-        count: 35,
-      },
-      {
-        icon: "fas fa-hospital",
-        title: "Representative",
-        count: 15,
-      },
-    ],
   }),
 
 
-
-  components: {
-    History,
-    Appointment,
-    Table
+  computed: {
+    hello () {
+      let time = new Date();
+      if (time.getHours() < 12 && time.getHours() > 6) {
+        return '上午好'
+      } else if (time.getHours() < 19) {
+        return '下午好'
+      } else {
+        return '晚上好'
+      }
+    }
   },
+
 };
 </script>
 <style scoped>
@@ -121,4 +92,5 @@ export default {
 .v-btn--fixed.v-btn--left {
   left: -26px !important;
 }
+
 </style>
