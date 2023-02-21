@@ -307,9 +307,10 @@ export default {
           sortable: false,
           value: 'deviceDataId',
         },
-        { text: '数据接收时间', value: 'createTime' },
-        { text: '数据值', value: 'data' },
-        { text: '协议', value: 'protocol' },
+        { text: '数据接收时间', sortable: false,value: 'createTime' },
+        { text: '数据值', sortable: false,value: 'data' },
+        { text: '协议', sortable: false,value: 'protocol' },
+        { text: '设备编码',sortable: false, value: 'equipmentNo' },
       ],
       dataValue: [
       ],
