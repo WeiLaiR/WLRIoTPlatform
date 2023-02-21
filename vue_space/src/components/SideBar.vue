@@ -82,7 +82,7 @@ export default {
         selectedItem: 0,
         items: [
             {icon: 'mdi-home-outline', text: '首页', path: '/home'},
-            {icon: 'mdi-cellphone-link', text: '设备信息', path: '/deviceInfo'},
+            {icon: 'mdi-cellphone-link', text: '设备管理', path: '/deviceInfo'},
             {icon: 'mdi-cellphone-cog', text: '设备配置', path: '/deviceSetting'},
             {icon: 'mdi-database-search-outline', text: '数据统计', path: '/dataStatistics'},
             {icon: 'mdi-account-search-outline', text: '用户信息', path: '/userInfo'},
