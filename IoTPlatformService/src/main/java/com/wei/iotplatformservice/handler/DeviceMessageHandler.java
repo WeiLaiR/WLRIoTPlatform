@@ -79,6 +79,9 @@ public class DeviceMessageHandler {
 
     private void infoTask(Map<String, Object> map,Long did ,String protocol) {
         DeviceInfo deviceInfo = deviceInfoMapper.selectById(did);
+        if (deviceInfo == null) {
+            return;
+        }
         boolean sing = false;
         if (deviceInfo.getProtocol() == null) {
             deviceInfo.setProtocol(protocol);
@@ -110,6 +113,11 @@ public class DeviceMessageHandler {
 
     private void dataTask(Map<String, Object> map,Long did ,String protocol) {
         List<DeviceCfg> deviceCfg = deviceCfgMapper.queryDeviceCfgListP(0, 100, did);
+        String equipmentNo = (String) map.getOrDefault("equipment_no", null);
+        if (equipmentNo == null) {
+            equipmentNo = "NO.1";
+        }
+
         for (DeviceCfg cfg : deviceCfg) {
             String s = (String) map.getOrDefault(cfg.getTypeName(), null);
             if (s != null) {
@@ -117,6 +125,7 @@ public class DeviceMessageHandler {
                     double val = Double.parseDouble(s);
                     DeviceDataNumber data = new DeviceDataNumber();
 
+                    data.setEquipmentNo(equipmentNo);
                     data.setData(val);
                     data.setDeviceCfgId(cfg.getDeviceCfgId());
                     data.setProtocol(protocol);
@@ -125,6 +134,7 @@ public class DeviceMessageHandler {
                 }else {
                     DeviceData data = new DeviceData();
 
+                    data.setEquipmentNo(equipmentNo);
                     data.setData(s);
                     data.setDeviceCfgId(cfg.getDeviceCfgId());
                     data.setProtocol(protocol);
