@@ -20,7 +20,7 @@ const routes = [
     redirect: "/home",
     children: [
       { path: 'home', name: '主页', component: Home, meta: {title: 'WLRIoTPlatform-主页'}},
-      { path: 'deviceInfo', name: '设备信息', component: DeviceInfo, meta: {title: 'WLRIoTPlatform-设备信息'}},
+      { path: 'deviceInfo', name: '设备管理', component: DeviceInfo, meta: {title: 'WLRIoTPlatform-设备管理'}},
       { path: 'deviceSetting', name: '设备配置', component: DeviceSetting, meta: {title: 'WLRIoTPlatform-设备配置'}},
       { path: 'dataStatistics', name: '数据统计', component: DataStatistics, meta: {title: 'WLRIoTPlatform-数据统计'}},
       { path: 'userInfo', name: '用户信息', component: UserInfo, meta: {title: 'WLRIoTPlatform-用户信息'}},
