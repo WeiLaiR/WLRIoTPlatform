@@ -40,7 +40,7 @@ public class CoAPController {
 
         List<Map<String, Object>> list = (List)  map.get("list");
 
-        customThreadPool1.execute(() -> CoAPTask(token, list));
+        customThreadPool1.execute(() -> CoAPTask(token, list, (boolean)map.getOrDefault("equipment_no", false)));
 
         map1.put("state", "200");
         map1.put("message", "success");
@@ -72,13 +72,21 @@ public class CoAPController {
     }
 
 
-    private void CoAPTask(String token, List<Map<String, Object>> list) {
+    private void CoAPTask(String token, List<Map<String, Object>> list, boolean EN) {
         Random random = new Random();
         double version = ((int) (random.nextDouble() * 30)) / 10.0 + 0.1;
+        int index = 0;
         while (status.getOrDefault(token, false)) {
             StringBuilder sb = new StringBuilder();
             sb.append("token=").append(token);
             sb.append("&version=").append(String.format("%.1f", version));
+
+            if (EN) {
+                sb.append("&equipment_no=").append("NO." + index);
+                index++;
+                index %= 3;
+            }
+
             for (Map<String, Object> val : list) {
                 int statVal = 0;
                 int endVal = 100;
@@ -102,7 +110,7 @@ public class CoAPController {
             coAPSendMessage.sendMessage(sb.toString());
 
             try {
-                Thread.sleep(5000);
+                Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

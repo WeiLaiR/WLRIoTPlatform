@@ -39,7 +39,7 @@ public class MqttController {
 
         List<Map<String, Object>> list = (List) val.get("list");
 
-        customThreadPool1.execute(() -> MqttTask(token, list));
+        customThreadPool1.execute(() -> MqttTask(token, list, (boolean)val.getOrDefault("equipment_no", false)));
 
         map.put("state", "200");
         map.put("message", "success");
@@ -70,13 +70,21 @@ public class MqttController {
         return map;
     }
 
-    private void MqttTask(String token, List<Map<String, Object>> list) {
+    private void MqttTask(String token, List<Map<String, Object>> list, boolean EN) {
         Random random = new Random();
         double version = ((int) (random.nextDouble() * 30)) / 10.0 + 0.6;
+        int index = 0;
         while (status.getOrDefault(token, false)) {
             StringBuilder sb = new StringBuilder();
             sb.append("token=").append(token);
             sb.append("&version=").append(String.format("%.1f", version));
+
+            if (EN) {
+                sb.append("&equipment_no=").append("NO." + index);
+                index++;
+                index %= 3;
+            }
+
             for (Map<String, Object> val : list) {
                 int statVal = 0;
                 int endVal = 100;
@@ -100,7 +108,7 @@ public class MqttController {
             message.publish(sb.toString(), false);
 
             try {
-                Thread.sleep(5000);
+                Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
