@@ -100,7 +100,7 @@ public class DeviceInfoServiceImpl extends ServiceImpl<DeviceInfoMapper, DeviceI
         ArrayList<Map<String, Object>> maps = new ArrayList<>();
 
         for (DeviceInfo info : infos) {
-            String s = redisUtil.get(info.getDeviceId() + "status");
+            String s = (String) redisUtil.get(info.getDeviceId() + "status");
 
             HashMap<String, Object> map1 = new HashMap<>();
             map1.put("deviceId", info.getDeviceId());
@@ -225,5 +225,10 @@ public class DeviceInfoServiceImpl extends ServiceImpl<DeviceInfoMapper, DeviceI
         }
 
         return map;
+    }
+
+    @Override
+    public void deleteRedisDeviceCfg(Long did) {
+        redisUtil.del(did + "cfg");
     }
 }

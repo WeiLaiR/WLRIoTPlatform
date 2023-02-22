@@ -24,4 +24,6 @@ public interface DeviceInfoService extends IService<DeviceInfo> {
 
     Map<String, Object> createNewToken(Long did);
 
+    void deleteRedisDeviceCfg (Long did);
+
 }
