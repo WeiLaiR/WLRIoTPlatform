@@ -59,4 +59,9 @@ public class DeviceInfoController {
         return deviceInfoService.deleteDeviceInfo(deviceId);
     }
 
+    @DeleteMapping("/deleteRedisDeviceCfg/{did}")
+    public void deleteRedisDeviceCfg(@PathVariable Long did) {
+        deviceInfoService.deleteRedisDeviceCfg(did);
+    }
+
 }
