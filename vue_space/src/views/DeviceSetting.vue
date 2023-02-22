@@ -431,6 +431,7 @@ export default {
               this.close()
             }
           });
+          request.delete("/platform/deviceInfo/deleteRedisDeviceCfg/" + this.deviceCh)
         }
       } else {
         this.dataCfg.push(this.editedItem)
@@ -480,6 +481,7 @@ export default {
             this.load();
           }
         });
+        request.delete("/platform/deviceInfo/deleteRedisDeviceCfg/" + this.deviceCh)
       }
       console.log('CREATE CFG')
     },
