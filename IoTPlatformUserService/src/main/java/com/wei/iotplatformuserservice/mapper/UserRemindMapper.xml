@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wei.iotplatformuserservice.mapper.UserRemindMapper">
+
+    <select id="queryRemindUnreadCount" resultType="java.lang.Integer">
+        select count(remind_id) from user_remind where uid = #{uid} and is_read = false;
+    </select>
+
+    <select id="queryRemindListPage" resultType="com.wei.iotplatformuserservice.pojo.UserRemind">
+        select SQL_CALC_FOUND_ROWS * from user_remind where uid = #{uid} order by remind_id desc limit #{start},#{size};
+    </select>
+
+    <select id="queryRemindPageCount" resultType="java.lang.Integer">
+        SELECT FOUND_ROWS() AS TOTAL;
+    </select>
+
+    <select id="queryRemindUnreadList" resultType="com.wei.iotplatformuserservice.pojo.UserRemind">
+        select * from user_remind where uid = #{uid} and is_read = false order by remind_id desc limit 100;
+    </select>
+</mapper>
