@@ -48,7 +48,7 @@
             <v-col
                 cols="4"
             >
-              <div style="color: #666666FF;font-size: 18px;position: absolute;right: 185px;top: 29px"> {{this.startNumber}} - {{this.endNumber}} of {{this.itemNums}}  <v-icon size="42px" @click="minusOne" color="#00CDFFFF">mdi-arrow-left-bold-box-outline</v-icon> <v-icon size="42px" @click="addOne" color="#00CDFFFF">mdi-arrow-right-bold-box-outline</v-icon></div>
+              <div style="color: #666666FF;font-size: 18px;position: absolute;right: 185px;top: 29px"> {{this.startNumber}} - {{this.endNumber}} of {{this.itemNums}}  <v-icon size="42px" @click="minusOne" color="#00C3BEFF">mdi-arrow-left-bold-box-outline</v-icon> <v-icon size="42px" @click="addOne" color="#00C3BEFF">mdi-arrow-right-bold-box-outline</v-icon></div>
 
 
               <v-btn right
