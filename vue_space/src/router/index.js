@@ -10,6 +10,7 @@ import DataStatistics from "@/views/DataStatistics.vue";
 import UserInfo from "@/views/UserInfo.vue";
 import UpdateInfo from "@/views/UpdateInfo.vue";
 import Setting from "@/views/Setting.vue";
+import DeviceRule from "@/views/DeviceRule.vue";
 
 Vue.use(VueRouter)
 
@@ -21,6 +22,7 @@ const routes = [
     children: [
       { path: 'home', name: '主页', component: Home, meta: {title: 'WLRIoTPlatform-主页'}},
       { path: 'deviceInfo', name: '设备管理', component: DeviceInfo, meta: {title: 'WLRIoTPlatform-设备管理'}},
+      { path: 'deviceRule', name: '规则管理', component: DeviceRule, meta: {title: 'WLRIoTPlatform-规则管理'}},
       { path: 'deviceSetting', name: '设备配置', component: DeviceSetting, meta: {title: 'WLRIoTPlatform-设备配置'}},
       { path: 'dataStatistics', name: '数据统计', component: DataStatistics, meta: {title: 'WLRIoTPlatform-数据统计'}},
       { path: 'userInfo', name: '用户信息', component: UserInfo, meta: {title: 'WLRIoTPlatform-用户信息'}},
