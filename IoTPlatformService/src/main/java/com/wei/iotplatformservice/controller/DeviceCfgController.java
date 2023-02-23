@@ -32,6 +32,11 @@ public class DeviceCfgController {
         return deviceCfgService.queryBriefCfgList(did);
     }
 
+    @GetMapping("/briefListIsNumber/{did}")
+    public Map<String, Object> getBriefCfgListIsNumber(@PathVariable Long did) {
+        return deviceCfgService.queryBriefCfgListAndIsNumber(did);
+    }
+
     @PutMapping("/newDeviceCfg")
     public Map<String, Object> newDeviceCfg(@RequestBody DeviceCfg deviceCfg) {
         return deviceCfgService.newDeviceCfg(deviceCfg);
