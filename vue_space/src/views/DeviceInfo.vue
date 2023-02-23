@@ -534,7 +534,7 @@ export default {
         this.infoData = res.data;
         this.itemNums = res.total;
         this.startNumber = (this.pageNum - 1) * this.rowNums + 1;
-        this.endNumber = this.pageNum * this.rowNums;
+        this.endNumber = this.pageNum * this.rowNums < this.itemNums ? this.pageNum * this.rowNums : this.itemNums;
       });
     },
 
