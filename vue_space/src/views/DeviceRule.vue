@@ -56,6 +56,15 @@
 
             <v-col cols="1">
 
+              <v-tooltip bottom>
+                <template  v-slot:activator="{ on, attrs }">
+                  <v-icon color="#1ECBEEFF" size="30px" style="margin-top: 35px"  v-bind="attrs" v-on="on">
+                    mdi-information-outline
+                  </v-icon>
+                </template>
+                <span>目前仅支持整形、浮点型的数字类型进行规则过滤。</span>
+              </v-tooltip>
+
             </v-col>
 
             <v-col
@@ -461,7 +470,7 @@ export default {
     });
 
     if (this.deviceCh != null && this.deviceCh !== '') {
-      await request.get("/platform/deviceCfg/briefList/" +  this.deviceCh).then(res => {
+      await request.get("/platform/deviceCfg/briefListIsNumber/" +  this.deviceCh).then(res => {
         console.log(res)
         this.cfgS = res.data;
         this.cfgCh = this.cfgS.at(0).value
@@ -542,7 +551,7 @@ export default {
     },
 
     loadCfg() {
-      request.get("/platform/deviceCfg/briefList/" +  this.deviceCh).then(res => {
+      request.get("/platform/deviceCfg/briefListIsNumber/" +  this.deviceCh).then(res => {
         console.log(res)
         this.cfgS = res.data;
         this.cfgCh = this.cfgS.at(0).value
