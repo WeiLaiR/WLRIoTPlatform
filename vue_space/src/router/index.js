@@ -11,6 +11,7 @@ import UserInfo from "@/views/UserInfo.vue";
 import UpdateInfo from "@/views/UpdateInfo.vue";
 import Setting from "@/views/Setting.vue";
 import DeviceRule from "@/views/DeviceRule.vue";
+import Remind from "@/views/Remind.vue";
 
 Vue.use(VueRouter)
 
@@ -27,6 +28,7 @@ const routes = [
       { path: 'dataStatistics', name: '数据统计', component: DataStatistics, meta: {title: 'WLRIoTPlatform-数据统计'}},
       { path: 'userInfo', name: '用户信息', component: UserInfo, meta: {title: 'WLRIoTPlatform-用户信息'}},
       { path: 'updateInfo', name: '个人信息', component: UpdateInfo, meta: {title: 'WLRIoTPlatform-个人信息'}},
+      { path: 'remind', name: '消息通知', component: Remind, meta: {title: 'WLRIoTPlatform-消息通知'}},
       { path: 'setting', name: '设置', component: Setting, meta: {title: 'WLRIoTPlatform-设置'}},
     ]
   },
