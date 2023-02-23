@@ -14,5 +14,7 @@ public interface DeviceCfgMapper extends BaseMapper<DeviceCfg> {
 
     List<DeviceCfg> queryBriefCfgList(Long did);
 
+    List<DeviceCfg> queryBriefCfgListAndIsNumber(Long did);
+
     Boolean queryDeviceIsNumber(Long cid);
 }
