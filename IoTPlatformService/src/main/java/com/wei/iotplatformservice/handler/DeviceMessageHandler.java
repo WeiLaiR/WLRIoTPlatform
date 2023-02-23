@@ -289,7 +289,7 @@ public class DeviceMessageHandler {
         DeviceInfo deviceInfo = deviceInfoMapper.selectById(did);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         StringBuilder sb = new StringBuilder();
-        sb.append("您的设备(集群) ").append(deviceInfo.getDeviceName()).append(" 的 ").append(deviceCfg.getTypeNickName()).append(" 数据于 ").append(simpleDateFormat.format(new Date())).append(" 超出预警值(值为：").append(value).append(" )，请及时查看设备状态。");
+        sb.append("您的设备(集群) ").append(deviceInfo.getDeviceName()).append(" (").append(deviceInfo.getDeviceId()).append(")的 ").append(deviceCfg.getTypeNickName()).append(" 数据于 ").append(simpleDateFormat.format(new Date())).append(" 超出预警值，当前值为：").append(value).append(" ，请及时查看设备状态。");
         map.put("uid", deviceInfo.getUid());
         map.put("message", sb.toString());
         remindClient.insertRemind(map);
