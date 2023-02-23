@@ -2,6 +2,7 @@ package com.wei.iotplatformservice.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wei.iotplatformservice.exception.CustomException;
+import com.wei.iotplatformservice.mapper.DeviceCfgMapper;
 import com.wei.iotplatformservice.mapper.DeviceRuleMapper;
 import com.wei.iotplatformservice.pojo.DeviceRule;
 import com.wei.iotplatformservice.service.DeviceRuleService;
@@ -23,7 +24,15 @@ public class DeviceRuleServiceImpl extends ServiceImpl<DeviceRuleMapper, DeviceR
         this.deviceRuleMapper = deviceRuleMapper;
     }
 
+    private DeviceCfgMapper deviceCfgMapper;
+
+    @Autowired
+    public void setDeviceCfgMapper(DeviceCfgMapper deviceCfgMapper) {
+        this.deviceCfgMapper = deviceCfgMapper;
+    }
+
     private RedisUtil redisUtil;
+
     @Autowired
     public void setRedisUtil(RedisUtil redisUtil) {
         this.redisUtil = redisUtil;
@@ -31,6 +40,9 @@ public class DeviceRuleServiceImpl extends ServiceImpl<DeviceRuleMapper, DeviceR
 
     @Override
     public Map<String, Object> newDeviceRule(DeviceRule deviceRule) {
+        if (!deviceCfgMapper.queryDeviceIsNumber(deviceRule.getDeviceCfgId())) {
+            throw new CustomException(400, "出现了未知异常0x00！(DeviceRuleServiceImpl.newDeviceRule)");
+        }
         HashMap<String, Object> map = new HashMap<>();
         try {
             if (deviceRuleMapper.insert(deviceRule) > 0) {
