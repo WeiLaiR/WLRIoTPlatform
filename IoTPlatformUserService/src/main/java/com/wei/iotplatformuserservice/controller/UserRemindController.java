@@ -38,4 +38,9 @@ public class UserRemindController {
     public Map<String, Object> getRemindUnreadList() {
         return userRemindService.queryRemindUnreadList();
     }
+
+    @PostMapping("/user/isRead")
+    public void isRead(@RequestBody Long rid) {
+        userRemindService.isRead(rid);
+    }
 }
