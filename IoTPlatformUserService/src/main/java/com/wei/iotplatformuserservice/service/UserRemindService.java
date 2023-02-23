@@ -14,4 +14,6 @@ public interface UserRemindService extends IService<UserRemind> {
     Map<String, Object> queryRemindListPage(Integer start, Integer size);
 
     Map<String, Object> queryRemindUnreadList();
+
+    void isRead(Long rid);
 }

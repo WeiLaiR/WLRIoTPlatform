@@ -68,4 +68,12 @@ public class UserRemindServiceImpl extends ServiceImpl<UserRemindMapper, UserRem
         }
         return map;
     }
+
+    @Override
+    public void isRead(Long rid) {
+        UserRemind userRemind = new UserRemind();
+        userRemind.setRemindId(rid);
+        userRemind.setIsRead(true);
+        userRemindMapper.updateById(userRemind);
+    }
 }
