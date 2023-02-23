@@ -76,6 +76,29 @@ public class DeviceCfgServiceImpl extends ServiceImpl<DeviceCfgMapper, DeviceCfg
     }
 
     @Override
+    public Map<String, Object> queryBriefCfgListAndIsNumber(Long did) {
+
+        Map<String, Object> map = new HashMap<>();
+
+        List<DeviceCfg> cfgS = deviceCfgMapper.queryBriefCfgListAndIsNumber(did);
+        ArrayList<Map<String, Object>> maps = new ArrayList<>();
+
+        for (DeviceCfg cfg : cfgS) {
+            HashMap<String, Object> map1 = new HashMap<>();
+            map1.put("text", cfg.getTypeNickName() + "-" + cfg.getTypeName() + " - " + cfg.getDeviceCfgId());
+            map1.put("value", cfg.getDeviceCfgId());
+            map1.put("isNumber", cfg.getIsNumber());
+            maps.add(map1);
+        }
+
+        map.put("status", 200);
+        map.put("message", "查询成功");
+        map.put("data", maps);
+
+        return map;
+    }
+
+    @Override
     public Boolean queryDeviceIsNumber(Long cid) {
         return deviceCfgMapper.queryDeviceIsNumber(cid);
     }
