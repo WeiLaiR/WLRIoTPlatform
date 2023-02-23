@@ -15,7 +15,7 @@ import java.util.Date;
 public class UserRemind {
     //    使用了自定义id生成器
     @TableId(type = IdType.ASSIGN_ID)
-    private Long RemindId;
+    private Long remindId;
 
     private Long uid;
 
@@ -24,5 +24,5 @@ public class UserRemind {
     private Boolean isRead;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private Date updateTime;
+    private Date createTime;
 }
