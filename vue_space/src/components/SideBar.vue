@@ -25,7 +25,7 @@
 
         <v-list   dense class="mt-5" >
             <v-list-item-group v-model="selectedItem" color="white" >
-                  <v-list-item v-for="(item, i) in items" :key="i" v-slot="{ active }" :to="item.path">
+                  <v-list-item v-for="(item, i) in items" :key="i" v-slot="{active}" :to="item.path">
                       <v-list-item-icon class="ml-6">
                           <v-icon v-text="item.icon"  :color="active ? 'black' : 'grey'" ></v-icon>
                       </v-list-item-icon>
@@ -80,19 +80,23 @@
       <div @click.stop>
         <transition>
           <v-card max-width="460px" style="padding: 10px 10px 10px 10px;position: absolute;top: 55px;right: 55px" elevation="23" v-if="show01 === true">
-            <v-card-text style="height: 500px;padding: 0 ;margin: 0;overflow-y: scroll;" >
+            <v-card-text style="height: 500px;padding: 0 ;margin: 0;overflow-y: scroll;width: 440px" >
 
-              <template v-for="(value, index) in values">
-                <v-alert :key="index" style="padding: 5px 5px;margin-bottom: 10px" color="#00A2FFFF" colored-border border="left" elevation="2">
+              <transition-group tag="v-alert">
 
-                  <v-icon color="#00A2FFFF" style="position: absolute;left: 12px;top: 35%">
-                    mdi-information
-                  </v-icon>
+                <template v-for="(value, index) in values">
+                  <v-alert :key="index" style="padding: 5px 5px;margin-bottom: 10px" color="#00A2FFFF" colored-border border="left" elevation="2" v-if="value.isRead === false" @click="isRead1(value)">
 
-                  <div style="padding: 10px 10px 10px 40px">{{value.message}}</div>
+                    <v-icon color="#00A2FFFF" style="position: absolute;left: 12px;top: 35%">
+                      mdi-information
+                    </v-icon>
 
-                </v-alert>
-              </template>
+                    <div style="padding: 10px 10px 10px 40px">{{value.message}}</div>
+
+                  </v-alert>
+
+                </template>
+              </transition-group>
 
             </v-card-text>
           </v-card>
@@ -125,6 +129,7 @@ export default {
           {icon: 'mdi-database-search-outline', text: '数据统计', path: '/dataStatistics'},
           {icon: 'mdi-account-search-outline', text: '用户信息', path: '/userInfo'},
           {icon: 'mdi-comment-account-outline', text: '个人信息', path: '/updateInfo'},
+          {icon: 'mdi-message-alert-outline', text: '消息通知', path: '/remind'},
           {icon: 'mdi-cogs', text: '设置', path: '/setting'},
       ],
       remindCount: 0,
@@ -165,6 +170,11 @@ export default {
       document.removeEventListener("click", this.bodyCloseMenus);
     },
 
+    isRead1(value) {
+      value.isRead = true;
+      request.post("/user/isRead", value.remindId);
+    }
+
 
 
 
@@ -202,7 +212,7 @@ export default {
             }
           }
         });
-      }, 10000);
+      }, 15000);
 
       this.$once('hook:beforeDestroy', () => {
         // 在页面销毁时，销毁定时器
@@ -220,7 +230,7 @@ export default {
 }
 /*设置transition组件管理的内容在显示和隐藏时候的样式*/
 .v-enter-active,.v-leave-active{
-  transition: all 0.8s;
+  transition: all 0.6s;
 }
 .v-enter,.v-leave-to{
   opacity: 0;
