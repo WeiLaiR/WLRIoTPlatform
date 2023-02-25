@@ -218,7 +218,9 @@ export default {
         request.post('/mail/email/send', {
           email: this.email
         }).then(res => {
-          console.log(res)
+          if (res.status === 200) {
+            this.$message.success(res.message);
+          }
         })
       }
 
