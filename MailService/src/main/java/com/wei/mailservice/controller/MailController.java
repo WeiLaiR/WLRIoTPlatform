@@ -4,6 +4,7 @@ import com.wei.mailservice.exception.CustomException;
 import com.wei.mailservice.utils.RedisUtil;
 import com.wei.mailservice.utils.SendEmail;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,18 @@ public class MailController {
         this.redisUtil = redisUtil;
     }
 
+    private ThreadPoolTaskExecutor customThreadPool1;
+
+    @Autowired
+    public void setCustomThreadPool1(ThreadPoolTaskExecutor customThreadPool1) {
+        this.customThreadPool1 = customThreadPool1;
+    }
+
+    private SendEmail sendEmail;
+    @Autowired
+    public void setSendEmail(SendEmail sendEmail) {
+        this.sendEmail = sendEmail;
+    }
 
 
     @PostMapping("/send")
@@ -42,7 +55,9 @@ public class MailController {
             }
         }
 
-        SendEmail.addQueue(email);
+        customThreadPool1.execute(() -> {
+            sendEmail.senEmailUt(email);
+        });
 
         Map<String, Object> map = new HashMap<>();
         map.put("status", 200);
