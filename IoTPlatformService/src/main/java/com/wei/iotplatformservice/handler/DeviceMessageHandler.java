@@ -291,6 +291,7 @@ public class DeviceMessageHandler {
         StringBuilder sb = new StringBuilder();
         sb.append("您的设备(集群) ").append(deviceInfo.getDeviceName()).append(" (").append(deviceInfo.getDeviceId()).append(")的 ").append(deviceCfg.getTypeNickName()).append(" 数据于 ").append(simpleDateFormat.format(new Date())).append(" 超出预警值，当前值为：").append(value).append(" ，请及时查看设备状态。");
         map.put("uid", deviceInfo.getUid());
+        map.put("did", did);
         map.put("message", sb.toString());
         remindClient.insertRemind(map);
     }
