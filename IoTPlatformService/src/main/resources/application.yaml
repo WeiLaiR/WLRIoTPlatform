@@ -71,3 +71,12 @@ mybatis-plus:
     db-config:
       logic-delete-value: true #逻辑已删除值true
       logic-not-delete-value: false #逻辑未删除值false
+feign:
+  client:
+    config:
+        default:
+            logger-level: BASIC
+  httpclient:
+    enabled: true
+    max-connections: 100
+    max-connections-per-route: 100
