@@ -3,7 +3,9 @@ package com.wei.iotplatformuserservice.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wei.iotplatformuserservice.exception.CustomException;
 import com.wei.iotplatformuserservice.mapper.LoginMapper;
+import com.wei.iotplatformuserservice.mapper.UserSettingMapper;
 import com.wei.iotplatformuserservice.pojo.Login;
+import com.wei.iotplatformuserservice.pojo.UserSetting;
 import com.wei.iotplatformuserservice.service.LoginService;
 import com.wei.iotplatformuserservice.utils.CreateRsaKey;
 import com.wei.iotplatformuserservice.utils.RSAUtils;
@@ -42,6 +44,12 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
         this.createRsaKey = createRsaKey;
     }
 
+    private UserSettingMapper userSettingMapper;
+    @Autowired
+    public void setUserSettingMapper(UserSettingMapper userSettingMapper) {
+        this.userSettingMapper = userSettingMapper;
+    }
+
     private RedisUtil redisUtil;
 
     @Autowired
@@ -67,8 +75,14 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
             if (login.getStatus() != 0) {
                 if (login.getPassword().equals(DigestUtils.sha256Hex(pw.concat(email)))) {
 //                生成Token并存入redis
+                    UserSetting userSetting = userSettingMapper.selectById(login.getUid());
                     String token = TokenUtils.getToken(login.getUid(), email);
-                    redisUtil.set(login.getUid().toString(), token, TIMEOUT);
+
+                    if (userSetting.getKeepAlive() != null) {
+                        redisUtil.set(login.getUid().toString(), token, userSetting.getKeepAlive() * 86400);
+                    } else {
+                        redisUtil.set(login.getUid().toString(), token, TIMEOUT);
+                    }
 
                     map.put("token", token);
                     map.put("status", 200);
