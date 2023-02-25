@@ -46,4 +46,4 @@ spring:
 
 filter:
   config:
-    excludeUrls: /user/login/,/user/ras/  #登录和注册不需过滤，直接放行
+    excludeUrls: /user/login/,/user/ras/,/mail/email/  #登录和注册不需过滤，直接放行
