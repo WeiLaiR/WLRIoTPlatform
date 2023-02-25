@@ -3,6 +3,15 @@ server:
   port: 8890
 
 spring:
+  rabbitmq:
+    host: 192.168.3.66
+    port: 5672
+    username: wei
+    password: weilai2
+    virtual-host: "/"
+    listener:
+      simple:
+        prefetch: 3
   mail:
     host: ---
     username: ---
