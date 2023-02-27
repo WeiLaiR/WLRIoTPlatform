@@ -1,5 +1,6 @@
 package com.wei.iotplatformuserservice.controller;
 
+import com.wei.iotplatformuserservice.annotation.AuthorityAnnotation;
 import com.wei.iotplatformuserservice.pojo.Login;
 import com.wei.iotplatformuserservice.service.LoginService;
 import com.wei.iotplatformuserservice.service.UserService;
@@ -54,11 +55,13 @@ public class LoginController {
         return loginService.logOut();
     }
 
+    @AuthorityAnnotation(sign = 2)
     @GetMapping("/get_status_zero_list")
     public Map<String, Object> getStatusZeroList() {
         return loginService.queryStatusZeroList();
     }
 
+    @AuthorityAnnotation(sign = 2)
     @PostMapping("/user_pass")
     public Map<String, Object> userPass(@RequestBody Map<String, Object> map) {
         Long uid = (Long) map.get("uid");
@@ -67,11 +70,13 @@ public class LoginController {
         return userService.insertUser(uid, (String) map.get("email"));
     }
 
+    @AuthorityAnnotation(sign = 2)
     @PostMapping("/user_reject")
     public Map<String, Object> userReject(@RequestBody Long uid) {
         return loginService.updateStatus(uid);
     }
 
+    @AuthorityAnnotation(sign = 2)
     @GetMapping("/get_status/{uid}")
     public Map<String, Object> getStatus(@PathVariable Long uid) {
         return loginService.queryStatus(uid);

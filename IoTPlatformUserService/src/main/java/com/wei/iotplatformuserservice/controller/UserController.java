@@ -1,5 +1,6 @@
 package com.wei.iotplatformuserservice.controller;
 
+import com.wei.iotplatformuserservice.annotation.AuthorityAnnotation;
 import com.wei.iotplatformuserservice.exception.CustomException;
 import com.wei.iotplatformuserservice.pojo.User;
 import com.wei.iotplatformuserservice.service.UserService;
@@ -23,6 +24,7 @@ public class UserController {
      * @param uid 用户id
      * @return 用户信息
      */
+    @AuthorityAnnotation(sign = 2)
     @GetMapping("/userinfo/{uid}")
     public Map<String, Object> getUserInfo(@PathVariable Long uid) {
         return userService.searchUserInfo(uid);
@@ -42,6 +44,7 @@ public class UserController {
         return userService.updateUserInfo(user);
     }
 
+    @AuthorityAnnotation(sign = 2)
     @GetMapping("/listP/{start}/{limit}/{val}")
     public Map<String, Object> getUserListP(@PathVariable Integer start, @PathVariable Integer limit, @PathVariable String val) {
         if (start >= 0 && limit > 0) {
