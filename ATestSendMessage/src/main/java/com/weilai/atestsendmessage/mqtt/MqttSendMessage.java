@@ -10,10 +10,10 @@ import javax.annotation.PostConstruct;
 public class MqttSendMessage {
 
     private final String broker = "tcp://192.168.3.66:1886";
-    private final String topic = "mqtt/weilai";
-    private final String username = "weilai";
-    private final String password = "weilaiPassword";
-    private final String clientid = "publish_client_weilai";
+    private final String topic = "mqtt/wlr";
+    private final String username = "wlruser";
+    private final String password = "wlriot";
+    private final String clientid = "publish_client_token";
     private final int qos = 1;
 
 

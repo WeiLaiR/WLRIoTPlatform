@@ -24,7 +24,7 @@ public class MqttDeviceServer {
 
     private void mqttServer() {
         String broker = "tcp://192.168.3.66:1886";
-        String topic = "mqtt/weilai";
+        String topic = "mqtt/wlr";
         String username = "weilai";
         String password = "weilaiPassword";
         String clientid = "client_weilai";
@@ -50,7 +50,7 @@ public class MqttDeviceServer {
 //                    System.out.println("topic: " + topic);
 //                    System.out.println("Qos: " + message.getQos());
                     //消息
-                    System.out.println(new String(message.getPayload()));
+//                    System.out.println(new String(message.getPayload()));
 
 
                     String exchangeName = "device.direct";
