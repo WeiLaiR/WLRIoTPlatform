@@ -137,6 +137,7 @@
 
 <script>
 import request from "@/utils/request";
+import store from "@/store";
 
 export default {
   name: "UpdateInfo",
@@ -200,6 +201,8 @@ export default {
         }).then(res => {
           if (res.status === 200) {
             this.$message.success(res.message);
+            localStorage.setItem("newNameValue", this.uname);
+            store.commit("setPath");
           }
         })
       }
