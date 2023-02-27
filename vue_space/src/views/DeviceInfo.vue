@@ -40,15 +40,27 @@
             <v-col
                 cols="2"
             >
-
-              <!--       空位置       -->
+              <v-btn
+                  right
+                  elevation="5"
+                  rounded
+                  color="#2ebfaf"
+                  dark
+                  style="position: absolute; margin-top: 30px;margin-left: 30px"
+                  @click="openTip"
+              >
+                tip
+              </v-btn>
 
             </v-col>
 
             <v-col
                 cols="4"
             >
-              <div style="color: #666666FF;font-size: 18px;position: absolute;right: 185px;top: 29px"> {{this.startNumber}} - {{this.endNumber}} of {{this.itemNums}}  <v-icon size="42px" @click="minusOne" color="#00C3BEFF">mdi-arrow-left-bold-box-outline</v-icon> <v-icon size="42px" @click="addOne" color="#00C3BEFF">mdi-arrow-right-bold-box-outline</v-icon></div>
+              <div style="color: #666666FF;font-size: 18px;position: absolute;right: 185px;top: 29px"> {{this.startNumber}} - {{this.endNumber}} of {{this.itemNums}}
+                <v-icon size="42px" @click="minusOne" color="#00C3BEFF">mdi-arrow-left-bold-box-outline</v-icon>
+                <v-icon size="42px" @click="addOne" color="#00C3BEFF">mdi-arrow-right-bold-box-outline</v-icon>
+              </div>
 
 
               <v-btn right
@@ -372,6 +384,102 @@
 
         </div>
 
+        <div>
+          <v-dialog
+              v-model="dltip"
+              width="900px"
+          >
+
+            <v-card>
+
+              <v-card-title>
+                Tip:
+              </v-card-title>
+
+              <div style="padding: 5px 35px">
+                点击右上角的”NEW DEVICE“按钮并输入对应信息即可添加设备，填写并成功提交后请及时保存系统提示的Token，该Token是您设备连接服务器的唯一凭证，请勿泄露！
+                如Token已经泄露，请点击设备卡片上的”重置密钥“按钮，系统将为您生成新的Token，之前的Token将立即作废。
+              </div>
+
+              <v-divider style="margin: 10px"></v-divider>
+
+              <div style="padding: 5px 35px">
+                如下是当前平台支持的协议，您可从中任选一种协议将您的设备接入平台
+              </div>
+
+
+              <v-icon color="#55A8D8FF" size="20px" style="position: absolute;left: 35px;top: 204px">
+                mdi-star-four-points-outline
+              </v-icon>
+              <div style="padding: 7px 35px 5px 65px">
+
+                HTTP协议： 请接入 <v-card elevation="3" style="display: inline;padding: 3px 8px;color: #696969FF">https://wlriot.xxx.com:6666</v-card>
+              </div>
+
+
+              <v-icon color="#55A8D8FF" size="20px" style="position: absolute;left: 35px;top: 240px">
+                mdi-star-four-points-outline
+              </v-icon>
+              <div style="padding: 7px 35px 5px 65px">
+
+                CoAP协议： 请接入 <v-card elevation="3" style="display: inline;padding: 3px 8px;color: #696969FF">coap://wlriot.xxx.com:6667/coapTelemetry</v-card>
+              </div>
+
+
+              <v-icon color="#55A8D8FF" size="20px" style="position: absolute;left: 35px;top: 280px">
+                mdi-star-four-points-outline
+              </v-icon>
+              <div style="padding: 7px 35px 5px 65px;line-height: 34px">
+                MQTT协议： 请设置broker为 <v-card elevation="3" style="display: inline;padding: 3px 8px;color: #696969FF">tcp://192.168.3.66:1886</v-card>，
+                设置topic为 <v-card elevation="3" style="display: inline;padding: 3px 8px;color: #696969FF">mqtt/wlr</v-card> ，
+                设置username为 <v-card elevation="3" style="display: inline;padding: 3px 8px;color: #696969FF">wlruser</v-card> ，
+                设置password为 <v-card elevation="3" style="display: inline;padding: 3px 8px;color: #696969FF">wlriot</v-card> ，
+                设置clientid为您的设备Token.
+              </div>
+
+              <v-divider style="margin: 10px"></v-divider>
+
+              <div style="padding: 5px 35px">
+                设备发送消息体规则如下：
+              </div>
+              <v-icon color="#55A8D8FF" size="20px" style="position: absolute;left: 35px;top: 415px">
+                mdi-star-four-points-outline
+              </v-icon>
+              <div style="padding: 7px 35px 5px 65px;line-height: 32px">
+                <v-card elevation="3" style="display: inline;padding: 3px 8px;color: #696969FF">token</v-card> : <p style="display: inline;font-weight: bold">必须</p> ,为平台分配给您的设备Token。
+              </div>
+
+              <v-icon color="#55A8D8FF" size="20px" style="position: absolute;left: 35px;top: 459px">
+                mdi-star-four-points-outline
+              </v-icon>
+              <div style="padding: 7px 35px 5px 65px;line-height: 32px">
+                <v-card elevation="3" style="display: inline;padding: 3px 8px;color: #696969FF">version</v-card> : <p style="display: inline;">可选</p> ,默认为1，为设备版本号。
+              </div>
+
+              <div style="padding: 7px 35px 5px 50px">
+                在消息体中应将数据以key、value键值对的方式存储，中间使用<v-card elevation="3" style="display: inline;padding: 3px 8px;color: #696969FF">=</v-card>连接，每个键值对之间使用
+                <v-card elevation="3" style="display: inline;padding: 3px 8px;color: #696969FF">&</v-card>连接。
+              </div>
+
+              <div style="padding: 5px 35px 5px 55px">
+                示例：<v-card elevation="3" style="display: inline;padding: 3px 8px;color: #696969FF">token=xxxxxxxxxxxxxxxxxxxxxx&version=1.x</v-card>
+              </div>
+
+              <v-divider style="margin: 10px"></v-divider>
+
+              <div style="padding: 5px 35px 25px 35px">
+                设备接入平台后，应至少每十分钟向平台发送一次信息，否则设备将被标记为离线状态。设备进入离线状态后，若设备向平台成功发送数据，设备将被标记为在线。
+              </div>
+
+
+            </v-card>
+
+
+
+
+          </v-dialog>
+        </div>
+
 
 
 
@@ -408,6 +516,8 @@ export default {
       dialogDeleteInfo: false,
       dDeviceInfoId: 0,
 
+
+      dltip: false,
 
 
 
@@ -602,6 +712,10 @@ export default {
     deleteDialog(item) {
       this.dDeviceInfoId = item.deviceId;
       this.dialogDeleteInfo = true;
+    },
+
+    openTip() {
+      this.dltip = true;
     }
 
   },
