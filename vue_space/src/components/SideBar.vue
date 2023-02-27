@@ -13,9 +13,9 @@
             <v-avatar class="my-5" size="60">
             <v-img src="https://cdn.vuetifyjs.com/images/lists/1.jpg" class="image"></v-img>
             </v-avatar>
-            <h1 class="black--text">IoT平台管理员</h1>
-            <h6 class="grey--text ">admin@admin.com</h6>
-            <v-btn rounded color="#2EBFAF" outlined>个人信息修改</v-btn>
+            <h1 class="black--text">{{newNameValue}}</h1>
+            <h6 class="grey--text ">{{this.email}}</h6>
+            <v-btn rounded color="#2EBFAF" outlined to="/updateInfo">个人信息修改</v-btn>
         </div>
 
         <v-divider class="mx-10 mt-3" ></v-divider>
@@ -112,6 +112,7 @@
 
 <script>
 import request from "@/utils/request";
+import store from "@/store";
 
 export default {
     data: () =>({
@@ -134,6 +135,8 @@ export default {
       ],
       remindCount: 0,
       remindSwitch: false,
+      uname: '',
+      email: '',
     }),
   methods: {
     LogOut() {
@@ -142,6 +145,7 @@ export default {
           this.$message.success(res.message);
         }
         localStorage.removeItem('token');
+        localStorage.removeItem('userStatus');
         this.$router.push('/login');
       })
     },
@@ -182,6 +186,12 @@ export default {
 
   },
 
+  computed: {
+    newNameValue() {
+      return store.state.newName;
+    },
+  },
+
   created() {
     let token = localStorage.getItem("token") ? localStorage.getItem("token") : null;
     if (token === null) {
@@ -196,6 +206,18 @@ export default {
         }
       }
     });
+
+    request.get("user/users/userinfo").then( res => {
+      if (res.status === 200) {
+        localStorage.setItem("newNameValue", res.data.uname);
+        store.commit("setPath");
+        this.email = res.data.email;
+      }
+    });
+
+    if (localStorage.getItem("userStatus") < 2) {
+      this.items.splice(5,1)
+    }
   },
 
   mounted() {
