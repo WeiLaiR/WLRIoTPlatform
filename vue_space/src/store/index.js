@@ -1,15 +1,19 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
 
-Vue.use(Vuex)
+import { createStore } from 'vuex'
 
-export default new Vuex.Store({
-  state: {
+
+const store = createStore({
+  state() {
+    return {
+      newName: '',
+
+    }
   },
   mutations: {
-  },
-  actions: {
-  },
-  modules: {
+    setPath(state) {
+      state.newName =  localStorage.getItem("newNameValue")
+    }
   }
 })
+
+export default store
