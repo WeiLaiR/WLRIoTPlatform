@@ -84,6 +84,7 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
                         redisUtil.set(login.getUid().toString(), token, TIMEOUT);
                     }
 
+                    map.put("userStatus", login.getStatus());
                     map.put("token", token);
                     map.put("status", 200);
                     map.put("message", "登录成功!");
