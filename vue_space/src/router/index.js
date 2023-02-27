@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import store from "@/store";
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Manage from "@/views/Manage.vue";
@@ -61,6 +62,12 @@ const router = new VueRouter({
 
 router.afterEach((to) => {
   document.title = to.meta.title //在全局后置守卫中获取路由元信息设置title
+})
+
+// 路由守卫
+router.beforeEach((to, from, next) => {
+  store.commit("setPath")  // 触发store的数据更新
+  next()  // 放行路由
 })
 
 
