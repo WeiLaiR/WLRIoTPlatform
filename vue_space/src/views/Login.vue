@@ -191,6 +191,7 @@ export default {
             this.$message.success(res.message);
             this.$router.push("/home");
             localStorage.setItem("token", res.token);
+            localStorage.setItem("userStatus", res.userStatus);
           }
         })
       }
