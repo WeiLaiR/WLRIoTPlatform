@@ -13,6 +13,7 @@ import {faTriangleExclamation} from '@fortawesome/free-solid-svg-icons'
 import {faCircleCheck} from '@fortawesome/free-solid-svg-icons'
 import JSEncrypt from 'jsencrypt';
 import SHA256 from 'js-sha256'
+import './router/permission'
 // import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
 
