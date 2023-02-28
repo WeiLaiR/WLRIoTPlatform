@@ -41,7 +41,7 @@ public class DeviceDataController {
                                             @PathVariable String startTime,
                                             @PathVariable String endTime) {
         Boolean isNumber = deviceCfgService.queryDeviceIsNumber(cid);
-        System.out.println(startTime + "===================================" + endTime);
+//        System.out.println(startTime + "===================================" + endTime);
         if (isNumber != null) {
             if (start >= 0 && limit > 0) {
                 Map<String, Object> map;
