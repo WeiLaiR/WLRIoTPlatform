@@ -30,7 +30,7 @@ public class CoAPDeviceServer {
             @Override
             public void handlePOST(CoapExchange exchange) {
                 String message = exchange.getRequestText();
-                System.out.println(message);
+//                System.out.println(message);
 
                 String exchangeName = "device.direct";
                 String routingKey = "coap";
@@ -39,9 +39,9 @@ public class CoAPDeviceServer {
 
                 if (map != null) {
                     rabbitTemplate.convertAndSend(exchangeName,routingKey,map);
-                    exchange.respond(CoAP.ResponseCode.CONTENT, "SUCCESS");
+                    exchange.respond(CoAP.ResponseCode.CONTENT, "200");
                 }else {
-                    exchange.respond(CoAP.ResponseCode.CONTENT, "ERROR");
+                    exchange.respond(CoAP.ResponseCode.CONTENT, "400");
                 }
 
 
