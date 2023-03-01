@@ -68,9 +68,9 @@ http://localhost:19898
 * #### Mosquitto ：2.0.15
 
 正确运行后应至少配置两个账户：
-*
-   * 平台接入，应设置高权限，设置成功后配置到`DeviceGateway/src/main/java/com/wei/devicegateway/server/MqttDeviceServer.java`中。
-   * 设备接入，应设置低权限(仅可发送接受小部分topic的信息)，设置成功后配置到`ATestSendMessage/src/main/java/com/weilai/atestsendmessage/mqtt/MqttSendMessage.java`或设备、模拟设备中。
+
+ 1. 平台接入，应设置高权限，设置成功后配置到`DeviceGateway/src/main/java/com/wei/devicegateway/server/MqttDeviceServer.java`中。
+ 2. 设备接入，应设置低权限(仅可发送接受小部分topic的信息)，设置成功后配置到`ATestSendMessage/src/main/java/com/weilai/atestsendmessage/mqtt/MqttSendMessage.java`或设备、模拟设备中。
 
 
 * #### MailService
