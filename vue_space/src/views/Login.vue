@@ -189,9 +189,9 @@ export default {
           console.log(res);
           if (res.status === 200) {
             this.$message.success(res.message);
-            this.$router.push("/home");
             localStorage.setItem("token", res.token);
             localStorage.setItem("userStatus", res.userStatus);
+            this.$router.push("/home");
           }
         })
       }
