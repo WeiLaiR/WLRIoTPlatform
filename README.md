@@ -36,17 +36,13 @@ http://localhost:19898
 
 ### 后端
 
-#### Java
-* 版本：1.8.0_352
+#### Java ：1.8.0_352
 
-#### SpringBoot
-* 版本：2.7.6、2.7.7
+#### SpringBoot ：2.7.6、2.7.7
 
-#### SpringCloudAlibaba
-* 版本：2021.0.1.0
+#### SpringCloudAlibaba ：2021.0.1.0
 
-#### MySQL
-* 版本：8.0.31
+#### MySQL ：8.0.31
 
 .sql文件在项目目录中，可直接导入。
 
@@ -57,23 +53,19 @@ http://localhost:19898
 > 注：`0d08db925f7d3332305970bfb4cba6df7aa1c36570f979f0d5b862db70a33237`在逻辑上并不等于`123456`的加密，所以将`0d08db925f7d3332305970bfb4cba6df7aa1c36570f979f0d5b862db70a33237`存储在其他用户的数据上，然后使用密码`123456`登录并不能成功，每个用户输入`123456`为密码，数据库都将存储不同的密文。
 
 
-#### Redis
-* 版本：7.0.8
+#### Redis ：7.0.8
 
 需正确配置服务中Redis的`host`、`port`、`password`等参数。
 
-#### RabbitMQ
-* 版本：3.9.27-management
+#### RabbitMQ ：3.9.27-management
 
 需正确配置服务中RabbitMQ的`host`、`port`、`username`、`password`等参数。
 
-#### Nacos
-* 版本：2.1.1
+#### Nacos ：2.1.1
 
 需正确配置服务中Nacos的`server-addr`等参数
 
-#### Mosquitto
-* 版本：2.0.15
+#### Mosquitto ：2.0.15
 
 正确运行后应至少配置两个账户：
 * 平台接入，应设置高权限，设置成功后配置到`DeviceGateway/src/main/java/com/wei/devicegateway/server/MqttDeviceServer.java`中。
