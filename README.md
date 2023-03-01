@@ -1,5 +1,5 @@
 <h1  align="center">WLRIoTPlatform</h1>
-<hr>
+***
 
 ## 简介
 
@@ -44,30 +44,32 @@ http://localhost:19898
 
 * #### MySQL ：8.0.31
 
-.sql文件在项目目录中，可直接导入。
+  .sql文件在项目目录中，可直接导入。
 
-之后请更改各个服务配置文件中的MySQL配置。
+  之后请更改各个服务配置文件中的MySQL配置。
 
-用户密码高度加密，管理员登录邮箱`admin@admin.com`，密码`123456`。
+  用户密码高度加密，管理员登录邮箱`admin@admin.com`，密码`123456`。
 
-> 注：`0d08db925f7d3332305970bfb4cba6df7aa1c36570f979f0d5b862db70a33237`在逻辑上并不等于`123456`的加密，所以将`0d08db925f7d3332305970bfb4cba6df7aa1c36570f979f0d5b862db70a33237`存储在其他用户的数据上，然后使用密码`123456`登录并不能成功，每个用户输入`123456`为密码，数据库都将存储不同的密文。
+> 注：`0d08db925f7d3332305970bfb4cba6df7aa1c36570f979f0d5b862db70a33237`在逻辑上并**不等于**`123456`的加密，所以将`0d08db925f7d3332305970bfb4cba6df7aa1c36570f979f0d5b862db70a33237`存储在其他用户的数据上，然后使用密码`123456`登录并不能成功，每个用户输入`123456`为密码，数据库都将存储不同的密文。
 
 
 * #### Redis ：7.0.8
 
-需正确配置服务中Redis的`host`、`port`、`password`等参数。
+  需正确配置服务中Redis的`host`、`port`、`password`等参数。
 
 * #### RabbitMQ ：3.9.27-management
 
-需正确配置服务中RabbitMQ的`host`、`port`、`username`、`password`等参数。
+  需正确配置服务中RabbitMQ的`host`、`port`、`username`、`password`等参数。
 
 * #### Nacos ：2.1.1
 
-需正确配置服务中Nacos的`server-addr`等参数
+  需正确配置服务中Nacos的`server-addr`等参数
 
 * #### Mosquitto ：2.0.15
 
-正确运行后应至少配置两个账户：
+  可选择其他MQTT Broker
+
+  正确运行后应至少配置**两个**账户：
 
  1. 平台接入，应设置高权限，设置成功后配置到`DeviceGateway/src/main/java/com/wei/devicegateway/server/MqttDeviceServer.java`中。
  2. 设备接入，应设置低权限(仅可发送接受小部分topic的信息)，设置成功后配置到`ATestSendMessage/src/main/java/com/weilai/atestsendmessage/mqtt/MqttSendMessage.java`或设备、模拟设备中。
@@ -75,11 +77,11 @@ http://localhost:19898
 
 * #### MailService
 
-首先你应该拥有一个开通SMTP服务的邮箱账户，之后在`MailService/src/main/resources/application.yaml`正确配置`host`、`port`、邮箱 等参数。
+  首先你应该拥有一个开通SMTP服务的邮箱账户，之后在`MailService/src/main/resources/application.yaml`正确配置`host`、`port`、邮箱 等参数。
 
 * #### ATestSendMessage
 
-这是一个模拟发送消息的测试程序，可用于测试CoAP、MQTT协议的设备接入、数据定时发送等操作，请按需使用。
+  这是一个模拟发送消息的测试程序，可用于测试CoAP、MQTT协议的设备接入、数据定时发送等操作，请按需使用。
 
 
 
