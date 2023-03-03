@@ -64,4 +64,8 @@ public class DeviceInfoController {
         deviceInfoService.deleteRedisDeviceCfg(did);
     }
 
+    @GetMapping("/homeInfo")
+    public Map<String, Object> queryHomeInfo() {
+        return deviceInfoService.queryHomeInfo();
+    }
 }
