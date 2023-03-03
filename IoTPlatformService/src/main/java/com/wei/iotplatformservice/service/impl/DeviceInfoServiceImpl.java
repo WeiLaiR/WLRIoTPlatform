@@ -3,6 +3,7 @@ package com.wei.iotplatformservice.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wei.iotplatformservice.exception.CustomException;
+import com.wei.iotplatformservice.handler.DeviceMessageHandler;
 import com.wei.iotplatformservice.mapper.DeviceCfgMapper;
 import com.wei.iotplatformservice.mapper.DeviceDataMapper;
 import com.wei.iotplatformservice.mapper.DeviceDataNumberMapper;
@@ -222,6 +223,22 @@ public class DeviceInfoServiceImpl extends ServiceImpl<DeviceInfoMapper, DeviceI
             }
         }catch (Exception e) {
             throw new CustomException(400, "出现了未知异常！(DeviceInfoCreateNewToken)");
+        }
+
+        return map;
+    }
+
+    @Override
+    public Map<String, Object> queryHomeInfo() {
+        HashMap<String, Object> map = new HashMap<>();
+        try {
+            map.put("status", 200);
+            map.put("message", "查询成功");
+            map.put("deviceNum", deviceInfoMapper.countByDeviceId());
+            map.put("actNum", deviceInfoMapper.countByProtocolNotNull());
+            map.put("onlineNum", DeviceMessageHandler.getNum());
+        }catch (Exception e) {
+            throw new CustomException(400, "出现了未知异常！(DeviceInfoQueryHomeInfo)");
         }
 
         return map;
