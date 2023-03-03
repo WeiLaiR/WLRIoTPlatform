@@ -81,7 +81,7 @@
                     </div>
 
                     <div style="position: absolute; top: 75px;left: 30px;font-size: 43px;font-weight: 500;color: #4B4B4BFF">
-                      28
+                      {{deviceNum}}
                     </div>
 
                     <v-img src="../assets/azs1.svg" height="130px" width="130px" style="position: absolute;right: 20px;bottom: 10px"></v-img>
@@ -102,7 +102,7 @@
                     </div>
 
                     <div style="position: absolute; top: 75px;left: 30px;font-size: 43px;font-weight: 500;color: #4B4B4BFF">
-                      19
+                      {{actNum}}
                     </div>
 
                     <v-img src="../assets/azs2.svg" height="130px" width="130px" style="position: absolute;right: 20px;bottom: 10px"></v-img>
@@ -123,7 +123,7 @@
                     </div>
 
                     <div style="position: absolute; top: 75px;left: 30px;font-size: 43px;font-weight: 500;color: #4B4B4BFF">
-                      16
+                      {{onlineNum}}
                     </div>
 
                     <v-img src="../assets/azs3.svg" height="130px" width="130px" style="position: absolute;right: 20px;bottom: 10px"></v-img>
@@ -374,9 +374,14 @@
 
 <script>
 
+import request from "@/utils/request";
+
 export default {
   name: "Home",
   data: () => ({
+    deviceNum: 0,
+    actNum: 0,
+    onlineNum: 0,
 
   }),
 
@@ -393,6 +398,22 @@ export default {
       }
     }
   },
+
+  methods: {
+    getInfo() {
+      request.get("/platform/deviceInfo/homeInfo").then(res => {
+        if (res.status === 200) {
+          this.deviceNum = res.deviceNum;
+          this.actNum = res.actNum;
+          this.onlineNum = res.onlineNum;
+        }
+      })
+    }
+  },
+
+  created() {
+    this.getInfo();
+  }
 
 };
 </script>
