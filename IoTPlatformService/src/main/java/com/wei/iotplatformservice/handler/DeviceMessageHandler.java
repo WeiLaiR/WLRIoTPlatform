@@ -5,12 +5,14 @@ import com.wei.iotplatformservice.mapper.*;
 import com.wei.iotplatformservice.pojo.*;
 import com.wei.iotplatformservice.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class DeviceMessageHandler {
@@ -18,6 +20,8 @@ public class DeviceMessageHandler {
     private static final Long TIMEOUT = 30 * 10L;
 
     private DeviceInfoMapper deviceInfoMapper;
+
+    private static final Map<Long, Long> keepAlive = new ConcurrentHashMap<>();
 
     @Autowired
     public void setDeviceInfoMapper(DeviceInfoMapper deviceInfoMapper) {
@@ -73,6 +77,10 @@ public class DeviceMessageHandler {
         this.remindClient = remindClient;
     }
 
+    public static Integer getNum() {
+        return keepAlive.size();
+    }
+
     @Transactional
     public void handleMessage(Map<String, Object> map, String protocol) {
         String token = (String) map.get("token");
@@ -88,6 +96,18 @@ public class DeviceMessageHandler {
         customThreadPool1.execute(() -> dataTask(map, did, protocol));
 
         redisUtil.set(did + "status", "Y", TIMEOUT);
+        keepAlive.put(did, System.currentTimeMillis());
+    }
+
+    @Scheduled(cron = "0 0/2 * * * ?")
+    public void isTimeOut() {
+        long l = System.currentTimeMillis();
+
+        for (Long key : keepAlive.keySet()) {
+            if (l - keepAlive.get(key) > 600000) {
+                keepAlive.remove(key);
+            }
+        }
     }
 
     private void infoTask(Map<String, Object> map, Long did, String protocol) {
