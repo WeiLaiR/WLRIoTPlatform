@@ -15,8 +15,17 @@
     <select id="queryBriefInfoList" resultType="com.wei.iotplatformservice.pojo.DeviceInfo">
         SELECT device_id, device_name FROM device_info  WHERE uid = #{uid} AND is_delete = false LIMIT 100;
     </select>
+
     <select id="queryDeviceIdByToken" resultType="java.lang.Long">
         SELECT device_id FROM device_info WHERE device_token = #{token};
+    </select>
+
+    <select id="countByDeviceId" resultType="java.lang.Integer">
+        SELECT COUNT(device_id) FROM device_info;
+    </select>
+
+    <select id="countByProtocolNotNull" resultType="java.lang.Integer">
+        SELECT COUNT(device_id) FROM device_info WHERE protocol IS NOT NULL;
     </select>
 
 
