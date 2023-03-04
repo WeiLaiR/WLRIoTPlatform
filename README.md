@@ -89,7 +89,7 @@ http://localhost:19898
 
 ## 功能架构略图
 
-整体功能架构如下图所示：
+整体功能架构如下图所示(目前稍有变化，后续会更新新的图示)：
 
 ![1](https://github.com/WeiLaiR/WLRIoTPlatform/blob/master/Aimg/draw01.png)
 
