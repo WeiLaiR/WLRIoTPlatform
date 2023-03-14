@@ -42,7 +42,17 @@
                 cols="3"
             >
 
-              <!--       空位置       -->
+              <v-btn
+                  right
+                  elevation="5"
+                  rounded
+                  color="#2ebfaf"
+                  dark
+                  style="position: absolute; margin-top: 30px;margin-left: 30px"
+                  @click="openTip"
+              >
+                tip
+              </v-btn>
 
             </v-col>
 
@@ -270,6 +280,82 @@
         </div>
 
 
+        <div>
+          <v-dialog
+              v-model="dltip"
+              width="900px"
+          >
+
+            <v-card>
+
+              <v-card-title>
+                Tip:
+              </v-card-title>
+
+              <div style="padding: 5px 35px">
+                在左侧选择框选择设备后,点击右上角的”NEW CONFIG“按钮并输入对应信息即可添加设备配置。
+              </div>
+
+              <v-divider style="margin: 10px"></v-divider>
+
+              <div style="padding: 5px 35px">
+                注意：
+              </div>
+
+
+              <v-icon color="#55A8D8FF" size="20px" style="position: absolute;left: 35px;top: 157px">
+                mdi-star-four-points-outline
+              </v-icon>
+              <div style="padding: 7px 35px 5px 65px">
+
+                如果您选择的是数字类型，则传入数据应为<v-card elevation="3" style="display: inline;padding: 3px 8px;color: #696969FF">Integer</v-card> 、 <v-card elevation="3" style="display: inline;padding: 3px 8px;color: #696969FF">Long</v-card> 、 <v-card elevation="3" style="display: inline;padding: 3px 8px;color: #696969FF">Short</v-card>
+                、 <v-card elevation="3" style="display: inline;padding: 3px 8px;color: #696969FF">Float</v-card> 和 <v-card elevation="3" style="display: inline;padding: 3px 8px;color: #696969FF">Double</v-card> 。其他类型则可能无法解析。
+              </div>
+
+
+              <v-icon color="#55A8D8FF" size="20px" style="position: absolute;left: 35px;top: 215px">
+                mdi-star-four-points-outline
+              </v-icon>
+              <div style="padding: 7px 35px 5px 65px">
+
+                如果您选择的是非数字类型，请将传入数据转换成字符串，否则将无法识别。
+              </div>
+
+              <v-icon color="#55A8D8FF" size="20px" style="position: absolute;left: 35px;top: 252px">
+                mdi-star-four-points-outline
+              </v-icon>
+              <div style="padding: 7px 35px 5px 65px">
+
+                每个配置的Nick Name可以重复，但是Type Name不可以重复。
+              </div>
+
+
+              <v-divider style="margin: 10px"></v-divider>
+
+              <div style="padding: 5px 35px">
+                设备发送消息体规则如下：
+              </div>
+
+              <div style="padding: 7px 35px 5px 50px">
+                在消息体中应将数据以key、value键值对的方式存储，中间使用 <v-card elevation="3" style="display: inline;padding: 3px 8px;color: #696969FF">=</v-card> 连接，每个键值对之间使用
+                 <v-card elevation="3" style="display: inline;padding: 3px 8px;color: #696969FF">&</v-card> 连接。
+              </div>
+
+              <div style="padding: 5px 35px 25px 55px">
+                示例：<v-card elevation="3" style="display: inline;padding: 3px 8px;color: #696969FF">token=xxxxxxxxxxxxxxxx&version=1.x&temperature=26&humidity=60&voltage=5.8</v-card>
+              </div>
+
+
+
+            </v-card>
+
+
+
+
+          </v-dialog>
+        </div>
+
+
 
       </v-card>
 
@@ -307,6 +393,7 @@ export default {
       dialogNewDeviceCfg: false,
       dialogDeleteCfg: false,
       dDeviceCfgId: 0,
+      dltip: false,
 
 
       rowNums: 10,
@@ -490,6 +577,9 @@ export default {
       this.dDeviceCfgId = item.deviceCfgId;
       this.dialogDeleteCfg = true;
     },
+    openTip() {
+      this.dltip = true;
+    }
   }
 }
 </script>
