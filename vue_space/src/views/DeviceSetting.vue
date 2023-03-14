@@ -556,6 +556,14 @@ export default {
         this.$message.error("请选择设备");
         return;
       } else {
+
+        for (let i = 0; i < this.dataCfg.length; i++) {
+          if (this.typeName === this.dataCfg[i].typeName) {
+            this.$message.error("数据名称已存在");
+            return;
+          }
+        }
+
         request.put("/platform/deviceCfg/newDeviceCfg", {
           deviceId: this.deviceCh,
           typeName: this.typeName,
