@@ -572,6 +572,14 @@ export default {
         this.$message.error("请正确输入数据！");
         return;
       } else {
+
+        for (let i = 0; i < this.dataRule.length; i++) {
+          if (this.nRule.ruleName === this.dataRule[i].ruleName) {
+            this.$message.error("规则名称已存在！");
+            return;
+          }
+        }
+
         this.nRule.deviceCfgId = this.cfgCh;
         request.put("/platform/deviceRule/add", this.nRule).then(res => {
           if (res.status === 200) {
