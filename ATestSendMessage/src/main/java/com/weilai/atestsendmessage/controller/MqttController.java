@@ -5,10 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @RestController
 @RequestMapping("/mqtt")
@@ -29,6 +26,13 @@ public class MqttController {
     }
 
     private static final Map<String, Boolean> status = new HashMap<>();
+
+
+    private static Queue<Map<String, Object>> queue = new LinkedList<>();
+
+    public static void setQueue(Map<String, Object> map) {
+        queue.add(map);
+    }
 
     @PostMapping("/addMqtt")
     public Map<String, Object> addMqtt(@RequestBody Map<String, Object> val) {
@@ -67,6 +71,14 @@ public class MqttController {
         map.put("message", "success");
         map.put("data", status);
 
+        return map;
+    }
+
+    @GetMapping("/getMessage")
+    public Map<String, Object> getMessage() {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("A_Size", queue.size());
+        map.put("Message", queue);
         return map;
     }
 
@@ -114,6 +126,9 @@ public class MqttController {
             }
         }
     }
+
+
+
 
 
 }
