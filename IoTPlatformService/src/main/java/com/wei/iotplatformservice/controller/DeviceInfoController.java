@@ -68,4 +68,9 @@ public class DeviceInfoController {
     public Map<String, Object> queryHomeInfo() {
         return deviceInfoService.queryHomeInfo();
     }
+
+    @PostMapping("/sendMqttMessage")
+    public Map<String, Object> sendMqttMessage(@RequestBody Map<String, Object> map) {
+        return deviceInfoService.SendMqttMessage((Long) map.get("did"), (String) map.get("message"));
+    }
 }
