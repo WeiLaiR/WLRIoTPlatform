@@ -27,4 +27,7 @@ public interface DeviceInfoService extends IService<DeviceInfo> {
     Map<String, Object> queryHomeInfo();
     void deleteRedisDeviceCfg (Long did);
 
+
+    Map<String, Object> SendMqttMessage(Long did, String message);
+
 }

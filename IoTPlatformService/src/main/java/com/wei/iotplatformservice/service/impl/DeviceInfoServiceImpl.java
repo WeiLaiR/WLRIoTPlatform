@@ -16,6 +16,7 @@ import com.wei.iotplatformservice.service.DeviceInfoService;
 import com.wei.iotplatformservice.utils.DeviceTokenUtil;
 import com.wei.iotplatformservice.utils.RedisUtil;
 import com.wei.iotplatformservice.utils.TokenUtils;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +57,13 @@ public class DeviceInfoServiceImpl extends ServiceImpl<DeviceInfoMapper, DeviceI
     @Autowired
     public void setRedisUtil(RedisUtil redisUtil) {
         this.redisUtil = redisUtil;
+    }
+
+    private RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    private void setRabbitTemplate(RabbitTemplate rabbitTemplate) {
+        this.rabbitTemplate = rabbitTemplate;
     }
 
 
@@ -247,5 +255,24 @@ public class DeviceInfoServiceImpl extends ServiceImpl<DeviceInfoMapper, DeviceI
     @Override
     public void deleteRedisDeviceCfg(Long did) {
         redisUtil.del(did + "cfg");
+    }
+
+    @Override
+    public Map<String, Object> SendMqttMessage(Long did, String message) {
+        HashMap<String, Object> map = new HashMap<>();
+        try {
+            DeviceInfo deviceInfo = deviceInfoMapper.selectById(did);
+            HashMap<String, String> map1 = new HashMap<>();
+            map1.put("token", deviceInfo.getDeviceToken());
+            map1.put("message", message);
+            String exchangeName = "device.direct";
+            String routingKey = "SenderMqtt";
+            rabbitTemplate.convertAndSend(exchangeName,routingKey,map1);
+            map.put("status", 200);
+            map.put("message", "发送成功");
+        }catch (Exception e) {
+            throw new CustomException(400, "出现了未知异常！(DeviceInfoSendMqttMessage)");
+        }
+        return map;
     }
 }
