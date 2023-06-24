@@ -239,12 +239,13 @@ public class DeviceInfoServiceImpl extends ServiceImpl<DeviceInfoMapper, DeviceI
     @Override
     public Map<String, Object> queryHomeInfo() {
         HashMap<String, Object> map = new HashMap<>();
+        Long id = TokenUtils.getId();
         try {
             map.put("status", 200);
             map.put("message", "查询成功");
-            map.put("deviceNum", deviceInfoMapper.countByDeviceId());
-            map.put("actNum", deviceInfoMapper.countByProtocolNotNull());
-            map.put("onlineNum", DeviceMessageHandler.getNum());
+            map.put("deviceNum", deviceInfoMapper.countByDeviceId(id));
+            map.put("actNum", deviceInfoMapper.countByProtocolNotNull(id));
+            map.put("onlineNum", DeviceMessageHandler.getNum(id));
         }catch (Exception e) {
             throw new CustomException(400, "出现了未知异常！(DeviceInfoQueryHomeInfo)");
         }

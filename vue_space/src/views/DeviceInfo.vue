@@ -444,7 +444,7 @@
 
                                 HTTP协议： 请接入
                                 <v-card elevation="3" style="display: inline;padding: 3px 8px;color: #696969FF">
-                                    https://wlriot.xxx.com:6666
+                                    http://iot.futureproton.com:6666
                                 </v-card>
                             </div>
 
@@ -456,7 +456,7 @@
 
                                 CoAP协议： 请接入
                                 <v-card elevation="3" style="display: inline;padding: 3px 8px;color: #696969FF">
-                                    coap://wlriot.xxx.com:6667/coapTelemetry
+                                    coap://iot.futureproton.com:6667/coapTelemetry
                                 </v-card>
                             </div>
 
@@ -467,7 +467,7 @@
                             <div style="padding: 7px 35px 5px 65px;line-height: 34px">
                                 MQTT协议： 请设置broker为
                                 <v-card elevation="3" style="display: inline;padding: 3px 8px;color: #696969FF">
-                                    tcp://192.168.3.66:1886
+                                    tcp://20.40.51.147:1886
                                 </v-card>
                                 ，
                                 设置topic为
@@ -498,7 +498,7 @@
                             <div style="padding: 7px 35px 5px 65px;line-height: 32px">
                                 <v-card elevation="3" style="display: inline;padding: 3px 8px;color: #696969FF">token
                                 </v-card>
-                                : <p style="display: inline;font-weight: bold">必须</p> ,为平台分配给您的设备Token。
+                                : <p style="display: inline;font-weight: bold">必须</p> ,为平台分配给您的设备Token(使用HTTP协议接入平台时应同时将token放入Header中用以验证)。
                             </div>
 
                             <v-icon color="#55A8D8FF" size="20px" style="position: absolute;left: 35px;top: 459px">
@@ -509,6 +509,17 @@
                                     version
                                 </v-card>
                                 : <p style="display: inline;">可选</p> ,默认为1，为设备版本号。
+                            </div>
+
+
+                            <v-icon color="#55A8D8FF" size="20px" style="position: absolute;left: 35px;top: 502px">
+                                mdi-star-four-points-outline
+                            </v-icon>
+                            <div style="padding: 7px 35px 5px 65px;line-height: 32px">
+                                <v-card elevation="3" style="display: inline;padding: 3px 8px;color: #696969FF">
+                                    equipment_no
+                                </v-card>
+                                : <p style="display: inline;">可选</p> ,当接入的设备为一个集群时可用此数据分辨不同设备发送来的消息。
                             </div>
 
                             <div style="padding: 7px 35px 5px 50px">
@@ -524,7 +535,7 @@
                             <div style="padding: 5px 35px 5px 55px">
                                 示例：
                                 <v-card elevation="3" style="display: inline;padding: 3px 8px;color: #696969FF">
-                                    token=xxxxxxxxxxxxxxxxxxxxxx&version=1.x
+                                    token=xxxxxxxxxxxxxxxxxxxxxx&version=1.x&equipment_no=NO.1
                                 </v-card>
                             </div>
 

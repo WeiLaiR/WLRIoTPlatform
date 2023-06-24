@@ -17,8 +17,10 @@ public interface DeviceInfoMapper extends BaseMapper<DeviceInfo> {
 
     Long queryDeviceIdByToken(String token);
 
-    Integer countByDeviceId();
+    Integer countByDeviceId(Long uid);
 
-    Integer countByProtocolNotNull();
+    Integer countByProtocolNotNull(Long uid);
+
+    Long queryUidLong(Long did);
 
 }

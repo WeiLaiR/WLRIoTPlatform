@@ -77,6 +77,7 @@
                     dark
                     v-model="password"
                     :rules="passwordRules"
+                    type="password"
                     label="PassWord"
                 >
 
@@ -87,6 +88,7 @@
                     dark
                     v-model="password2"
                     :rules="passwordRules"
+                    type="password"
                     label="Enter the password again"
                 >
 

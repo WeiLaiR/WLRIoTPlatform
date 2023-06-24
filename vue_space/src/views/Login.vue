@@ -160,7 +160,6 @@ export default {
 
         console.log("==============================");
 
-
         // 进行简单的加盐
         let temp = ""
         for (let i = 0; i < this.Login.password.length; i++) {
@@ -195,7 +194,6 @@ export default {
           }
         })
       }
-
     },
 
     signup() {

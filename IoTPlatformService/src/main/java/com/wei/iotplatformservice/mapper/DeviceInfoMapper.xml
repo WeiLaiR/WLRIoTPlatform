@@ -21,11 +21,15 @@
     </select>
 
     <select id="countByDeviceId" resultType="java.lang.Integer">
-        SELECT COUNT(device_id) FROM device_info;
+        SELECT COUNT(device_id) FROM device_info  WHERE uid = #{uid} AND is_delete = false;
     </select>
 
     <select id="countByProtocolNotNull" resultType="java.lang.Integer">
-        SELECT COUNT(device_id) FROM device_info WHERE protocol IS NOT NULL;
+        SELECT COUNT(device_id) FROM device_info WHERE protocol IS NOT NULL AND uid = #{uid} AND is_delete = false;
+    </select>
+
+    <select id="queryUidLong" resultType="java.lang.Long">
+        SELECT uid FROM device_info WHERE device_id = #{did};
     </select>
 
 

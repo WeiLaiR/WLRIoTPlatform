@@ -23,6 +23,8 @@ public class DeviceMessageHandler {
 
     private static final Map<Long, Long> keepAlive = new ConcurrentHashMap<>();
 
+    private static final Map<Long, Integer> userKeepAliveNum = new ConcurrentHashMap<>();
+
     @Autowired
     public void setDeviceInfoMapper(DeviceInfoMapper deviceInfoMapper) {
         this.deviceInfoMapper = deviceInfoMapper;
@@ -77,8 +79,8 @@ public class DeviceMessageHandler {
         this.remindClient = remindClient;
     }
 
-    public static Integer getNum() {
-        return keepAlive.size();
+    public static Integer getNum(Long uid) {
+        return userKeepAliveNum.getOrDefault(uid, 0);
     }
 
     @Transactional
@@ -95,8 +97,17 @@ public class DeviceMessageHandler {
 
         customThreadPool1.execute(() -> dataTask(map, did, protocol));
 
+        Long uid = deviceInfoMapper.queryUidLong(did);
+
         redisUtil.set(did + "status", "Y", TIMEOUT);
-        keepAlive.put(did, System.currentTimeMillis());
+        if (!keepAlive.containsKey(did)) {
+            keepAlive.put(did, System.currentTimeMillis());
+            int num = userKeepAliveNum.getOrDefault(uid, 0);
+            num ++;
+            userKeepAliveNum.put(uid, num);
+        }else {
+            keepAlive.put(did, System.currentTimeMillis());
+        }
     }
 
     @Scheduled(cron = "0 0/2 * * * ?")
@@ -105,6 +116,14 @@ public class DeviceMessageHandler {
 
         for (Long key : keepAlive.keySet()) {
             if (l - keepAlive.get(key) > 600000) {
+                Long uid = deviceInfoMapper.queryUidLong(key);
+                Integer num = userKeepAliveNum.getOrDefault(uid, 0);
+                if (num > 0) {
+                    num --;
+                    userKeepAliveNum.put(uid, num);
+                }else {
+                    userKeepAliveNum.remove(uid);
+                }
                 keepAlive.remove(key);
             }
         }
