@@ -89,15 +89,43 @@ http://localhost:19898
 
 ## 功能架构略图
 
-整体功能架构如下图所示(目前稍有变化，后续会更新新的图示)：
+系统架构图如下：
+
+![3](https://github.com/WeiLaiR/WLRIoTPlatform/blob/master/Aimg/draw03.png)
+
+整体功能架构如下图所示：
 
 ![1](https://github.com/WeiLaiR/WLRIoTPlatform/blob/master/Aimg/draw01.png)
 
+部署后用户访问流程如下：
+
+![2](https://github.com/WeiLaiR/WLRIoTPlatform/blob/master/Aimg/draw02.png)
 
 ## 展示
 
 * 主页：
 
-  ![1](https://github.com/WeiLaiR/WLRIoTPlatform/blob/master/Aimg/home.png)
+  ![home](https://github.com/WeiLaiR/WLRIoTPlatform/blob/master/Aimg/home.png)
+
+* 设备管理：
+
+  ![device](https://github.com/WeiLaiR/WLRIoTPlatform/blob/master/Aimg/4.4.jpg)
+
+* 数据统计：
+
+  ![data](https://github.com/WeiLaiR/WLRIoTPlatform/blob/master/Aimg/4.7.jpg)
+
+* 消息通知：
+
+  ![message](https://github.com/WeiLaiR/WLRIoTPlatform/blob/master/Aimg/4.10.jpg)
+
+* 邮件验证码：
+
+  ![email01](https://github.com/WeiLaiR/WLRIoTPlatform/blob/master/Aimg/email01.png)
+
+* 警告通知邮件：
+
+  ![email02](https://github.com/WeiLaiR/WLRIoTPlatform/blob/master/Aimg/email02.png)
 
 
+以上仅为部分内容展示，更多内容请自行体验。
