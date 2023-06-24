@@ -91,7 +91,7 @@ http://localhost:19898
 
 系统架构图如下：
 
-<img src="https://github.com/WeiLaiR/WLRIoTPlatform/blob/master/Aimg/draw03.png" alt="draw" width="60%" />
+<img src="https://github.com/WeiLaiR/WLRIoTPlatform/blob/master/Aimg/draw03.png" alt="draw" width="70%" align="center"/>
 
 
 
@@ -101,7 +101,7 @@ http://localhost:19898
 
 部署后用户访问流程如下：
 
-<img src="https://github.com/WeiLaiR/WLRIoTPlatform/blob/master/Aimg/draw02.png" alt="draw2" width="60%" />
+<img src="https://github.com/WeiLaiR/WLRIoTPlatform/blob/master/Aimg/draw02.png" alt="draw2" width="70%" align="center"/>
 
 
 ## 展示
